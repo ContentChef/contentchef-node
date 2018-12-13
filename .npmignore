@@ -1,6 +1,9 @@
+.cache
+coverage
 .DS_STORE
 .gitignore
 CONTRIBUTING.md
 jest.config.js
 src
 tsconfig.json
+typings
