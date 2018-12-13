@@ -72,7 +72,7 @@ const cf = ContentChef({
 const publishedArticles = cf.repository('articles', 'live');
 
 // will retrieve from the channel articles a single published content
-publishedArticles.getContent({ publicId: 'your-content-id' }).then(response => /* handles response */);
+publishedArticles.content({ publicId: 'your-content-id' }).then(response => /* handles response */);
 
 // will retrieve from the channel articles every content with a specific contentDefinition
 publishedArticles.search({ contentDefinition: 'featured-articles' }).then(response => /* handles response */);
