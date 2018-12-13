@@ -1,8 +1,9 @@
+__tests__
 .cache
-coverage
 .DS_STORE
 .gitignore
 CONTRIBUTING.md
+coverage
 jest.config.js
 src
 tsconfig.json

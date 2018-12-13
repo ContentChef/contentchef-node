@@ -2,9 +2,29 @@ export type ContentRequestMethod = 'content' | 'search';
 
 export type ContentState = 'staging' | 'live';
 
+/**
+ * Content Chef repository configuration object
+ * @export
+ * @interface IContentChefConfiguration
+ */
 export interface IConfig {
+  /**
+   * Your Content Chef API key
+   * @type {string}
+   * @memberof IContentChefConfiguration
+   */
   apiKey: string;
-  callTimeout: number;
+  /**
+   * Sets a pending request timeout
+   * @type {number}
+   * @memberof IContentChefConfiguration
+   */
+  callTimeout?: number;
+  /**
+   * Content Chef API Endpoint
+   * @type {string}
+   * @memberof IContentChefConfiguration
+   */
   serviceRoot: string;
 }
 

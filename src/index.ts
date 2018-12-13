@@ -1,30 +1,11 @@
-import ContentChef from './services/ContentChef';
+import Repository, { IConfig } from './services/Repository';
 
 /**
  * Content Chef configuration object
  * @export
  * @interface IContentChefConfiguration
  */
-export interface IContentChefConfiguration {
-  /**
-   * Your Content Chef API key
-   * @type {string}
-   * @memberof IContentChefConfiguration
-   */
-  apiKey: string;
-  /**
-   * Sets a pending request timeout
-   * @type {number}
-   * @memberof IContentChefConfiguration
-   */
-  callTimeout?: number;
-  /**
-   * Content Chef API Endpoint
-   * @type {string}
-   * @memberof IContentChefConfiguration
-   */
-  serviceRoot: string;
-}
+export interface IContentChefConfiguration extends IConfig { }
 
 /**
  * Configures and returns the Content Chef SDK
@@ -53,7 +34,7 @@ export function configure(configuration: IContentChefConfiguration) {
     throw new TypeError('serviceRoot must be a string');
   }
 
-  const repository = ContentChef(configuration);
+  const repository = Repository(configuration);
   
   return {
     repository,
@@ -69,6 +50,6 @@ export {
   IRequest,
   ISearchConfig,
   ISearchResponse,
-} from './services/ContentChef';
+} from './services/Repository';
 
 export default configure;

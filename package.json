@@ -9,7 +9,7 @@
   "umd:main": "dist/index.umd.js",
   "source": "src/index.ts",
   "scripts": {
-    "build": "npm run clean",
+    "build": "npm run clean && tsc -p .",
     "changelog": "standard-changelog",
     "clean": "rimraf dist",
     "prepublishOnly": "npm run build",

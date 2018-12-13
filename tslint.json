@@ -12,6 +12,7 @@
             false
         ],
         "jsdoc-format": true,
+        "no-empty-interface": false,
         "quotemark": [
             true,
             "single"
