@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from 'axios';
+import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import * as interfaces from './interfaces';
 
 let defaultConfig: interfaces.IConfig = {
@@ -37,9 +37,10 @@ export function configure(config: interfaces.IConfig) {
  */
 export function createContentRequest(channel: string, state: interfaces.ContentState) {
   const url = getEndpoint('content', state, channel);
+  const axiosInstance = axios.create({ baseURL: defaultConfig.serviceRoot });
 
   return async <T extends object>(config: interfaces.IGetContentConfig): Promise<AxiosResponse<interfaces.IGetContentResponse<T>>> => {
-    return axios(url, { params: config, timeout: defaultConfig.callTimeout }).then(response => response);
+    return axiosInstance(url, { params: config, timeout: defaultConfig.callTimeout }).then(response => response);
   };
 }
 
@@ -50,9 +51,10 @@ export function createContentRequest(channel: string, state: interfaces.ContentS
  */
 export function createSearchRequest(channel: string, state: interfaces.ContentState) {
   const url = getEndpoint('search', state, channel);
+  const axiosInstance = axios.create({ baseURL: defaultConfig.serviceRoot });
 
   return async <T extends object>(config: interfaces.ISearchConfig): Promise<AxiosResponse<Array<interfaces.ISearchResponse<T>>>> => {
-    return axios(url, { params: config, timeout: defaultConfig.callTimeout }).then(response => response);
+    return axiosInstance(url, { params: config, timeout: defaultConfig.callTimeout }).then(response => response);
   };
 }
 
@@ -63,7 +65,7 @@ export function createSearchRequest(channel: string, state: interfaces.ContentSt
  * @returns
  */
 export function getEndpoint(method: interfaces.ContentRequestMethod, state: interfaces.ContentState, channel: string) {
-  return `${defaultConfig.serviceRoot}/${state}/${method}/${channel}`;
+  return `/${state}/${method}/${channel}`;
 }
 
 /**
