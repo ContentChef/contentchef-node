@@ -22,6 +22,8 @@ describe('Tests the sdk', () => {
 
     // @ts-ignore
     expect(() => sdk({ apiKey: '', callTimeout: 100, serviceRoot: '' })).toThrow();
+    
+    expect(() => sdk({ apiKey: 'toast', serviceRoot: 'unicorn' })).not.toThrow();
   });
 
   test('A well configured sdk will return a repository method', () => {

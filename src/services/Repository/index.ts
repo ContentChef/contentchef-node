@@ -25,7 +25,7 @@ export function configure(config: interfaces.IConfig) {
     throw new TypeError(`serviceRoot cannot be undefined`);
   }
   
-  defaultConfig = Object.assign({}, defaultConfig, config);
+  defaultConfig = { ... defaultConfig, ... config };
 
   return getRequestMethods;
 }
