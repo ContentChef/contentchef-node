@@ -1,11 +1,7 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import * as interfaces from './interfaces';
 
-let defaultConfig: interfaces.IConfig = {
-  apiKey: '',
-  host: '',
-  timeout: 15000,
-} as interfaces.IConfig;
+let defaultConfig: interfaces.IConfig = <interfaces.IConfig> {};
 
 /**
  * @export
