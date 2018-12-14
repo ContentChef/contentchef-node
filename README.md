@@ -42,10 +42,10 @@ import ContentChef from '@byte-code/contentchef-sdk';
 const cf = ContentChef({
   // Your Content Chef apiKey
   apiKey: 'your-content-chef-api-key',
-  // Will close every http call exceeding this duration (in milliseconds)
-  callTimeout: 5000,
   // Your Content Chef instance domain
   host: 'https://instance.of.contentchef.com/',
+  // Will close a pending change after 5 seconds
+  timeout: 5000,
 });
 ```
 
@@ -113,8 +113,8 @@ import ContentChef from '@byte-code/contentchef-sdk';
 
 const cf = ContentChef({
   apiKey: 'your-content-chef-api-key',
-  callTimeout: 5000,
   host: 'https://instance.of.contentchef.com/',
+  timeout: 5000,
 });
 
 // opens for example an article repository, will query only the published ones
