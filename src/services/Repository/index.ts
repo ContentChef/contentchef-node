@@ -35,8 +35,8 @@ export function createContentRequest(channel: string, state: interfaces.ContentS
   const url = getEndpoint('content', state, channel);
   const axiosInstance = getAxiosInstance();
 
-  return async <T extends object>(config: interfaces.IGetContentConfig): Promise<AxiosResponse<interfaces.IGetContentResponse<T>>> => {
-    return axiosInstance(url, { params: config, timeout: defaultConfig.timeout }).then(response => response);
+  return async <T extends object>(params: interfaces.IGetContentConfig): Promise<AxiosResponse<interfaces.IGetContentResponse<T>>> => {
+    return axiosInstance(url, { params }).then(response => response);
   };
 }
 
@@ -49,8 +49,8 @@ export function createSearchRequest(channel: string, state: interfaces.ContentSt
   const url = getEndpoint('search', state, channel);
   const axiosInstance = getAxiosInstance();
 
-  return async <T extends object>(config: interfaces.ISearchConfig): Promise<AxiosResponse<Array<interfaces.ISearchResponse<T>>>> => {
-    return axiosInstance(url, { params: config, timeout: defaultConfig.timeout }).then(response => response);
+  return async <T extends object>(params: interfaces.ISearchConfig): Promise<AxiosResponse<Array<interfaces.ISearchResponse<T>>>> => {
+    return axiosInstance(url, { params }).then(response => response);
   };
 }
 
