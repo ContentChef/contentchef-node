@@ -4,9 +4,7 @@
   "homepage": "https://github.com/ContentChef/sdk-typescript",
   "description": "TypeScript SDK for Content Chef",
   "main": "dist/index.js",
-  "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
-  "umd:main": "dist/index.umd.js",
   "source": "src/index.ts",
   "scripts": {
     "build": "npm run clean && tsc -p .",
@@ -42,8 +40,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "axios": "^0.18.0",
-    "retry-axios": "^0.3.2"
+    "axios": "^0.18.0"
   },
   "devDependencies": {
     "@types/express": "^4.16.0",
