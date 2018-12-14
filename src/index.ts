@@ -47,7 +47,7 @@ export {
   IConfig,
   IGetContentConfig,
   IGetContentResponse,
-  IRequest,
+  IResponse,
   ISearchConfig,
   ISearchResponse,
 } from './services/Repository';

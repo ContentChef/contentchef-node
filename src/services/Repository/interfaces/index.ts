@@ -60,12 +60,12 @@ export interface IGetContentConfig {
   targetDate?: any;
 }
 
-export interface IGetContentResponse<T = any> extends IRequest<T> {
+export interface IGetContentResponse<T = any> extends IResponse<T> {
   definition: string;
   publicId: string;
 }
 
-export interface IRequest<T> {
+export interface IResponse<T> {
   metadata: IRequestMetadata;
   offlineDate: string | null;
   onlineDate: string | null;
@@ -88,7 +88,7 @@ export interface ISearchConfig {
   targetDate?: any;
 }
 
-export interface ISearchResponse<T = any> extends IRequest<T> {
+export interface ISearchResponse<T = any> extends IResponse<T> {
   requestData: ISearchResponseRequestData;
 }
 
