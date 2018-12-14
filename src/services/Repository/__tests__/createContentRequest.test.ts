@@ -32,8 +32,8 @@ beforeAll(async () => {
 
   configure({
     apiKey: 'qwerty',
-    callTimeout: 25000,
-    serviceRoot: `http://localhost:${port}/`,
+    host: `http://localhost:${port}/`,
+    timeout: 25000,
   });
 });
 afterAll(() => server.close());

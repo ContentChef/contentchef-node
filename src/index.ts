@@ -22,15 +22,15 @@ export function configure(configuration: IContentChefConfiguration) {
     throw new TypeError('apiKey must be a string');
   }
 
-  if (configuration.callTimeout && typeof configuration.callTimeout !== 'number') {
+  if (configuration.timeout && typeof configuration.timeout !== 'number') {
     throw new TypeError('callTimeout must be a number');
   }
 
-  if (configuration.callTimeout < 0) {
+  if (configuration.timeout < 0) {
     throw new TypeError('callTimeout cannot be less than 0');
   }
 
-  if (typeof configuration.serviceRoot !== 'string') {
+  if (typeof configuration.host !== 'string') {
     throw new TypeError('serviceRoot must be a string');
   }
 

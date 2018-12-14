@@ -45,11 +45,60 @@ const cf = ContentChef({
   // Will close every http call exceeding this duration (in milliseconds)
   callTimeout: 5000,
   // Your Content Chef instance domain
-  serviceRoot: 'https://instance.of.contentchef.com/',
+  host: 'https://instance.of.contentchef.com/',
 });
 ```
 
-> Bear in mind that `apiKey` and `serviceRoot` are required
+Configuration implements this interface
+
+```typescript
+export interface IConfig {
+  /**
+   * Your Content Chef API key
+   * @type {string}
+   * @memberof IContentChefConfiguration
+   */
+  apiKey: string;
+  /**
+   * Sets a pending request timeout
+   * @type {number}
+   * @memberof IContentChefConfiguration
+   */
+  timeout?: number;
+  /**
+   * Custom agent to perform HTTP requests. 
+   * Find further information in the 
+   * [axios request config documentation](https://github.com/mzabriskie/axios#request-config).
+   * @type {string}
+   * @memberof IConfig
+   */
+  httpAgent?: string;
+  /**
+   * Custom agent to perform HTTPS requests.
+   * Find further information in the 
+   * [axios request config documentation](https://github.com/mzabriskie/axios#request-config).
+   * @type {string}
+   * @memberof IConfig
+   */
+  httpsAgent?: string;
+  /**
+   * Content Chef API Endpoint
+   * @type {string}
+   * @memberof IContentChefConfiguration
+   */
+  host: string;
+  /**
+   * Axios proxy configuration. 
+   * See the [axios request config documentation](https://github.com/mzabriskie/axios#request-config) 
+   * for further information about the supported values.
+   * @type {AxiosProxyConfig}
+   * @memberof IConfig
+   */
+  proxy?: AxiosProxyConfig;
+}
+```
+
+> Bear in mind that `apiKey` and `host` are required
 
 #### repository
 
@@ -65,7 +114,7 @@ import ContentChef from '@byte-code/contentchef-sdk';
 const cf = ContentChef({
   apiKey: 'your-content-chef-api-key',
   callTimeout: 5000,
-  serviceRoot: 'https://instance.of.contentchef.com/',
+  host: 'https://instance.of.contentchef.com/',
 });
 
 // opens for example an article repository, will query only the published ones

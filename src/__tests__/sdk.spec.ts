@@ -12,22 +12,22 @@ describe('Tests the sdk', () => {
     expect(() => sdk({ apiKey: '' })).toThrow();
 
     // @ts-ignore
-    expect(() => sdk({ apiKey: '', callTimeout: '' })).toThrow();
+    expect(() => sdk({ apiKey: '', timeout: '' })).toThrow();
 
     // @ts-ignore
-    expect(() => sdk({ apiKey: '', callTimeout: 'this will throw' })).toThrow();
+    expect(() => sdk({ apiKey: '', timeout: 'this will throw' })).toThrow();
 
     // @ts-ignore
-    expect(() => sdk({ apiKey: '', callTimeout: -1 })).toThrow();
+    expect(() => sdk({ apiKey: '', timeout: -1 })).toThrow();
 
     // @ts-ignore
-    expect(() => sdk({ apiKey: '', callTimeout: 100, serviceRoot: '' })).toThrow();
+    expect(() => sdk({ apiKey: '', timeout: 100, host: '' })).toThrow();
     
-    expect(() => sdk({ apiKey: 'toast', serviceRoot: 'unicorn' })).not.toThrow();
+    expect(() => sdk({ apiKey: 'toast', host: 'unicorn' })).not.toThrow();
   });
 
   test('A well configured sdk will return a repository method', () => {
-    const cf = sdk({ apiKey: 'qwe', serviceRoot: 'qweqwe' });
+    const cf = sdk({ apiKey: 'qwe', host: 'qweqwe' });
     
     expect(typeof cf).toBe('object');
     expect(typeof cf.repository).toBe('function');

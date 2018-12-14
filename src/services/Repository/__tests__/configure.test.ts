@@ -1,10 +1,10 @@
-import ContentChefConfiguration from '..';
+import { configure } from '..';
 
 describe(`Tests Content Chef service`, () => {
   test(`Configuring the service, a function will be returned`, () => {
-    expect(typeof ContentChefConfiguration({
+    expect(typeof configure({
       apiKey: 'foo',
-      serviceRoot: 'bar',
+      host: 'bar',
     })).toBe('function');
   });
 });

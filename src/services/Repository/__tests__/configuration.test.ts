@@ -9,10 +9,10 @@ describe(`Tests Content Chef service internal methods`, () => {
     expect(() => configure({ apiKey: 'foo' })).toThrow();
     
     // @ts-ignore
-    expect(() => configure({ serviceRoot: 'bar' })).toThrow();
+    expect(() => configure({ host: 'bar' })).toThrow();
   });
 
   test('Configurating the service will return a new function', () => {
-    expect(typeof configure({ apiKey: 'qwerty', serviceRoot: 'abedebare' })).toBe('function');
+    expect(typeof configure({ apiKey: 'qwerty', host: 'abedebare' })).toBe('function');
   });
 });

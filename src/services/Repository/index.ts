@@ -3,8 +3,8 @@ import * as interfaces from './interfaces';
 
 let defaultConfig: interfaces.IConfig = {
   apiKey: '',
-  callTimeout: 15000,
-  serviceRoot: '',
+  host: '',
+  timeout: 15000,
 } as interfaces.IConfig;
 
 /**
@@ -21,7 +21,7 @@ export function configure(config: interfaces.IConfig) {
     throw new TypeError(`apiKey cannot be undefined`);
   }
 
-  if (!config.serviceRoot) {
+  if (!config.host) {
     throw new TypeError(`serviceRoot cannot be undefined`);
   }
   
@@ -37,10 +37,10 @@ export function configure(config: interfaces.IConfig) {
  */
 export function createContentRequest(channel: string, state: interfaces.ContentState) {
   const url = getEndpoint('content', state, channel);
-  const axiosInstance = axios.create({ baseURL: defaultConfig.serviceRoot });
+  const axiosInstance = getAxiosInstance();
 
   return async <T extends object>(config: interfaces.IGetContentConfig): Promise<AxiosResponse<interfaces.IGetContentResponse<T>>> => {
-    return axiosInstance(url, { params: config, timeout: defaultConfig.callTimeout }).then(response => response);
+    return axiosInstance(url, { params: config, timeout: defaultConfig.timeout }).then(response => response);
   };
 }
 
@@ -51,11 +51,28 @@ export function createContentRequest(channel: string, state: interfaces.ContentS
  */
 export function createSearchRequest(channel: string, state: interfaces.ContentState) {
   const url = getEndpoint('search', state, channel);
-  const axiosInstance = axios.create({ baseURL: defaultConfig.serviceRoot });
+  const axiosInstance = getAxiosInstance();
 
   return async <T extends object>(config: interfaces.ISearchConfig): Promise<AxiosResponse<Array<interfaces.ISearchResponse<T>>>> => {
-    return axiosInstance(url, { params: config, timeout: defaultConfig.callTimeout }).then(response => response);
+    return axiosInstance(url, { params: config, timeout: defaultConfig.timeout }).then(response => response);
   };
+}
+
+/**
+ * Will get a configured axios instance
+ * @export
+ * @returns {AxiosInstance}
+ */
+export function getAxiosInstance(): AxiosInstance {
+  const instance = axios.create({
+    baseURL: defaultConfig.host,
+    httpAgent: defaultConfig.httpAgent,
+    httpsAgent: defaultConfig.httpsAgent,
+    proxy: defaultConfig.proxy,
+    timeout: defaultConfig.timeout,
+  });
+
+  return instance;
 }
 
 /**
