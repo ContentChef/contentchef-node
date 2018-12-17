@@ -102,7 +102,7 @@ export interface IConfig {
 
 #### Channel
 
-A channel is a collector of contents in a certain channel.
+A channel is a collector of contents.
 
 With the SDK you can retrieve contents which are both in *staging* and *live* state.
 
