@@ -25,7 +25,7 @@ An IDE/TextEditor with support for TypeScript is highly recommended.
 
 ```bash
 # install it from NPM!
-npm i --save @byte-code/contentchef-sdk
+npm i --save @contentchef/contentchef-node
 ```
 
 ## API
@@ -37,7 +37,7 @@ ContentChef is the default exported function. It is used to configure the SDK wi
 example
 
 ```typescript
-import ContentChef from '@byte-code/contentchef-sdk';
+import ContentChef from '@contentchef/contentchef-node';
 
 const cf = ContentChef({
   // Your Content Chef apiKey
@@ -109,7 +109,7 @@ With the SDK you can retrieve contents which are both in *staging* and *live* st
 You can use the **content** method collects a specific content by it's own `publicId`, for example to retrieve a single post from your blog, a single image from a gallery or a set or articles from your featured articles list, otherwise you can use the **search** method to find content with multiple matching criterias, like content definition name, publishing dates and more.
 
 ```typescript
-import ContentChef from '@byte-code/contentchef-sdk';
+import ContentChef from '@contentchef/contentchef-node';
 
 const cf = ContentChef({
   apiKey: 'your-content-chef-api-key',
