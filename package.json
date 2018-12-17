@@ -13,7 +13,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "source": "src/index.ts",
-  "private": true,
+  "private": false,
   "scripts": {
     "build": "npm run clean && tsc -p .",
     "changelog": "standard-changelog",
