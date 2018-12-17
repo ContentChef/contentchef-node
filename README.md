@@ -118,11 +118,11 @@ const cf = ContentChef({
 });
 
 // opens for example your website channel, will query only the published ones
-const publishedArticles = cf.channel('website');
+const websiteChannel = cf.channel('website');
 
-// will retrieve from the channel articles a single published content
-publishedArticles.content({ publicId: 'your-content-id' }).then(response => /* handles response */);
+// will retrieve from the channel website a single published content
+websiteChannel.content({ publicId: 'your-content-id' }).then(response => /* handles response */);
 
-// will retrieve from the channel articles every content with a specific contentDefinition
-publishedArticles.search({ contentDefinition: 'featured-articles' }).then(response => /* handles response */);
+// will retrieve from the channel website every content with a specific contentDefinition
+websiteChannel.search({ contentDefinition: 'featured-articles' }).then(response => /* handles response */);
 ```
