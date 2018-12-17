@@ -1,26 +1,15 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
+import ISDKConfiguration from '../ConfigurationManager/interfaces/SDKConfiguration';
 import * as interfaces from './interfaces';
 
-let defaultConfig: interfaces.IConfig = <interfaces.IConfig> {};
+let defaultConfig: ISDKConfiguration = <ISDKConfiguration> {};
 
 /**
  * @export
- * @param {interfaces.IConfig} config
+ * @param {ISDKConfiguration} config
  * @returns
  */
-export function configure(config: interfaces.IConfig) {
-  if (!config) {
-    throw new TypeError(`configuration cannot be undefined`);
-  }
-
-  if (!config.apiKey) {
-    throw new TypeError(`apiKey cannot be undefined`);
-  }
-
-  if (!config.host) {
-    throw new TypeError(`serviceRoot cannot be undefined`);
-  }
-  
+export function configure(config: ISDKConfiguration) {
   defaultConfig = { ... defaultConfig, ... config };
 
   return getRequestMethods;

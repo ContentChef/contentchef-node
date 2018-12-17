@@ -1,11 +1,13 @@
-import Repository, { IConfig } from './services/Repository';
+import ConfigurationManager from './services/ConfigurationManager';
+import ISDKConfiguration from './services/ConfigurationManager/interfaces/SDKConfiguration';
+import * as Repository from './services/Repository';
 
 /**
  * Content Chef configuration object
  * @export
  * @interface IContentChefConfiguration
  */
-export interface IContentChefConfiguration extends IConfig { }
+export interface IContentChefConfiguration extends ISDKConfiguration { }
 
 /**
  * Configures and returns the Content Chef SDK
@@ -14,27 +16,8 @@ export interface IContentChefConfiguration extends IConfig { }
  * @returns
  */
 export function configure(configuration: IContentChefConfiguration) {
-  if (configuration === undefined) {
-    throw new TypeError('Configuration cannot be undefined');
-  }
-
-  if (typeof configuration.apiKey !== 'string') {
-    throw new TypeError('apiKey must be a string');
-  }
-
-  if (configuration.timeout && typeof configuration.timeout !== 'number') {
-    throw new TypeError('callTimeout must be a number');
-  }
-
-  if (configuration.timeout < 0) {
-    throw new TypeError('callTimeout cannot be less than 0');
-  }
-
-  if (typeof configuration.host !== 'string') {
-    throw new TypeError('serviceRoot must be a string');
-  }
-
-  const repository = Repository(configuration);
+  const configurationManager = new ConfigurationManager(configuration);
+  const repository = configurationManager.configure(Repository);
   
   return {
     repository,
@@ -44,7 +27,6 @@ export function configure(configuration: IContentChefConfiguration) {
 export { 
   ContentRequestMethod,
   ContentState,
-  IConfig,
   IGetContentConfig,
   IGetContentResponse,
   IResponse,
