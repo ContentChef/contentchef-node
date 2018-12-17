@@ -117,8 +117,8 @@ const cf = ContentChef({
   timeout: 5000,
 });
 
-// opens for example an article channel, will query only the published ones
-const publishedArticles = cf.channel('articles');
+// opens for example your website channel, will query only the published ones
+const publishedArticles = cf.channel('website');
 
 // will retrieve from the channel articles a single published content
 publishedArticles.content({ publicId: 'your-content-id' }).then(response => /* handles response */);
