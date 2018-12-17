@@ -22,10 +22,9 @@ export function configure(config: ISDKConfiguration) {
  */
 export function createContentRequest(channel: string, state: interfaces.ContentState) {
   const url = getEndpoint('content', state, channel);
-  const axiosInstance = getAxiosInstance();
 
   return async <T extends object>(params: interfaces.IGetContentConfig): Promise<AxiosResponse<interfaces.IGetContentResponse<T>>> => {
-    return axiosInstance(url, { params }).then(response => response);
+    return getAxiosInstance()(url, { params });
   };
 }
 
@@ -36,10 +35,9 @@ export function createContentRequest(channel: string, state: interfaces.ContentS
  */
 export function createSearchRequest(channel: string, state: interfaces.ContentState) {
   const url = getEndpoint('search', state, channel);
-  const axiosInstance = getAxiosInstance();
 
   return async <T extends object>(params: interfaces.ISearchConfig): Promise<AxiosResponse<Array<interfaces.ISearchResponse<T>>>> => {
-    return axiosInstance(url, { params }).then(response => response);
+    return getAxiosInstance()(url, { params });
   };
 }
 
