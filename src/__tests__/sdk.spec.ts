@@ -26,10 +26,10 @@ describe('Tests the sdk', () => {
     expect(() => sdk({ apiKey: 'toast', host: 'unicorn' })).not.toThrow();
   });
 
-  test('A well configured sdk will return a repository method', () => {
+  test('A well configured sdk will return a channel method', () => {
     const cf = sdk({ apiKey: 'qwe', host: 'qweqwe' });
     
     expect(typeof cf).toBe('object');
-    expect(typeof cf.repository).toBe('function');
+    expect(typeof cf.channel).toBe('function');
   });
 });

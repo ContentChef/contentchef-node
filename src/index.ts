@@ -17,10 +17,10 @@ export interface IContentChefConfiguration extends ISDKConfiguration { }
  */
 export function configure(configuration: IContentChefConfiguration) {
   const configurationManager = new ConfigurationManager(configuration);
-  const repository = configurationManager.configure(Repository);
+  const channel = configurationManager.configure(Repository);
   
   return {
-    repository,
+    channel,
   };
 }
 
@@ -32,6 +32,7 @@ export {
   IResponse,
   ISearchConfig,
   ISearchResponse,
+  PublishingStatus,
 } from './services/Repository';
 
 export default configure;

@@ -4,6 +4,11 @@ import * as interfaces from './interfaces';
 
 let defaultConfig: ISDKConfiguration = <ISDKConfiguration> {};
 
+export enum PublishingStatus {
+  Live = 'live',
+  Staging = 'staging',
+}
+
 /**
  * @export
  * @param {ISDKConfiguration} config
@@ -17,10 +22,10 @@ export function configure(config: ISDKConfiguration) {
 
 /**
  * @param {string} channel
- * @param {interfaces.ContentState} state
+ * @param {PublishingStatus} state
  * @returns
  */
-export function createContentRequest(channel: string, state: interfaces.ContentState) {
+export function createContentRequest(channel: string, state: PublishingStatus) {
   const url = getEndpoint('content', state, channel);
 
   return async <T extends object>(params: interfaces.IGetContentConfig): Promise<AxiosResponse<interfaces.IGetContentResponse<T>>> => {
@@ -30,10 +35,10 @@ export function createContentRequest(channel: string, state: interfaces.ContentS
 
 /**
  * @param {string} channel
- * @param {interfaces.ContentState} state
+ * @param {PublishingStatus} state
  * @returns
  */
-export function createSearchRequest(channel: string, state: interfaces.ContentState) {
+export function createSearchRequest(channel: string, state: PublishingStatus) {
   const url = getEndpoint('search', state, channel);
 
   return async <T extends object>(params: interfaces.ISearchConfig): Promise<AxiosResponse<Array<interfaces.ISearchResponse<T>>>> => {
@@ -64,7 +69,7 @@ export function getAxiosInstance(): AxiosInstance {
  * @param {string} channel
  * @returns
  */
-export function getEndpoint(method: interfaces.ContentRequestMethod, state: interfaces.ContentState, channel: string) {
+export function getEndpoint(method: interfaces.ContentRequestMethod, state: PublishingStatus, channel: string) {
   return `/${state}/${method}/${channel}`;
 }
 
@@ -73,12 +78,12 @@ export function getEndpoint(method: interfaces.ContentRequestMethod, state: inte
  * @param {interfaces.ContentState} state
  * @returns
  */
-export function getRequestMethods(channel: string, state: interfaces.ContentState) {
+export function getRequestMethods(channel: string, state: PublishingStatus = PublishingStatus.Live) {
   if (typeof channel !== 'string') {
     throw new TypeError('Channel cannot be undefined');
   }
 
-  if (state !== 'live' && state !== 'staging') {
+  if (state !== PublishingStatus.Live && state !== PublishingStatus.Staging) {
     throw new TypeError(`State must be either 'live' or 'staging'`);
   }
   
