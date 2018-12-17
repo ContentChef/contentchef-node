@@ -52,7 +52,7 @@ const cf = ContentChef({
 Configuration implements this interface
 
 ```typescript
-export interface IConfig {
+export default interface ISDKConfiguration {
   /**
    * Your Content Chef API key
    * @type {string}
@@ -69,18 +69,18 @@ export interface IConfig {
    * Custom agent to perform HTTP requests. 
    * Find further information in the 
    * [axios request config documentation](https://github.com/mzabriskie/axios#request-config).
-   * @type {string}
+   * @type {any}
    * @memberof IConfig
    */
-  httpAgent?: string;
+  httpAgent?: any;
   /**
    * Custom agent to perform HTTPS requests.
    * Find further information in the 
    * [axios request config documentation](https://github.com/mzabriskie/axios#request-config).
-   * @type {string}
+   * @type {any}
    * @memberof IConfig
    */
-  httpsAgent?: string;
+  httpsAgent?: any;
   /**
    * Content Chef API Endpoint
    * @type {string}
