@@ -10,7 +10,7 @@ Content Chef Typescript SDK
   - [Installation](#installation)
   - [API](#api)
       - [ContentChef](#contentchef)
-      - [repository](#repository)
+      - [Channel](#channel)
 
 ## Requirements
 
@@ -100,9 +100,9 @@ export interface IConfig {
 
 > Bear in mind that `apiKey` and `host` are required
 
-#### repository
+#### Channel
 
-A repository is a collector of contents in a certain channel.
+A channel is a collector of contents in a certain channel.
 
 With the SDK you can retrieve contents which are both in *staging* and *live* state.
 
