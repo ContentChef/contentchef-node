@@ -1,5 +1,5 @@
 {
-  "name": "@byte-code/contentchef-sdk",
+  "name": "@contentchef/sdk",
   "version": "0.0.1",
   "homepage": "https://github.com/ContentChef/sdk-typescript",
   "description": "TypeScript SDK for Content Chef",

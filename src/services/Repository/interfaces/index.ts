@@ -1,5 +1,3 @@
-import { AxiosProxyConfig } from 'axios';
-
 export type ContentRequestMethod = 'content' | 'search';
 
 export type ContentState = 'staging' | 'live';
