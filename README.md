@@ -60,12 +60,6 @@ export default interface ISDKConfiguration {
    */
   apiKey: string;
   /**
-   * Sets a pending request timeout
-   * @type {number}
-   * @memberof IContentChefConfiguration
-   */
-  timeout?: number;
-  /**
    * Custom agent to perform HTTP requests. 
    * Find further information in the 
    * [axios request config documentation](https://github.com/mzabriskie/axios#request-config).
@@ -95,6 +89,12 @@ export default interface ISDKConfiguration {
    * @memberof IConfig
    */
   proxy?: AxiosProxyConfig;
+  /**
+   * Sets a pending request timeout
+   * @type {number}
+   * @memberof IContentChefConfiguration
+   */
+  timeout?: number;
 }
 ```
 
