@@ -16,7 +16,7 @@ Content Chef Typescript SDK
 
 In order to use this SDK, you will need
 
-* A active Content Chef account
+* An active Content Chef account
 * Node.js (v >= 8)
 
 An IDE/TextEditor with support for TypeScript is highly recommended. 
