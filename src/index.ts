@@ -1,6 +1,6 @@
+import * as Channel from './services/Channel';
 import ConfigurationManager from './services/ConfigurationManager';
 import ISDKConfiguration from './services/ConfigurationManager/interfaces/SDKConfiguration';
-import * as Repository from './services/Repository';
 
 /**
  * Content Chef configuration object
@@ -17,7 +17,7 @@ export interface IContentChefConfiguration extends ISDKConfiguration { }
  */
 export function configure(configuration: IContentChefConfiguration) {
   const configurationManager = new ConfigurationManager(configuration);
-  const channel = configurationManager.configure(Repository);
+  const channel = configurationManager.configure(Channel);
   
   return {
     channel,
@@ -33,6 +33,6 @@ export {
   ISearchConfig,
   ISearchResponse,
   PublishingStatus,
-} from './services/Repository';
+} from './services/Channel';
 
 export default configure;
