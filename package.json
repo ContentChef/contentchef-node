@@ -21,7 +21,7 @@
     "lint": "tslint -p .",
     "prepack": "npm run build",
     "postpack": "npm run clean",
-    "prepublishOnly": "npm run build",
+    "prepublishOnly": "npm test && npm run lint && npm run build",
     "postpublish": "npm run clean",
     "test": "npm run clean && jest"
   },
