@@ -14,7 +14,7 @@ export enum PublishingStatus {
  * @param {ISDKConfiguration} config
  * @returns
  */
-export function configure(config: ISDKConfiguration) {
+export function configure(config: ISDKConfiguration): interfaces.GetRequestMethods {
   defaultConfig = { ... defaultConfig, ... config };
 
   return getRequestMethods;
@@ -78,7 +78,7 @@ export function getEndpoint(method: interfaces.ContentRequestMethod, state: Publ
  * @param {interfaces.ContentState} state
  * @returns
  */
-export function getRequestMethods(channel: string, state: PublishingStatus = PublishingStatus.Live) {
+export function getRequestMethods(channel: string, state: PublishingStatus = PublishingStatus.Live): interfaces.IGetRequestMethodsList {
   if (typeof channel !== 'string') {
     throw new TypeError('Channel cannot be undefined');
   }
