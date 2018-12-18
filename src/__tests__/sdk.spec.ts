@@ -4,6 +4,18 @@ describe('Tests the sdk', () => {
   test('Entering an invalid configuration will throw an error', () => {
     // @ts-ignore
     expect(() => sdk()).toThrow();
+    
+    // @ts-ignore
+    expect(() => sdk(null)).toThrow();
+    
+    // @ts-ignore
+    expect(() => sdk('🍔🍣🍜')).toThrow();
+    
+    // @ts-ignore
+    expect(() => sdk(new Date())).toThrow();
+    
+    // @ts-ignore
+    expect(() => sdk(new Proxy({}))).toThrow();
 
     // @ts-ignore
     expect(() => sdk({})).toThrow();
