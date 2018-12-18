@@ -108,8 +108,10 @@ With the SDK you can retrieve contents which are both in *staging* and *live* st
 
 You can use the **content** method collects a specific content by it's own `publicId`, for example to retrieve a single post from your blog, a single image from a gallery or a set or articles from your featured articles list, otherwise you can use the **search** method to find content with multiple matching criterias, like content definition name, publishing dates and more.
 
+Example:
+
 ```typescript
-import ContentChef from '@contentchef/contentchef-node';
+import ContentChef, { PublishingStatus } from '@contentchef/contentchef-node';
 
 const cf = ContentChef({
   apiKey: 'your-content-chef-api-key',
@@ -117,12 +119,27 @@ const cf = ContentChef({
   timeout: 5000,
 });
 
+// This could be the representation of your daat
+interface IArticle {
+  main_image: {
+    transformations: string;
+    publicId: string;
+  };
+  sections: Array<{
+    name: string;
+    value: {
+      body: string;
+    };
+  }>;
+  title: string;
+}
+
 // opens for example your website channel, will query only the published ones
-const websiteChannel = cf.channel('website');
+const websiteChannel = cf.channel('website', PublishingStatus.Staging);
 
 // will retrieve from the channel website a single published content
-websiteChannel.content({ publicId: 'your-content-id' }).then(response => /* handles response */);
+websiteChannel.content<IArticle>({ publicId: 'your-content-id' }).then(response => /* handles response */);
 
 // will retrieve from the channel website every content with a specific contentDefinition
-websiteChannel.search({ contentDefinition: 'featured-articles' }).then(response => /* handles response */);
+websiteChannel.search<IArticle>({ contentDefinition: 'featured-articles' }).then(response => /* handles response */);
 ```
