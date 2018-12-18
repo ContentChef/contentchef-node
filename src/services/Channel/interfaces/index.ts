@@ -13,10 +13,7 @@ export interface IGetContentConfig {
   targetDate?: any;
 }
 
-export interface IGetContentResponse<T = any> extends IResponse<T> {
-  definition: string;
-  publicId: string;
-}
+export interface IGetContentResponse<T = any> extends IResponse<T> { }
 
 export interface IGetRequestMethodsList {
   content<T extends object>(params: IGetContentConfig): Promise<AxiosResponse<IGetContentResponse<T>>>;

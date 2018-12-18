@@ -1,6 +1,6 @@
 {
   "name": "@contentchef/contentchef-node",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "author": "Byte-Code",
   "maintainers": [
     {
@@ -38,12 +38,14 @@
   },
   "license": "MIT",
   "dependencies": {
-    "axios": "^0.18.0"
+    "axios": "^0.18.0",
+    "qs": "^6.6.0"
   },
   "devDependencies": {
     "@types/express": "^4.16.0",
     "@types/jest": "^23.3.10",
     "@types/node": "^10.12.14",
+    "@types/qs": "^6.5.1",
     "awesome-typescript-loader": "^5.2.1",
     "axios-mock-adapter": "^1.15.0",
     "covgen": "^3.1.0",

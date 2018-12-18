@@ -1,4 +1,5 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
+import qs from 'qs';
 import ISDKConfiguration from '../ConfigurationManager/interfaces/SDKConfiguration';
 import * as interfaces from './interfaces';
 
@@ -56,6 +57,7 @@ export function getAxiosInstance(): AxiosInstance {
     baseURL: defaultConfig.host,
     httpAgent: defaultConfig.httpAgent,
     httpsAgent: defaultConfig.httpsAgent,
+    paramsSerializer: params => qs.stringify(params, { arrayFormat: 'repeat' }),
     proxy: defaultConfig.proxy,
     timeout: defaultConfig.timeout,
   });

@@ -19,10 +19,11 @@ const mockedData = {
   requestData: {
     publishingChannel: 'test',
   },
-} as ISearchResponse<number>;
+} as ISearchResponse<any>;
 
 app.get('*', (_, response) => {
-  response.status(200).json(mockedData);
+  mockedData.payload = _.query;
+  response.status(200).json([mockedData]);
 });
 
 let server: Server | undefined;
@@ -47,14 +48,15 @@ describe(`Tests createSearchRequest`, () => {
 
   test('Invoking the returning method with staging state will trigger an axios request', done => {
     createSearchRequest('foo', PublishingStatus.Staging)({ contentDefinition: 'hello-world' }).then(response => {
-      expect(response.data).toEqual(mockedData);
+      expect(response.data).toEqual([mockedData]);
       done();
     });
   });
 
   test('Invoking the returning method with live state will trigger an axios request', done => {
-    createSearchRequest('foo', PublishingStatus.Live)({ contentDefinition: 'hello-world' }).then(response => {
-      expect(response.data).toEqual(mockedData);
+    createSearchRequest('foo', PublishingStatus.Live)<any>({ contentDefinition: 'hello-world', tags: ['hello', 'world'] }).then(response => {
+      expect(response.data).toEqual([mockedData]);
+      expect(response.data[0].payload.tags).toEqual(['hello', 'world']);
       done();
     });
   });
