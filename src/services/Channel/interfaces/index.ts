@@ -24,6 +24,8 @@ export interface IGetRequestMethodsList {
 }
 
 export interface IResponse<T> {
+  definition: string;
+  publicId: string;
   metadata: IRequestMetadata;
   offlineDate: string | null;
   onlineDate: string | null;
