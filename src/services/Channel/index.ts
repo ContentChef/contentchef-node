@@ -18,16 +18,17 @@ export enum PublishingStatus {
 export function configure(config: ISDKConfiguration): interfaces.GetRequestMethods {
   defaultConfig = { ... defaultConfig, ... config };
 
-  return getRequestMethods;
+  return (channel: string, state: PublishingStatus) => getRequestMethods(defaultConfig.spaceId, channel, state);
 }
 
 /**
+ * @param {string} spaceId
  * @param {string} channel
  * @param {PublishingStatus} state
  * @returns
  */
-export function createContentRequest(channel: string, state: PublishingStatus) {
-  const url = getEndpoint('content', state, channel);
+export function createContentRequest(spaceId: string, channel: string, state: PublishingStatus) {
+  const url = getEndpoint(spaceId, 'content', state, channel);
 
   return async <T extends object>(params: interfaces.IGetContentConfig): Promise<AxiosResponse<interfaces.IGetContentResponse<T>>> => {
     return getAxiosInstance()(url, { params });
@@ -35,12 +36,13 @@ export function createContentRequest(channel: string, state: PublishingStatus) {
 }
 
 /**
+ * @param {string} spaceId
  * @param {string} channel
  * @param {PublishingStatus} state
  * @returns
  */
-export function createSearchRequest(channel: string, state: PublishingStatus) {
-  const url = getEndpoint('search', state, channel);
+export function createSearchRequest(spaceId: string, channel: string, state: PublishingStatus) {
+  const url = getEndpoint(spaceId, 'search', state, channel);
 
   return async <T extends object>(params: interfaces.ISearchConfig): Promise<AxiosResponse<Array<interfaces.ISearchResponse<T>>>> => {
     return getAxiosInstance()(url, { params });
@@ -66,31 +68,37 @@ export function getAxiosInstance(): AxiosInstance {
 }
 
 /**
+ * @param {string} spaceId
  * @param {interfaces.ContentRequestMethod} method
  * @param {interfaces.ContentState} state
  * @param {string} channel
  * @returns
  */
-export function getEndpoint(method: interfaces.ContentRequestMethod, state: PublishingStatus, channel: string) {
-  return `/${state}/${method}/${channel}`;
+export function getEndpoint(spaceId: string, method: interfaces.ContentRequestMethod, state: PublishingStatus, channel: string) {
+  return `/space/${spaceId}/${state}/${method}/${channel}`;
 }
 
 /**
+ * @param {string} spaceId
  * @param {string} channel
  * @param {interfaces.ContentState} state
  * @returns
  */
-export function getRequestMethods(channel: string, state: PublishingStatus = PublishingStatus.Live): interfaces.IGetRequestMethodsList {
-  if (typeof channel !== 'string') {
-    throw new TypeError('Channel cannot be undefined');
+export function getRequestMethods(spaceId: string, channel: string, state: PublishingStatus = PublishingStatus.Live): interfaces.IGetRequestMethodsList {
+  if (typeof spaceId !== 'string' || spaceId.length === 0) {
+    throw new TypeError('SpaceId is mandatory');
+  }
+
+  if (typeof channel !== 'string' || channel.length === 0) {
+    throw new TypeError('Channel is mandatory');
   }
 
   if (state !== PublishingStatus.Live && state !== PublishingStatus.Staging) {
     throw new TypeError(`State must be either 'live' or 'staging'`);
   }
-  
-  const content = createContentRequest(channel, state);
-  const search = createSearchRequest(channel, state);
+
+  const content = createContentRequest(spaceId, channel, state);
+  const search = createSearchRequest(spaceId, channel, state);
 
   return { content, search };
 }

@@ -8,8 +8,14 @@ export default interface ISDKConfiguration {
    */
   apiKey: string;
   /**
-   * Custom agent to perform HTTP requests. 
-   * Find further information in the 
+   * Content Chef SpaceId to use
+   * @type {string}
+   * @memberof IContentChefConfiguration
+   */
+  spaceId: string;
+  /**
+   * Custom agent to perform HTTP requests.
+   * Find further information in the
    * [axios request config documentation](https://github.com/mzabriskie/axios#request-config).
    * @type {any}
    * @memberof IConfig
@@ -17,7 +23,7 @@ export default interface ISDKConfiguration {
   httpAgent?: any;
   /**
    * Custom agent to perform HTTPS requests.
-   * Find further information in the 
+   * Find further information in the
    * [axios request config documentation](https://github.com/mzabriskie/axios#request-config).
    * @type {any}
    * @memberof IConfig
@@ -30,8 +36,8 @@ export default interface ISDKConfiguration {
    */
   host: string;
   /**
-   * Axios proxy configuration. 
-   * See the [axios request config documentation](https://github.com/mzabriskie/axios#request-config) 
+   * Axios proxy configuration.
+   * See the [axios request config documentation](https://github.com/mzabriskie/axios#request-config)
    * for further information about the supported values.
    * @type {AxiosProxyConfig}
    * @memberof IConfig

@@ -33,6 +33,7 @@ beforeAll(async () => {
   configure({
     apiKey: 'qwerty',
     host: `http://localhost:${port}/`,
+    spaceId: 'aSpace',
     timeout: 25000,
   });
 });
@@ -40,20 +41,20 @@ afterAll(() => server.close());
 
 describe(`Tests createContentRequest`, () => {
   test(`Invoking this method will return a new function`, () => {
-    expect(() => createContentRequest('foo', PublishingStatus.Live)).not.toThrow();
-    
-    expect(typeof createContentRequest('foo', PublishingStatus.Live)).toBe('function');
+    expect(() => createContentRequest('aSpace', 'foo', PublishingStatus.Live)).not.toThrow();
+
+    expect(typeof createContentRequest('aSpace', 'foo', PublishingStatus.Live)).toBe('function');
   });
 
   test('Invoking the returning method with staging state will trigger an axios request', done => {
-    createContentRequest('foo', PublishingStatus.Staging)({ publicId: 'hello-world' }).then(response => {
+    createContentRequest('aSpace', 'foo', PublishingStatus.Staging)({ publicId: 'hello-world' }).then(response => {
       expect(response.data).toEqual(mockedData);
       done();
     });
   });
 
   test('Invoking the returning method with live state will trigger an axios request', done => {
-    createContentRequest('foo', PublishingStatus.Live)({ publicId: 'hello-world' }).then(response => {
+    createContentRequest('aSpace', 'foo', PublishingStatus.Live)({ publicId: 'hello-world' }).then(response => {
       expect(response.data).toEqual(mockedData);
       done();
     });

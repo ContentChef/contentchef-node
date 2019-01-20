@@ -5,6 +5,7 @@ describe(`Tests Content Chef service`, () => {
     expect(typeof configure({
       apiKey: 'foo',
       host: 'bar',
+      spaceId: 'aSpace',
     })).toBe('function');
   });
 });

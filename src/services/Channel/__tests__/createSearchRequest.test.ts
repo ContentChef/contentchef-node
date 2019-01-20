@@ -36,6 +36,7 @@ beforeAll(async () => {
   configure({
     apiKey: 'qwerty',
     host: `http://localhost:${port}/`,
+    spaceId: 'aSpace',
     timeout: 25000,
   });
 });
@@ -43,18 +44,18 @@ afterAll(() => server.close());
 
 describe(`Tests createSearchRequest`, () => {
   test(`Invoking this method will return a new function`, () => {
-    expect(typeof createSearchRequest('test', PublishingStatus.Live)).toBe('function');
+    expect(typeof createSearchRequest('aSpace', 'test', PublishingStatus.Live)).toBe('function');
   });
 
   test('Invoking the returning method with staging state will trigger an axios request', done => {
-    createSearchRequest('foo', PublishingStatus.Staging)({ contentDefinition: 'hello-world' }).then(response => {
+    createSearchRequest('aSpace', 'foo', PublishingStatus.Staging)({ contentDefinition: 'hello-world' }).then(response => {
       expect(response.data).toEqual([mockedData]);
       done();
     });
   });
 
   test('Invoking the returning method with live state will trigger an axios request', done => {
-    createSearchRequest('foo', PublishingStatus.Live)<any>({ contentDefinition: 'hello-world', tags: ['hello', 'world'] }).then(response => {
+    createSearchRequest('aSpace', 'foo', PublishingStatus.Live)<any>({ contentDefinition: 'hello-world', tags: ['hello', 'world'] }).then(response => {
       expect(response.data).toEqual([mockedData]);
       expect(response.data[0].payload.tags).toEqual(['hello', 'world']);
       done();

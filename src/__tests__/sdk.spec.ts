@@ -4,16 +4,16 @@ describe('Tests the sdk', () => {
   test('Entering an invalid configuration will throw an error', () => {
     // @ts-ignore
     expect(() => sdk()).toThrow();
-    
+
     // @ts-ignore
     expect(() => sdk(null)).toThrow();
-    
+
     // @ts-ignore
     expect(() => sdk('🍔🍣🍜')).toThrow();
-    
+
     // @ts-ignore
     expect(() => sdk(new Date())).toThrow();
-    
+
     // @ts-ignore
     expect(() => sdk(new Proxy({}))).toThrow();
 
@@ -34,13 +34,13 @@ describe('Tests the sdk', () => {
 
     // @ts-ignore
     expect(() => sdk({ apiKey: '', timeout: 100, host: '' })).toThrow();
-    
-    expect(() => sdk({ apiKey: 'toast', host: 'unicorn' })).not.toThrow();
+
+    expect(() => sdk({ spaceId: 'aSpace', apiKey: 'toast', host: 'unicorn' })).not.toThrow();
   });
 
   test('A well configured sdk will return a channel method', () => {
-    const cf = sdk({ apiKey: 'qwe', host: 'qweqwe' });
-    
+    const cf = sdk({ spaceId: 'aSpace', apiKey: 'qwe', host: 'qweqwe' });
+
     expect(typeof cf).toBe('object');
     expect(typeof cf.channel).toBe('function');
   });
