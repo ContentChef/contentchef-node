@@ -1,9 +1,11 @@
+<div align="center">
+  <img src="assets/logo-banner.svg" height="128"/>
+</div>
+
 Content Chef Typescript SDK
 ===========================
 
 [Content Chef](https://contentchefwebsite)'s polymorphic typescript SDK for your web and node.js applications.
-
-![Logo](assets/logo-banner.svg)
 
 - [Content Chef Typescript SDK](#content-chef-typescript-sdk)
   - [Requirements](#requirements)
