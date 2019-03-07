@@ -43,6 +43,7 @@ export interface ISearchConfig {
   limit?: any;
   tags?: any;
   targetDate?: any;
+  propFilters?: any;
 }
 
 export interface ISearchResponse<T = any> extends IResponse<T> {
