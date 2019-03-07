@@ -35,6 +35,7 @@ export interface IRequestMetadata {
   contentVersion: number;
   id: number;
   publishedOn: string;
+  tags: string[];
 }
 
 export interface ISearchConfig {
