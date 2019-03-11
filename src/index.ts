@@ -1,7 +1,8 @@
 import * as Channel from './services/Channel';
-import { GetRequestMethods } from './services/Channel';
+import { GetChannelMethods } from './services/Channel';
 import ConfigurationManager from './services/ConfigurationManager';
 import ISDKConfiguration from './services/ConfigurationManager/interfaces/SDKConfiguration';
+export * from './services/Channel/interfaces';
 
 /**
  * Content Chef configuration object
@@ -10,8 +11,8 @@ import ISDKConfiguration from './services/ConfigurationManager/interfaces/SDKCon
  */
 export interface IContentChefConfiguration extends ISDKConfiguration { }
 
-interface IConfigure {
-  channel: GetRequestMethods;
+interface IConfiguredSDK {
+  channel: GetChannelMethods;
 }
 
 /**
@@ -20,7 +21,7 @@ interface IConfigure {
  * @param {IContentChefConfiguration} configuration
  * @returns
  */
-export function configure(configuration: IContentChefConfiguration): IConfigure {
+export function configure(configuration: IContentChefConfiguration): IConfiguredSDK {
   const configurationManager = new ConfigurationManager(configuration);
   const channel = configurationManager.configure(Channel);
   

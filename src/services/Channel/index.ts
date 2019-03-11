@@ -15,10 +15,10 @@ export enum PublishingStatus {
  * @param {ISDKConfiguration} config
  * @returns
  */
-export function configure(config: ISDKConfiguration): interfaces.GetRequestMethods {
+export function configure(config: ISDKConfiguration): interfaces.GetChannelMethods {
   defaultConfig = { ... defaultConfig, ... config };
 
-  return (channel: string, state: PublishingStatus) => getRequestMethods(defaultConfig.spaceId, channel, state);
+  return (channel: string, state: PublishingStatus) => getChannelMethods(defaultConfig.spaceId, channel, state);
 }
 
 /**
@@ -69,22 +69,11 @@ export function getAxiosInstance(): AxiosInstance {
 
 /**
  * @param {string} spaceId
- * @param {interfaces.ContentRequestMethod} method
- * @param {interfaces.ContentState} state
- * @param {string} channel
- * @returns
- */
-export function getEndpoint(spaceId: string, method: interfaces.ContentRequestMethod, state: PublishingStatus, channel: string) {
-  return `/space/${spaceId}/${state}/${method}/${channel}`;
-}
-
-/**
- * @param {string} spaceId
  * @param {string} channel
  * @param {interfaces.ContentState} state
  * @returns
  */
-export function getRequestMethods(spaceId: string, channel: string, state: PublishingStatus = PublishingStatus.Live): interfaces.IGetRequestMethodsList {
+export function getChannelMethods(spaceId: string, channel: string, state: PublishingStatus = PublishingStatus.Live): interfaces.IChannelMethods {
   if (typeof spaceId !== 'string' || spaceId.length === 0) {
     throw new TypeError('SpaceId is mandatory');
   }
@@ -101,6 +90,17 @@ export function getRequestMethods(spaceId: string, channel: string, state: Publi
   const search = createSearchRequest(spaceId, channel, state);
 
   return { content, search };
+}
+
+/**
+ * @param {string} spaceId
+ * @param {interfaces.ContentRequestMethod} method
+ * @param {interfaces.ContentState} state
+ * @param {string} channel
+ * @returns
+ */
+export function getEndpoint(spaceId: string, method: interfaces.ContentRequestMethod, state: PublishingStatus, channel: string) {
+  return `/space/${spaceId}/${state}/${method}/${channel}`;
 }
 
 export * from './interfaces';
