@@ -5,7 +5,7 @@ export type ContentRequestMethod = 'content' | 'search';
 
 export type ContentState = 'staging' | 'live';
 
-export type GetRequestMethods = (channel: string, state: PublishingStatus) => IGetRequestMethodsList;
+export type GetChannelMethods = (channel: string, state: PublishingStatus) => IChannelMethods;
 
 export interface IGetContentConfig {
   legacyMetadata?: boolean;
@@ -15,7 +15,7 @@ export interface IGetContentConfig {
 
 export interface IGetContentResponse<T = any> extends IResponse<T> { }
 
-export interface IGetRequestMethodsList {
+export interface IChannelMethods {
   content<T extends object>(params: IGetContentConfig): Promise<AxiosResponse<IGetContentResponse<T>>>;
   search<T extends object>(params: ISearchConfig): Promise<AxiosResponse<Array<ISearchResponse<T>>>>;
 }
@@ -23,13 +23,13 @@ export interface IGetRequestMethodsList {
 export interface IResponse<T> {
   definition: string;
   publicId: string;
-  metadata: IRequestMetadata;
+  metadata: IResponseMetadata;
   offlineDate: string | null;
   onlineDate: string | null;
   payload: T;
 }
 
-export interface IRequestMetadata {
+export interface IResponseMetadata {
   authoringContentId: number;
   contentLastModifiedDate: string;
   contentVersion: number;
