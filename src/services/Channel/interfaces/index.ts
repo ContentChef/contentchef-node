@@ -8,9 +8,9 @@ export type ContentState = 'staging' | 'live';
 export type GetRequestMethods = (channel: string, state: PublishingStatus) => IGetRequestMethodsList;
 
 export interface IGetContentConfig {
-  legacyMetadata?: any;
-  publicId?: any;
-  targetDate?: any;
+  legacyMetadata?: boolean;
+  publicId?: string;
+  targetDate?: string;
 }
 
 export interface IGetContentResponse<T = any> extends IResponse<T> { }
@@ -39,12 +39,35 @@ export interface IRequestMetadata {
 }
 
 export interface ISearchConfig {
-  contentDefinition?: any;
-  legacyMetadata?: any;
-  limit?: any;
-  tags?: any;
-  targetDate?: any;
-  propFilters?: any;
+  publicId?: string[] | string;
+  contentDefinition?: string[] | string;
+  legacyMetadata?: boolean;
+  limit?: number;
+  tags?: string[] | string;
+  targetDate?: string;
+  propFilters?: IPropFilter;
+}
+
+export interface IPropFilter {
+  condition: LogicalOperators;
+  items: IPropFilterItem[];
+}
+
+export interface IPropFilterItem {
+  field: string;
+  operator: Operators;
+  value: string;
+}
+
+export enum LogicalOperators {
+  AND = 'AND',
+  OR = 'OR',
+}
+
+export enum Operators {
+  EQUALS = 'EQUALS',
+  CONTAINS = 'CONTAINS',
+  IGNORE_CASE = 'IGNORE_CASE',
 }
 
 export interface ISearchResponse<T = any> extends IResponse<T> {
