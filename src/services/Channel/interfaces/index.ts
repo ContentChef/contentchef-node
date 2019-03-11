@@ -9,7 +9,7 @@ export type GetRequestMethods = (channel: string, state: PublishingStatus) => IG
 
 export interface IGetContentConfig {
   legacyMetadata?: boolean;
-  publicId?: string;
+  publicId: string;
   targetDate?: string;
 }
 
