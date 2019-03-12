@@ -44,7 +44,7 @@ export interface ISearchConfig {
   legacyMetadata?: boolean;
   limit?: number;
   tags?: string[] | string;
-  targetDate?: string;
+  targetDate?: Date;
   propFilters?: IPropFilter;
 }
 
