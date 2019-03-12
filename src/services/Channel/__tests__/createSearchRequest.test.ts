@@ -2,7 +2,7 @@ import express from 'express';
 import { Server } from 'http';
 import portfinder from 'portfinder';
 import { configure, createSearchRequest, PublishingStatus } from '..';
-import { ISearchResponse } from '../interfaces';
+import { IPropFilter, ISearchResponse, LogicalOperators, Operators } from '../interfaces';
 
 const app = express();
 const mockedData = {
@@ -58,6 +58,22 @@ describe(`Tests createSearchRequest`, () => {
     createSearchRequest('aSpace', 'foo', PublishingStatus.Live)<any>({ contentDefinition: 'hello-world', tags: ['hello', 'world'] }).then(response => {
       expect(response.data).toEqual([mockedData]);
       expect(response.data[0].payload.tags).toEqual(['hello', 'world']);
+      done();
+    });
+  });
+
+  test('Invoking the returning method with stage state and propFilters param should trigger an axios request and propFilters should be a stringified json', done => {
+    const propFilters: IPropFilter = {
+      condition: LogicalOperators.AND,
+      items: [{
+        field: 'indexedField1',
+        operator: Operators.CONTAINS,
+        value: 'indexedValue1',
+      }],
+    };
+    createSearchRequest('aSpace', 'foo', PublishingStatus.Live)<any>({ propFilters }).then(response => {
+      expect(response.data).toEqual([mockedData]);
+      expect(response.config.params.propFilters).toEqual(JSON.stringify(propFilters));
       done();
     });
   });

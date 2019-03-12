@@ -31,6 +31,7 @@ export function createContentRequest(spaceId: string, channel: string, state: Pu
   const url = getEndpoint(spaceId, 'content', state, channel);
 
   return async <T extends object>(params: interfaces.IGetContentConfig): Promise<AxiosResponse<interfaces.IGetContentResponse<T>>> => {
+    
     return getAxiosInstance()(url, { params });
   };
 }
@@ -45,7 +46,11 @@ export function createSearchRequest(spaceId: string, channel: string, state: Pub
   const url = getEndpoint(spaceId, 'search', state, channel);
 
   return async <T extends object>(params: interfaces.ISearchConfig): Promise<AxiosResponse<Array<interfaces.ISearchResponse<T>>>> => {
-    return getAxiosInstance()(url, { params });
+
+    return getAxiosInstance()(url, { params: {
+      ...params,
+      propFilters: params.propFilters ? JSON.stringify(params.propFilters) : undefined,
+    } });
   };
 }
 
