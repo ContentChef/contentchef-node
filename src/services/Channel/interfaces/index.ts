@@ -66,8 +66,9 @@ export enum LogicalOperators {
 
 export enum Operators {
   EQUALS = 'EQUALS',
+  EQUALS_IGNORE_CASE = 'EQUALS_IGNORE_CASE',
   CONTAINS = 'CONTAINS',
-  IGNORE_CASE = 'IGNORE_CASE',
+  CONTAINS_IGNORE_CASE = 'CONTAINS_IGNORE_CASE',
 }
 
 export interface ISearchResponse<T = any> extends IResponse<T> {
