@@ -56,7 +56,7 @@ export interface IPropFilter {
 export interface IPropFilterItem {
   field: string;
   operator: Operators;
-  value: string;
+  value: any;
 }
 
 export enum LogicalOperators {
