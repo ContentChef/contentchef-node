@@ -56,7 +56,7 @@ export interface IPropFilter {
 export interface IPropFilterItem {
   field: string;
   operator: Operators;
-  value: string;
+  value: any;
 }
 
 export enum LogicalOperators {
@@ -65,10 +65,14 @@ export enum LogicalOperators {
 }
 
 export enum Operators {
-  EQUALS = 'EQUALS',
-  EQUALS_IGNORE_CASE = 'EQUALS_IGNORE_CASE',
   CONTAINS = 'CONTAINS',
-  CONTAINS_IGNORE_CASE = 'CONTAINS_IGNORE_CASE',
+  CONTAINS_IC = 'CONTAINS_IC',
+  EQUALS = 'EQUALS',
+  EQUALS_IC = 'EQUALS_IC',
+  IN = 'IN',
+  IN_IC = 'IN_IC',
+  STARTS_WITH = 'STARTS_WITH',
+  STARTS_WITH_IC = 'STARTS_WITH_IC',
 }
 
 export interface ISearchResponse<T = any> extends IResponse<T> {
