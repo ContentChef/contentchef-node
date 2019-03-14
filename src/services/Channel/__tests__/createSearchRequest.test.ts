@@ -6,24 +6,31 @@ import { IPropFilter, ISearchResponse, LogicalOperators, Operators } from '../in
 
 const app = express();
 const mockedData = {
-  metadata: {
-    authoringContentId: 1,
-    contentLastModifiedDate: '',
-    contentVersion: 0,
-    id: 0,
-    publishedOn: '',
-  },
-  offlineDate: '',
-  onlineDate: '',
-  payload: 100,
-  requestData: {
-    publishingChannel: 'test',
-  },
-} as ISearchResponse<any>;
+  items: [
+    {
+      metadata: {
+        authoringContentId: 1,
+        contentLastModifiedDate: '',
+        contentVersion: 0,
+        id: 0,
+        publishedOn: '',
+      },
+      offlineDate: '',
+      onlineDate: '',
+      payload: 100,
+      requestData: {
+        publishingChannel: 'test',
+      },
+    } as ISearchResponse<any>,
+  ],
+  skip: 0,
+  take: 10,
+  total: 1,
+};
 
 app.get('*', (_, response) => {
-  mockedData.payload = _.query;
-  response.status(200).json([mockedData]);
+  mockedData.items[0].payload = _.query;
+  response.status(200).json(mockedData);
 });
 
 let server: Server | undefined;
@@ -48,16 +55,16 @@ describe(`Tests createSearchRequest`, () => {
   });
 
   test('Invoking the returning method with staging state will trigger an axios request', done => {
-    createSearchRequest('aSpace', 'foo', PublishingStatus.Staging)({ contentDefinition: 'hello-world' }).then(response => {
-      expect(response.data).toEqual([mockedData]);
+    createSearchRequest('aSpace', 'foo', PublishingStatus.Staging)({ contentDefinition: 'hello-world', skip: 0, take: 10 }).then(response => {
+      expect(response.data).toEqual(mockedData);
       done();
     });
   });
 
   test('Invoking the returning method with live state will trigger an axios request', done => {
-    createSearchRequest('aSpace', 'foo', PublishingStatus.Live)<any>({ contentDefinition: 'hello-world', tags: ['hello', 'world'] }).then(response => {
-      expect(response.data).toEqual([mockedData]);
-      expect(response.data[0].payload.tags).toEqual(['hello', 'world']);
+    createSearchRequest('aSpace', 'foo', PublishingStatus.Live)<any>({ contentDefinition: 'hello-world', tags: ['hello', 'world'], skip: 0, take: 10 }).then(response => {
+      expect(response.data).toEqual(mockedData);
+      expect(response.data.items[0].payload.tags).toEqual(['hello', 'world']);
       done();
     });
   });
@@ -71,8 +78,8 @@ describe(`Tests createSearchRequest`, () => {
         value: 'indexedValue1',
       }],
     };
-    createSearchRequest('aSpace', 'foo', PublishingStatus.Live)<any>({ propFilters }).then(response => {
-      expect(response.data).toEqual([mockedData]);
+    createSearchRequest('aSpace', 'foo', PublishingStatus.Live)<any>({ propFilters, skip: 0, take: 10 }).then(response => {
+      expect(response.data).toEqual(mockedData);
       expect(response.config.params.propFilters).toEqual(JSON.stringify(propFilters));
       done();
     });
