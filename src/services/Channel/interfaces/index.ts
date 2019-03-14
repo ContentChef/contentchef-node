@@ -1,7 +1,7 @@
 import { AxiosResponse } from 'axios';
 import { PublishingStatus } from '../index';
 
-export type ContentRequestMethod = 'content' | 'search';
+export type ContentRequestMethod = 'content' | 'search' | `search/v2`;
 
 export type ContentState = 'staging' | 'live';
 
@@ -17,7 +17,7 @@ export interface IGetContentResponse<T = any> extends IResponse<T> { }
 
 export interface IChannelMethods {
   content<T extends object>(params: IGetContentConfig): Promise<AxiosResponse<IGetContentResponse<T>>>;
-  search<T extends object>(params: ISearchConfig): Promise<AxiosResponse<Array<ISearchResponse<T>>>>;
+  search<T extends object>(params: ISearchConfig): Promise<AxiosResponse<IPaginatedResponse<ISearchResponse<T>>>>;
 }
 
 export interface IResponse<T> {
@@ -27,6 +27,13 @@ export interface IResponse<T> {
   offlineDate: string | null;
   onlineDate: string | null;
   payload: T;
+}
+
+export interface IPaginatedResponse<T = any> {
+  items: T[];
+  total: number;
+  skip: number;
+  take: number;
 }
 
 export interface IResponseMetadata {
@@ -39,10 +46,11 @@ export interface IResponseMetadata {
 }
 
 export interface ISearchConfig {
+  skip: number;
+  take: number;
   publicId?: string[] | string;
   contentDefinition?: string[] | string;
   legacyMetadata?: boolean;
-  limit?: number;
   tags?: string[] | string;
   targetDate?: Date;
   propFilters?: IPropFilter;

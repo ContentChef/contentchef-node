@@ -43,9 +43,9 @@ export function createContentRequest(spaceId: string, channel: string, state: Pu
  * @returns
  */
 export function createSearchRequest(spaceId: string, channel: string, state: PublishingStatus) {
-  const url = getEndpoint(spaceId, 'search', state, channel);
+  const url = getEndpoint(spaceId, 'search/v2', state, channel);
 
-  return async <T extends object>(params: interfaces.ISearchConfig): Promise<AxiosResponse<Array<interfaces.ISearchResponse<T>>>> => {
+  return async <T extends object>(params: interfaces.ISearchConfig): Promise<AxiosResponse<interfaces.IPaginatedResponse<interfaces.ISearchResponse<T>>>> => {
 
     return getAxiosInstance()(url, { params: {
       ...params,
