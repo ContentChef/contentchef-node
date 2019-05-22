@@ -1,10 +1,8 @@
-import express from 'express';
-import { Server } from 'http';
-import portfinder from 'portfinder';
-import { configure, createContentRequest, PublishingStatus } from '../index';
+import nock = require('nock');
+import ISDKConfiguration from '../../ConfigurationManager/interfaces/SDKConfiguration';
+import { createContentRequest, PublishingStatus } from '../index';
 import { IGetContentResponse } from '../interfaces';
 
-const app = express();
 const mockedData = {
   definition: '',
   metadata: {
@@ -19,42 +17,34 @@ const mockedData = {
   payload: 0,
   publicId: '',
 } as IGetContentResponse<number>;
+const config = <ISDKConfiguration> {
+  apiKey: 'qwerty',
+  host: 'http://localhost:1234/',
+  spaceId: 'aSpace',
+  timeout: 25000,
+};
 
-app.get('*', (_, response) => {
-  response.status(200).json(mockedData);
-});
-
-let server: Server | undefined;
-
-beforeAll(async () => {
-  const port = await portfinder.getPortPromise();
-  server = app.listen(port);
-
-  configure({
-    apiKey: 'qwerty',
-    host: `http://localhost:${port}/`,
-    spaceId: 'aSpace',
-    timeout: 25000,
-  });
-});
-afterAll(() => server.close());
+nock(config.host)
+  .persist()
+  .get(/.*/)
+  .reply(200, mockedData);
 
 describe(`Tests createContentRequest`, () => {
   test(`Invoking this method will return a new function`, () => {
-    expect(() => createContentRequest('aSpace', 'foo', PublishingStatus.Live)).not.toThrow();
+    expect(() => createContentRequest('aSpace', 'foo', PublishingStatus.Live, config)).not.toThrow();
 
-    expect(typeof createContentRequest('aSpace', 'foo', PublishingStatus.Live)).toBe('function');
+    expect(typeof createContentRequest('aSpace', 'foo', PublishingStatus.Live, config)).toBe('function');
   });
 
   test('Invoking the returning method with staging state will trigger an axios request', done => {
-    createContentRequest('aSpace', 'foo', PublishingStatus.Staging)({ publicId: 'hello-world' }).then(response => {
+    createContentRequest('aSpace', 'foo', PublishingStatus.Staging, config)({ publicId: 'hello-world' }).then(response => {
       expect(response.data).toEqual(mockedData);
       done();
     });
   });
 
   test('Invoking the returning method with live state will trigger an axios request', done => {
-    createContentRequest('aSpace', 'foo', PublishingStatus.Live)({ publicId: 'hello-world' }).then(response => {
+    createContentRequest('aSpace', 'foo', PublishingStatus.Live, config)({ publicId: 'hello-world' }).then(response => {
       expect(response.data).toEqual(mockedData);
       done();
     });

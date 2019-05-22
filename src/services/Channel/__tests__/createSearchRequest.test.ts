@@ -1,10 +1,8 @@
-import express from 'express';
-import { Server } from 'http';
-import portfinder from 'portfinder';
-import { configure, createSearchRequest, PublishingStatus } from '..';
+import nock from 'nock';
+import { createSearchRequest, PublishingStatus } from '..';
+import ISDKConfiguration from '../../ConfigurationManager/interfaces/SDKConfiguration';
 import { IPropFilter, ISearchResponse, LogicalOperators, Operators } from '../interfaces';
 
-const app = express();
 const mockedData = {
   items: [
     {
@@ -17,7 +15,12 @@ const mockedData = {
       },
       offlineDate: '',
       onlineDate: '',
-      payload: 100,
+      payload: {
+        tags: [
+          'hello',
+          'world',
+        ],
+      },
       requestData: {
         publishingChannel: 'test',
       },
@@ -28,41 +31,32 @@ const mockedData = {
   total: 1,
 };
 
-app.get('*', (_, response) => {
-  mockedData.items[0].payload = _.query;
-  response.status(200).json(mockedData);
-});
+const config = <ISDKConfiguration> {
+  apiKey: 'qwerty',
+  host: `http://localhost:1234/`,
+  spaceId: 'aSpace',
+  timeout: 25000,
+};
 
-let server: Server | undefined;
-
-beforeAll(async () => {
-  const port = await portfinder.getPortPromise();
-
-  server = app.listen(port);
-
-  configure({
-    apiKey: 'qwerty',
-    host: `http://localhost:${port}/`,
-    spaceId: 'aSpace',
-    timeout: 25000,
-  });
-});
-afterAll(() => server.close());
+nock(config.host)
+  .persist()
+  .get(/.*/)
+  .reply(200, mockedData);
 
 describe(`Tests createSearchRequest`, () => {
   test(`Invoking this method will return a new function`, () => {
-    expect(typeof createSearchRequest('aSpace', 'test', PublishingStatus.Live)).toBe('function');
+    expect(typeof createSearchRequest('aSpace', 'test', PublishingStatus.Live, config)).toBe('function');
   });
 
   test('Invoking the returning method with staging state will trigger an axios request', done => {
-    createSearchRequest('aSpace', 'foo', PublishingStatus.Staging)({ contentDefinition: 'hello-world', skip: 0, take: 10 }).then(response => {
+    createSearchRequest('aSpace', 'foo', PublishingStatus.Staging, config)({ contentDefinition: 'hello-world', skip: 0, take: 10 }).then(response => {
       expect(response.data).toEqual(mockedData);
       done();
     });
   });
 
   test('Invoking the returning method with live state will trigger an axios request', done => {
-    createSearchRequest('aSpace', 'foo', PublishingStatus.Live)<any>({ contentDefinition: 'hello-world', tags: ['hello', 'world'], skip: 0, take: 10 }).then(response => {
+    createSearchRequest('aSpace', 'foo', PublishingStatus.Live, config)<any>({ contentDefinition: 'hello-world', tags: ['hello', 'world'], skip: 0, take: 10 }).then(response => {
       expect(response.data).toEqual(mockedData);
       expect(response.data.items[0].payload.tags).toEqual(['hello', 'world']);
       done();
@@ -78,7 +72,7 @@ describe(`Tests createSearchRequest`, () => {
         value: 'indexedValue1',
       }],
     };
-    createSearchRequest('aSpace', 'foo', PublishingStatus.Live)<any>({ propFilters, skip: 0, take: 10 }).then(response => {
+    createSearchRequest('aSpace', 'foo', PublishingStatus.Live, config)<any>({ propFilters, skip: 0, take: 10 }).then(response => {
       expect(response.data).toEqual(mockedData);
       expect(response.config.params.propFilters).toEqual(JSON.stringify(propFilters));
       done();
