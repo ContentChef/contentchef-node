@@ -2,7 +2,7 @@ import { getAxiosInstance } from '..';
 
 describe(`Tests getAxiosInstance`, () => {
   test('getAxiosInstance returns a new axios instance', () => {
-    const axios = getAxiosInstance(); 
+    const axios = getAxiosInstance({} as any); 
 
     expect(typeof axios).toBe('function');
     expect(axios).toHaveProperty('delete');

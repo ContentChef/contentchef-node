@@ -44,6 +44,7 @@
   "devDependencies": {
     "@types/express": "^4.16.0",
     "@types/jest": "^23.3.10",
+    "@types/nock": "^10.0.3",
     "@types/node": "^10.12.14",
     "@types/qs": "^6.5.1",
     "awesome-typescript-loader": "^5.2.1",
@@ -51,6 +52,7 @@
     "covgen": "^3.1.0",
     "express": "^4.16.4",
     "jest": "^23.6.0",
+    "nock": "^10.0.6",
     "portfinder": "^1.0.20",
     "rimraf": "^2.6.2",
     "standard-changelog": "^2.0.6",

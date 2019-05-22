@@ -3,7 +3,9 @@ import qs from 'qs';
 import ISDKConfiguration from '../ConfigurationManager/interfaces/SDKConfiguration';
 import * as interfaces from './interfaces';
 
-let defaultConfig: ISDKConfiguration = <ISDKConfiguration> {};
+const defaultConfig: ISDKConfiguration = <ISDKConfiguration> {
+
+};
 
 export enum PublishingStatus {
   Live = 'live',
@@ -16,23 +18,8 @@ export enum PublishingStatus {
  * @returns
  */
 export function configure(config: ISDKConfiguration): interfaces.GetChannelMethods {
-  defaultConfig = { ... defaultConfig, ... config };
-
-  return (channel: string, state: PublishingStatus) => getChannelMethods(defaultConfig.spaceId, channel, state);
-}
-
-/**
- * @param {string} spaceId
- * @param {string} channel
- * @param {PublishingStatus} state
- * @returns
- */
-export function createContentRequest(spaceId: string, channel: string, state: PublishingStatus) {
-  const url = getEndpoint(spaceId, 'content', state, channel);
-
-  return async <T extends object>(params: interfaces.IGetContentConfig): Promise<AxiosResponse<interfaces.IGetContentResponse<T>>> => {
-    
-    return getAxiosInstance()(url, { params });
+  return (channel: string, state: PublishingStatus = PublishingStatus.Live) => {
+    return getChannelMethods(config.spaceId, channel, state, { ... defaultConfig, ... config });
   };
 }
 
@@ -42,12 +29,27 @@ export function createContentRequest(spaceId: string, channel: string, state: Pu
  * @param {PublishingStatus} state
  * @returns
  */
-export function createSearchRequest(spaceId: string, channel: string, state: PublishingStatus) {
+export function createContentRequest(spaceId: string, channel: string, state: PublishingStatus, config: ISDKConfiguration) {
+  const url = getEndpoint(spaceId, 'content', state, channel);
+
+  return async <T extends object>(params: interfaces.IGetContentConfig): Promise<AxiosResponse<interfaces.IGetContentResponse<T>>> => {
+    
+    return getAxiosInstance(config)(url, { params });
+  };
+}
+
+/**
+ * @param {string} spaceId
+ * @param {string} channel
+ * @param {PublishingStatus} state
+ * @returns
+ */
+export function createSearchRequest(spaceId: string, channel: string, state: PublishingStatus, config: ISDKConfiguration) {
   const url = getEndpoint(spaceId, 'search/v2', state, channel);
 
   return async <T extends object>(params: interfaces.ISearchConfig): Promise<AxiosResponse<interfaces.IPaginatedResponse<interfaces.ISearchResponse<T>>>> => {
 
-    return getAxiosInstance()(url, { params: {
+    return getAxiosInstance(config)(url, { params: {
       ...params,
       propFilters: params.propFilters ? JSON.stringify(params.propFilters) : undefined,
     } });
@@ -59,14 +61,14 @@ export function createSearchRequest(spaceId: string, channel: string, state: Pub
  * @export
  * @returns {AxiosInstance}
  */
-export function getAxiosInstance(): AxiosInstance {
+export function getAxiosInstance(config: ISDKConfiguration): AxiosInstance {
   const instance = axios.create({
-    baseURL: defaultConfig.host,
-    httpAgent: defaultConfig.httpAgent,
-    httpsAgent: defaultConfig.httpsAgent,
+    baseURL: config.host,
+    httpAgent: config.httpAgent,
+    httpsAgent: config.httpsAgent,
     paramsSerializer: params => qs.stringify(params, { arrayFormat: 'repeat' }),
-    proxy: defaultConfig.proxy,
-    timeout: defaultConfig.timeout,
+    proxy: config.proxy,
+    timeout: config.timeout,
   });
 
   return instance;
@@ -78,7 +80,7 @@ export function getAxiosInstance(): AxiosInstance {
  * @param {interfaces.ContentState} state
  * @returns
  */
-export function getChannelMethods(spaceId: string, channel: string, state: PublishingStatus = PublishingStatus.Live): interfaces.IChannelMethods {
+export function getChannelMethods(spaceId: string, channel: string, state: PublishingStatus, config: ISDKConfiguration): interfaces.IChannelMethods {
   if (typeof spaceId !== 'string' || spaceId.length === 0) {
     throw new TypeError('SpaceId is mandatory');
   }
@@ -91,8 +93,8 @@ export function getChannelMethods(spaceId: string, channel: string, state: Publi
     throw new TypeError(`State must be either 'live' or 'staging'`);
   }
 
-  const content = createContentRequest(spaceId, channel, state);
-  const search = createSearchRequest(spaceId, channel, state);
+  const content = createContentRequest(spaceId, channel, state, config);
+  const search = createSearchRequest(spaceId, channel, state, config);
 
   return { content, search };
 }
