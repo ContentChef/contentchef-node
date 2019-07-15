@@ -33,7 +33,35 @@ export function createContentRequest(spaceId: string, channel: string, state: Pu
   const url = getEndpoint(spaceId, 'content', state, channel);
 
   return async <T extends object>(params: interfaces.IGetContentConfig): Promise<AxiosResponse<interfaces.IGetContentResponse<T>>> => {
-    
+
+    return getAxiosInstance(config)(url, { params });
+  };
+}
+
+/**
+ * @param {string} spaceId
+ * @param {string} channel
+ * @param {ISDKConfiguration} config
+ */
+export function createOnlineContentRequest(spaceId: string, channel: string, config: ISDKConfiguration) {
+  const url = getOnlineEndpoint(spaceId, 'content', channel);
+
+  return async <T extends object>(params: interfaces.GetContentOnlineConfig): Promise<AxiosResponse<interfaces.IGetContentResponse<T>>> => {
+
+    return getAxiosInstance(config)(url, { params });
+  };
+}
+
+/**
+ * @param {string} spaceId
+ * @param {string} channel
+ * @param {PublishingStatus} state
+ * @param {ISDKConfiguration} config
+ */
+export function createPreviewContentRequest(spaceId: string, channel: string, state: PublishingStatus, config: ISDKConfiguration) {
+  const url = getPreviewEndpoint(spaceId, 'content', state, channel);
+
+  return async <T extends object>(params: interfaces.GetContentPreviewConfig): Promise<AxiosResponse<interfaces.IGetContentResponse<T>>> => {
     return getAxiosInstance(config)(url, { params });
   };
 }
@@ -53,6 +81,33 @@ export function createSearchRequest(spaceId: string, channel: string, state: Pub
       ...params,
       propFilters: params.propFilters ? JSON.stringify(params.propFilters) : undefined,
     } });
+  };
+}
+
+/**
+ * @param {string} spaceId
+ * @param {string} channel
+ * @param {ISDKConfiguration} config
+ */
+export function createOnlineSearchRequest(spaceId: string, channel: string, config: ISDKConfiguration) {
+  const url = getOnlineEndpoint(spaceId, 'search/v2', channel);
+
+  return async <T extends object>(params: interfaces.SearchOnlineConfig): Promise<AxiosResponse<interfaces.IPaginatedResponse<interfaces.ISearchResponse<T>>>> => {
+    return getAxiosInstance(config)(url, { params: {
+        ...params,
+        propFilters: params.propFilters ? JSON.stringify(params.propFilters) : undefined,
+      } });
+  };
+}
+
+export function createPreviewSearchRequest(spaceId: string, channel: string, state: PublishingStatus, config: ISDKConfiguration) {
+  const url = getPreviewEndpoint(spaceId, 'search/v2', state, channel);
+
+  return async <T extends object>(params: interfaces.SearchPreviewConfig): Promise<AxiosResponse<interfaces.IPaginatedResponse<interfaces.ISearchResponse<T>>>> => {
+    return getAxiosInstance(config)(url, { params : {
+        ...params,
+        propFilters: params.propFilters ? JSON.stringify(params.propFilters) : undefined,
+      } });
   };
 }
 
@@ -77,7 +132,7 @@ export function getAxiosInstance(config: ISDKConfiguration): AxiosInstance {
 /**
  * @param {string} spaceId
  * @param {string} channel
- * @param {interfaces.ContentState} state
+ * @param {PublishingStatus} state
  * @returns
  */
 export function getChannelMethods(spaceId: string, channel: string, state: PublishingStatus, config: ISDKConfiguration): interfaces.IChannelMethods {
@@ -94,20 +149,52 @@ export function getChannelMethods(spaceId: string, channel: string, state: Publi
   }
 
   const content = createContentRequest(spaceId, channel, state, config);
+  const contentOnline = createOnlineContentRequest(spaceId, channel, config);
+  const contentPreview = createPreviewContentRequest(spaceId, channel, state, config);
   const search = createSearchRequest(spaceId, channel, state, config);
+  const searchOnline = createOnlineSearchRequest(spaceId, channel, config);
+  const searchPreview = createPreviewSearchRequest(spaceId, channel, state, config);
 
-  return { content, search };
+  return {
+    content,
+    contentOnline,
+    contentPreview,
+    search,
+    searchOnline,
+    searchPreview,
+  };
 }
 
 /**
  * @param {string} spaceId
  * @param {interfaces.ContentRequestMethod} method
- * @param {interfaces.ContentState} state
+ * @param {PublishingStatus} state
  * @param {string} channel
  * @returns
  */
 export function getEndpoint(spaceId: string, method: interfaces.ContentRequestMethod, state: PublishingStatus, channel: string) {
   return `/space/${spaceId}/${state}/${method}/${channel}`;
+}
+
+/**
+ * @param {string} spaceId
+ * @param {interfaces.ContentRequestMethod} method
+ * @param {string} channel
+ * @returns
+ */
+export function getOnlineEndpoint(spaceId: string, method: interfaces.ContentRequestMethod, channel: string) {
+  return `/space/${spaceId}/online/${method}/${channel}`;
+}
+
+/**
+ * @param {string} spaceId
+ * @param {interfaces.ContentRequestMethod} method
+ * @param {PublishingStatus} state
+ * @param {string} channel
+ * @returns
+ */
+export function getPreviewEndpoint(spaceId: string, method: interfaces.ContentRequestMethod, state: PublishingStatus, channel: string) {
+  return `/space/${spaceId}/preview/${state}/${method}/${channel}`;
 }
 
 export * from './interfaces';
