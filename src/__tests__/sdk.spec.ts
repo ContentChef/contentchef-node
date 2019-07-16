@@ -42,6 +42,7 @@ describe('Tests the sdk', () => {
     const cf = sdk({ spaceId: 'aSpace', apiKey: 'qwe', host: 'qweqwe' });
 
     expect(typeof cf).toBe('object');
-    expect(typeof cf.channel).toBe('function');
+    expect(typeof cf.onlineChannel).toBe('function');
+    expect(typeof cf.previewChannel).toBe('function');
   });
 });

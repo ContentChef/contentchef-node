@@ -1,5 +1,6 @@
 import ConfigurationManager from '..';
 import ISDKConfiguration from '../interfaces/SDKConfiguration';
+import {GetOnlineChannelMethods, GetPreviewChannelMethods} from "../../Channel/interfaces";
 
 describe('Tests ConfigurationManager class', () => {
   test('It throws if some configuration options are not valid', () => {
@@ -31,9 +32,13 @@ describe('Tests ConfigurationManager class', () => {
   test('It can configure an object implementing the IConfigurable interface', () => {
     const configurable = {
       foo: '',
-      configure(configuration: ISDKConfiguration) {
+      configurePreviewMethods(configuration: ISDKConfiguration) {
         this.foo = configuration.apiKey;
-        return 123;
+        return {} as GetPreviewChannelMethods;
+      },
+      configureOnlineMethods(configuration: ISDKConfiguration) {
+        this.foo = configuration.apiKey;
+        return {} as GetOnlineChannelMethods;
       },
     };
     const configurationManager = new ConfigurationManager({
@@ -42,7 +47,8 @@ describe('Tests ConfigurationManager class', () => {
       spaceId: 'aSpace',
     });
 
-    expect(configurationManager.configure(configurable)).toBe(123);
+    expect(configurationManager.configure(configurable)).toHaveProperty('onlineChannel');
+    expect(configurationManager.configure(configurable)).toHaveProperty('previewChannel');
     expect(configurable.foo).toBe('lorem');
   });
 });
