@@ -127,12 +127,12 @@ export function getPreviewChannelMethods(spaceId: string, channel: string, state
     throw new TypeError(`State must be either 'live' or 'staging'`);
   }
 
-  const contentPreview = createPreviewContentRequest(spaceId, channel, state, config);
-  const searchPreview = createPreviewSearchRequest(spaceId, channel, state, config);
+  const content = createPreviewContentRequest(spaceId, channel, state, config);
+  const search = createPreviewSearchRequest(spaceId, channel, state, config);
 
   return {
-    contentPreview,
-    searchPreview,
+    content,
+    search,
   };
 }
 
@@ -151,12 +151,12 @@ export function getOnlineChannelMethods(spaceId: string, channel: string, config
     throw new TypeError('Channel is mandatory');
   }
 
-  const contentOnline = createOnlineContentRequest(spaceId, channel, config);
-  const searchOnline = createOnlineSearchRequest(spaceId, channel, config);
+  const content = createOnlineContentRequest(spaceId, channel, config);
+  const search = createOnlineSearchRequest(spaceId, channel, config);
 
   return {
-    contentOnline,
-    searchOnline,
+    content,
+    search,
   };
 }
 

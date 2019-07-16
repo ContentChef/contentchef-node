@@ -20,13 +20,13 @@ export type GetContentPreviewConfig = IGetContentConfig;
 export interface IGetContentResponse<T = any> extends IResponse<T> { }
 
 export interface IOnlineChannelMethods {
-  contentOnline<T extends object>(params: GetContentOnlineConfig): Promise<AxiosResponse<IGetContentResponse<T>>>;
-  searchOnline<T extends object>(params: SearchOnlineConfig): Promise<AxiosResponse<IPaginatedResponse<ISearchResponse<T>>>>;
+  content<T extends object>(params: GetContentOnlineConfig): Promise<AxiosResponse<IGetContentResponse<T>>>;
+  search<T extends object>(params: SearchOnlineConfig): Promise<AxiosResponse<IPaginatedResponse<ISearchResponse<T>>>>;
 }
 
 export interface IPreviewChannelMethods {
-  contentPreview<T extends object>(params: GetContentPreviewConfig): Promise<AxiosResponse<IGetContentResponse<T>>>;
-  searchPreview<T extends object>(params: SearchPreviewConfig): Promise<AxiosResponse<IPaginatedResponse<ISearchResponse<T>>>>;
+  content<T extends object>(params: GetContentPreviewConfig): Promise<AxiosResponse<IGetContentResponse<T>>>;
+  search<T extends object>(params: SearchPreviewConfig): Promise<AxiosResponse<IPaginatedResponse<ISearchResponse<T>>>>;
 }
 
 export interface IResponse<T> {

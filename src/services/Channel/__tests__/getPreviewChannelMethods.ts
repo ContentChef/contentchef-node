@@ -34,7 +34,7 @@ describe(`Tests getPreviewChannelMethods` , () => {
   test(`getPreviewChannelMethods returns methods for contentPreview and searchPreview endpoints`, () => {
     const result = getPreviewChannelMethods('test', 'testchannel', PublishingStatus.Live, {} as any);
 
-    expect(typeof result.contentPreview).toBe('function');
-    expect(typeof result.searchPreview).toBe('function');
+    expect(typeof result.content).toBe('function');
+    expect(typeof result.search).toBe('function');
   });
 });

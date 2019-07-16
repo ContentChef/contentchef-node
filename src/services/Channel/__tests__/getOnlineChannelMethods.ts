@@ -30,7 +30,7 @@ describe(`Tests getOnlineChannelMethods` , () => {
     test(`getOnlineChannelMethods returns methods for contentPreview and searchPreview endpoints`, () => {
         const result = getOnlineChannelMethods('test', 'testchannel', {} as any);
 
-        expect(typeof result.contentOnline).toBe('function');
-        expect(typeof result.searchOnline).toBe('function');
+        expect(typeof result.content).toBe('function');
+        expect(typeof result.search).toBe('function');
     });
 });
