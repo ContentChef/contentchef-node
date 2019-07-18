@@ -1,11 +1,12 @@
 import { AxiosResponse } from 'axios';
 import { PublishingStatus } from '../index';
 
-export type ContentRequestMethod = 'content' | 'search' | `search/v2`;
+export type ContentRequestMethod = 'content' | `search/v2`;
 
 export type ContentState = 'staging' | 'live';
 
-export type GetChannelMethods = (channel: string, state: PublishingStatus) => IChannelMethods;
+export type GetPreviewChannelMethods = (channel: string, state: PublishingStatus) => IPreviewChannelMethods;
+export type GetOnlineChannelMethods = (channel: string) => IOnlineChannelMethods;
 
 export interface IGetContentConfig {
   legacyMetadata?: boolean;
@@ -13,11 +14,19 @@ export interface IGetContentConfig {
   targetDate?: string;
 }
 
+export type GetContentOnlineConfig = Pick<IGetContentConfig, Exclude<keyof IGetContentConfig, 'targetDate'>>;
+export type GetContentPreviewConfig = IGetContentConfig;
+
 export interface IGetContentResponse<T = any> extends IResponse<T> { }
 
-export interface IChannelMethods {
-  content<T extends object>(params: IGetContentConfig): Promise<AxiosResponse<IGetContentResponse<T>>>;
-  search<T extends object>(params: ISearchConfig): Promise<AxiosResponse<IPaginatedResponse<ISearchResponse<T>>>>;
+export interface IOnlineChannelMethods {
+  content<T extends object>(params: GetContentOnlineConfig): Promise<AxiosResponse<IGetContentResponse<T>>>;
+  search<T extends object>(params: SearchOnlineConfig): Promise<AxiosResponse<IPaginatedResponse<ISearchResponse<T>>>>;
+}
+
+export interface IPreviewChannelMethods {
+  content<T extends object>(params: GetContentPreviewConfig): Promise<AxiosResponse<IGetContentResponse<T>>>;
+  search<T extends object>(params: SearchPreviewConfig): Promise<AxiosResponse<IPaginatedResponse<ISearchResponse<T>>>>;
 }
 
 export interface IResponse<T> {
@@ -55,6 +64,9 @@ export interface ISearchConfig {
   targetDate?: Date;
   propFilters?: IPropFilter;
 }
+
+export type SearchOnlineConfig = Pick<ISearchConfig, Exclude<keyof ISearchConfig, 'targetDate'>>;
+export type SearchPreviewConfig = ISearchConfig;
 
 export interface IPropFilter {
   condition: LogicalOperators;

@@ -56,6 +56,9 @@ export default class ConfigurationManager {
    * @memberof ConfigurationManager
    */
   public configure(configurable: IConfigurable) {
-    return configurable.configure(this.configuration);
+    return {
+      onlineChannel: configurable.configureOnlineMethods(this.configuration),
+      previewChannel: configurable.configurePreviewMethods(this.configuration),
+    };
   }
 }

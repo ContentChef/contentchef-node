@@ -1,3 +1,4 @@
+import { GetOnlineChannelMethods, GetPreviewChannelMethods } from '../../Channel/interfaces';
 import ISDKConfiguration from './SDKConfiguration';
 
 /**
@@ -10,5 +11,12 @@ export interface IConfigurable {
    * @returns {*}
    * @memberof IConfigurable
    */
-  configure(configuration: ISDKConfiguration): any;
+  configurePreviewMethods(configuration: ISDKConfiguration): GetPreviewChannelMethods;
+
+  /**
+   * @param {ISDKConfiguration} configuration
+   * @returns {*}
+   * @memberof IConfigurable
+   */
+  configureOnlineMethods(configuration: ISDKConfiguration): GetOnlineChannelMethods;
 }
