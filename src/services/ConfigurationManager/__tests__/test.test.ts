@@ -1,6 +1,6 @@
 import ConfigurationManager from '..';
+import { GetOnlineChannelMethods, GetPreviewChannelMethods } from '../../Channel/interfaces';
 import ISDKConfiguration from '../interfaces/SDKConfiguration';
-import {GetOnlineChannelMethods, GetPreviewChannelMethods} from "../../Channel/interfaces";
 
 describe('Tests ConfigurationManager class', () => {
   test('It throws if some configuration options are not valid', () => {
