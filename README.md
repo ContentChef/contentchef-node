@@ -8,31 +8,34 @@ Content Chef Typescript SDK
 [Content Chef](https://contentchefwebsite)'s polymorphic typescript SDK for your web and node.js applications.
 
 - [Content Chef Typescript SDK](#content-chef-typescript-sdk)
-  - [Requirements](#requirements)
-  - [Installation](#installation)
-  - [API](#api)
-      - [ContentChef](#contentchef)
-      - [Channel](#channel)
+- [Requirements](#requirements)
+- [Installation](#installation)
+- [API](#api)
+  - [ContentChef](#contentchef)
+  - [Channels](#channels)
 
-## Requirements
+# Requirements
 
 In order to use this SDK, you will need
 
-* An active Content Chef account
+* An active ContentChef account
 * Node.js (v >= 8)
 
-An IDE/TextEditor with support for TypeScript is highly recommended. 
+> An IDE/TextEditor with support for TypeScript is highly recommended. 
 
-## Installation
+# Installation
 
 ```bash
-# install it from NPM!
+# install it using npm
 npm i --save @contentchef/contentchef-node
+
+# or if you use yarn
+yarn add @contentchef/contentchef-node
 ```
 
-## API
+# API
 
-#### ContentChef
+## ContentChef
 
 ContentChef is the default exported function. It is used to configure the SDK with your data.
 
@@ -46,7 +49,7 @@ const cf = ContentChef({
   apiKey: 'your-content-chef-api-key',
   // Your Content Chef instance domain
   host: 'https://instance.of.contentchef.com/',
-  // Will close a pending change after 5 seconds
+  // Will close a pending call after 5 seconds
   timeout: 5000,
 });
 ```
@@ -102,7 +105,7 @@ export default interface ISDKConfiguration {
 
 > Bear in mind that `apiKey` and `host` are required
 
-#### Channels
+## Channels
 
 A channel is a collector of contents.
 
@@ -148,7 +151,11 @@ const websiteOnlineChannel = cf.onlineChannel('website');
 websiteOnlineChannel.content<IArticle>({ publicId: 'your-content-id' }).then(response => /* handles response */);
 
 // will retrieve the first 10 contents from the channel website with a specific contentDefinition
-websiteOnlineChannel.search<IArticle>({ contentDefinition: 'featured-articles', skip: 0, take: 10 }).then(response => /* handles response */);
+websiteOnlineChannel.search<IArticle>({
+  contentDefinition: 'featured-articles',
+  skip: 0,
+  take: 10,
+}).then(response => /* handles response */);
 
 // opens your website channel and queries only the published content with a staging state
 const websitePreviewChannel = cf.previewChannel('website', PublishingStatus.Staging);
@@ -157,11 +164,24 @@ const websitePreviewChannel = cf.previewChannel('website', PublishingStatus.Stag
 websitePreviewChannel.content<IArticle>({ publicId: 'your-content-id' }).then(response => /* handles response */);
 
 // retrieves a single published content from the channel website for a desired date as specified in the targetDate param
-websitePreviewChannel.content<IArticle>({ publicId: 'your-content-id', targetDate: 'a_date_different_from_now'}).then(response => /* handles response */);
+websitePreviewChannel.content<IArticle>({
+  publicId: 'your-content-id',
+  // remember, valid dates are expressed using the ISO format like 2019-08-16T12:22:232Z
+  targetDate: 'a_date_different_from_now',
+}).then(response => /* handles response */);
 
 // retrieves the first 10 contents from the channel website with a specific contentDefinition in another date
-websitePreviewChannel.search<IArticle>({ contentDefinition: 'featured-articles', skip: 0, take: 10 }).then(response => /* handles response */);
+websitePreviewChannel.search<IArticle>({
+  contentDefinition: 'featured-articles',
+  skip: 0,
+  take: 10,
+}).then(response => /* handles response */);
 
 // retrieves the first 10 contents with a specific contentDefinition from the channel website for a desired date as specified in the targetDate param
-websitePreviewChannel.search<IArticle>({ contentDefinition: 'featured-articles', skip: 0, take: 10, targetDate: 'a_date_different_from_now' }).then(response => /* handles response */);
+websitePreviewChannel.search<IArticle>({
+  contentDefinition: 'featured-articles',
+  skip: 0,
+  take: 10,
+  targetDate: 'a_date_different_from_now',
+}).then(response => /* handles response */);
 ```
