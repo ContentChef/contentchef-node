@@ -31,6 +31,7 @@ export interface IPreviewChannelMethods {
 
 export interface IResponse<T> {
   definition: string;
+  repository: string;
   publicId: string;
   metadata: IResponseMetadata;
   offlineDate: string | null;
@@ -59,6 +60,7 @@ export interface ISearchConfig {
   take: number;
   publicId?: string[] | string;
   contentDefinition?: string[] | string;
+  repositories?: string[];
   legacyMetadata?: boolean;
   tags?: string[] | string;
   targetDate?: Date;
