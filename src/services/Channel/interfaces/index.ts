@@ -55,6 +55,11 @@ export interface IResponseMetadata {
   tags: string[];
 }
 
+export interface ISortingField {
+  fieldName: 'publicId' | 'id' | 'onlineDate' | 'offlineDate' | string;
+  ascending: boolean;
+}
+
 export interface ISearchConfig {
   skip: number;
   take: number;
@@ -65,6 +70,7 @@ export interface ISearchConfig {
   tags?: string[] | string;
   targetDate?: Date;
   propFilters?: IPropFilter;
+  sorting?: ISortingField[] | string;
 }
 
 export type SearchOnlineConfig = Pick<ISearchConfig, Exclude<keyof ISearchConfig, 'targetDate'>>;
