@@ -2,6 +2,7 @@ import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import qs from 'qs';
 import ISDKConfiguration from '../ConfigurationManager/interfaces/SDKConfiguration';
 import * as interfaces from './interfaces';
+import serializeSorting from './serializeSorting';
 
 const defaultConfig: ISDKConfiguration = <ISDKConfiguration> {
 
@@ -74,6 +75,7 @@ export function createOnlineSearchRequest(spaceId: string, channel: string, conf
     return getAxiosInstance(config)(url, { params: {
         ...params,
         propFilters: params.propFilters ? JSON.stringify(params.propFilters) : undefined,
+        sorting: serializeSorting(params.sorting),
       } });
   };
 }
@@ -85,6 +87,7 @@ export function createPreviewSearchRequest(spaceId: string, channel: string, sta
     return getAxiosInstance(config)(url, { params : {
         ...params,
         propFilters: params.propFilters ? JSON.stringify(params.propFilters) : undefined,
+        sorting: serializeSorting(params.sorting),
       } });
   };
 }
