@@ -24,4 +24,4 @@ describe('sorting will be serialized', () => {
   it('array with one two field one ascending the second descending', () => {
     expect(serializeSorting([ { fieldName: 'publicId', ascending: true }, { fieldName: ' onlineDate', ascending: false } ])).toEqual('+publicId,-onlineDate');
   });
-})
+});
