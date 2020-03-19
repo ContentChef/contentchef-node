@@ -28,11 +28,22 @@ describe(`Tests getPreviewChannelMethods` , () => {
 
     expect(() => (getPreviewChannelMethods as any)('defaultSpaceId', 'foobar', 'Unknown!')).toThrow();
 
-    expect(() => getPreviewChannelMethods('defaultSpaceId', 'foobar', PublishingStatus.Staging, {} as any)).not.toThrow();
+    expect(() => getPreviewChannelMethods(
+      'defaultSpaceId',
+      'foobar',
+      PublishingStatus.Staging, {} as any,
+      { getTargetDate: async () => 'testTargetDate' },
+    )).not.toThrow();
   });
 
   test(`getPreviewChannelMethods returns methods for contentPreview and searchPreview endpoints`, () => {
-    const result = getPreviewChannelMethods('test', 'testchannel', PublishingStatus.Live, {} as any);
+    const result = getPreviewChannelMethods(
+      'test',
+      'testchannel',
+      PublishingStatus.Live,
+      {} as any,
+      { getTargetDate: async () => 'testTargetDate' },
+    );
 
     expect(typeof result.content).toBe('function');
     expect(typeof result.search).toBe('function');

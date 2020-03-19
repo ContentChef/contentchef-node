@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import qs from 'qs';
-import ISDKConfiguration from '../ConfigurationManager/interfaces/SDKConfiguration';
+import ISDKConfiguration, { ITargetDateResolver } from '../ConfigurationManager/interfaces/SDKConfiguration';
 import * as interfaces from './interfaces';
 import serializeSorting from './serializeSorting';
 
@@ -16,11 +16,12 @@ export enum PublishingStatus {
 /**
  * @export
  * @param {ISDKConfiguration} config
+ * @param {ITargetDateResolver} targetDateResolver
  * @returns
  */
-export function configurePreviewMethods(config: ISDKConfiguration): interfaces.GetPreviewChannelMethods {
+export function configurePreviewMethods(config: ISDKConfiguration, targetDateResolver: ITargetDateResolver): interfaces.GetPreviewChannelMethods {
   return (channel: string, state: PublishingStatus = PublishingStatus.Live) => {
-    return getPreviewChannelMethods(config.spaceId, channel, state, { ... defaultConfig, ... config });
+    return getPreviewChannelMethods(config.spaceId, channel, state, { ... defaultConfig, ... config }, targetDateResolver);
   };
 }
 
@@ -53,13 +54,20 @@ export function createOnlineContentRequest(spaceId: string, channel: string, con
  * @param {string} spaceId
  * @param {string} channel
  * @param {PublishingStatus} state
+ * @param {ITargetDateResolver} targetDateResolver
  * @param {ISDKConfiguration} config
  */
-export function createPreviewContentRequest(spaceId: string, channel: string, state: PublishingStatus, config: ISDKConfiguration) {
+export function createPreviewContentRequest(spaceId: string, channel: string, state: PublishingStatus, config: ISDKConfiguration, targetDateResolver: ITargetDateResolver) {
   const url = getPreviewEndpoint(spaceId, 'content', state, channel);
 
   return async <T extends object>(params: interfaces.GetContentPreviewConfig): Promise<AxiosResponse<interfaces.IGetContentResponse<T>>> => {
-    return getAxiosInstance(config)(url, { params });
+    const targetDate = await targetDateResolver.getTargetDate();
+    return getAxiosInstance(config)(url, {
+      params: {
+        ...params,
+        targetDate,
+      },
+    });
   };
 }
 
@@ -80,14 +88,16 @@ export function createOnlineSearchRequest(spaceId: string, channel: string, conf
   };
 }
 
-export function createPreviewSearchRequest(spaceId: string, channel: string, state: PublishingStatus, config: ISDKConfiguration) {
+export function createPreviewSearchRequest(spaceId: string, channel: string, state: PublishingStatus, config: ISDKConfiguration, targetDateResolver: ITargetDateResolver) {
   const url = getPreviewEndpoint(spaceId, 'search/v2', state, channel);
 
   return async <T extends object>(params: interfaces.SearchPreviewConfig): Promise<AxiosResponse<interfaces.IPaginatedResponse<interfaces.ISearchResponse<T>>>> => {
+    const targetDate = await targetDateResolver.getTargetDate();
     return getAxiosInstance(config)(url, { params : {
         ...params,
         propFilters: params.propFilters ? JSON.stringify(params.propFilters) : undefined,
         sorting: serializeSorting(params.sorting),
+        targetDate,
       } });
   };
 }
@@ -115,9 +125,16 @@ export function getAxiosInstance(config: ISDKConfiguration): AxiosInstance {
  * @param {string} channel
  * @param {PublishingStatus} state
  * @param {ISDKConfiguration} config
+ * @param {ITargetDateResolver} targetDateResolver
  * @returns
  */
-export function getPreviewChannelMethods(spaceId: string, channel: string, state: PublishingStatus, config: ISDKConfiguration): interfaces.IPreviewChannelMethods {
+export function getPreviewChannelMethods(
+    spaceId: string,
+    channel: string,
+    state: PublishingStatus,
+    config: ISDKConfiguration,
+    targetDateResolver: ITargetDateResolver,
+): interfaces.IPreviewChannelMethods {
   if (typeof spaceId !== 'string' || spaceId.length === 0) {
     throw new TypeError('SpaceId is mandatory');
   }
@@ -130,8 +147,8 @@ export function getPreviewChannelMethods(spaceId: string, channel: string, state
     throw new TypeError(`State must be either 'live' or 'staging'`);
   }
 
-  const content = createPreviewContentRequest(spaceId, channel, state, config);
-  const search = createPreviewSearchRequest(spaceId, channel, state, config);
+  const content = createPreviewContentRequest(spaceId, channel, state, config, targetDateResolver);
+  const search = createPreviewSearchRequest(spaceId, channel, state, config, targetDateResolver);
 
   return {
     content,

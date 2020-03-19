@@ -1,5 +1,5 @@
 import { GetOnlineChannelMethods, GetPreviewChannelMethods } from '../../Channel/interfaces';
-import ISDKConfiguration from './SDKConfiguration';
+import ISDKConfiguration, {ITargetDateResolver} from './SDKConfiguration';
 
 /**
  * @export
@@ -8,10 +8,11 @@ import ISDKConfiguration from './SDKConfiguration';
 export interface IConfigurable {
   /**
    * @param {ISDKConfiguration} configuration
+   * @param {ITargetDateResolver} targetDateResolver
    * @returns {*}
    * @memberof IConfigurable
    */
-  configurePreviewMethods(configuration: ISDKConfiguration): GetPreviewChannelMethods;
+  configurePreviewMethods(configuration: ISDKConfiguration, targetDateResolver: ITargetDateResolver): GetPreviewChannelMethods;
 
   /**
    * @param {ISDKConfiguration} configuration
