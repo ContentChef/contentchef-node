@@ -45,18 +45,36 @@ nock(config.host)
 
 describe(`Tests createPreviewSearchRequest`, () => {
   test(`Invoking this method will return a new function`, () => {
-    expect(typeof createPreviewSearchRequest('aSpace', 'test', PublishingStatus.Live, config)).toBe('function');
+    expect(typeof createPreviewSearchRequest(
+      'aSpace',
+      'test',
+      PublishingStatus.Live,
+      config,
+      { getTargetDate: async () => 'testTargetDateResolver' },
+    )).toBe('function');
   });
 
   test('Invoking the returning method with staging state will trigger an axios request', done => {
-    createPreviewSearchRequest('aSpace', 'foo', PublishingStatus.Staging, config)({ contentDefinition: 'hello-world', skip: 0, take: 10 }).then(response => {
+    createPreviewSearchRequest(
+      'aSpace',
+      'foo',
+      PublishingStatus.Staging,
+      config,
+      { getTargetDate: async () => 'testTargetDateResolver' },
+    )({ contentDefinition: 'hello-world', skip: 0, take: 10 }).then(response => {
       expect(response.data).toEqual(mockedData);
       done();
     });
   });
 
   test('Invoking the returning method with live state will trigger an axios request', done => {
-    createPreviewSearchRequest('aSpace', 'foo', PublishingStatus.Live, config)<any>({ contentDefinition: 'hello-world', tags: ['hello', 'world'], skip: 0, take: 10 }).then(response => {
+    createPreviewSearchRequest(
+      'aSpace',
+      'foo',
+      PublishingStatus.Live,
+      config,
+      { getTargetDate: async () => 'testTargetDateResolver' },
+    )<any>({ contentDefinition: 'hello-world', tags: ['hello', 'world'], skip: 0, take: 10 }).then(response => {
       expect(response.data).toEqual(mockedData);
       expect(response.data.items[0].payload.tags).toEqual(['hello', 'world']);
       done();
@@ -72,7 +90,13 @@ describe(`Tests createPreviewSearchRequest`, () => {
         value: 'indexedValue1',
       }],
     };
-    createPreviewSearchRequest('aSpace', 'foo', PublishingStatus.Live, config)<any>({ propFilters, skip: 0, take: 10 }).then(response => {
+    createPreviewSearchRequest(
+      'aSpace',
+      'foo',
+      PublishingStatus.Live,
+      config,
+      { getTargetDate: async () => 'testTargetDateResolver' },
+    )<any>({ propFilters, skip: 0, take: 10 }).then(response => {
       expect(response.data).toEqual(mockedData);
       expect(response.config.params.propFilters).toEqual(JSON.stringify(propFilters));
       done();

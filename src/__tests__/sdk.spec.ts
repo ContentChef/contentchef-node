@@ -1,4 +1,5 @@
 import sdk from '..';
+import ConfigurationManager from "../services/ConfigurationManager";
 
 describe('Tests the sdk', () => {
   test('Entering an invalid configuration will throw an error', () => {
@@ -36,6 +37,19 @@ describe('Tests the sdk', () => {
     expect(() => sdk({ apiKey: '', timeout: 100, host: '' })).toThrow();
 
     expect(() => sdk({ spaceId: 'aSpace', apiKey: 'toast', host: 'unicorn' })).not.toThrow();
+
+    // @ts-ignore
+    expect( () => new ConfigurationManager({ spaceId: 'aSpace', apiKey: 'toast', host: 'unicorn' }, 10)).toThrow();
+
+    expect( () => new ConfigurationManager(
+        { spaceId: 'aSpace', apiKey: 'qwe', host: 'qwe' },
+        'testTargetDate',
+    )).not.toThrow();
+
+    expect( () => new ConfigurationManager(
+        { spaceId: 'aSpace', apiKey: 'qwe', host: 'qwe' },
+        { getTargetDate: async () => 'testTargetDate' },
+    )).not.toThrow();
   });
 
   test('A well configured sdk will return a channel method', () => {

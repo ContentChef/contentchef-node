@@ -10,10 +10,14 @@ describe(`Tests Content Chef service`, () => {
   });
 
   test(`Configuring the service previewMethods, a function will be returned`, () => {
-    expect(typeof configurePreviewMethods({
-      apiKey: 'foo',
-      host: 'bar',
-      spaceId: 'aSpace',
-    })).toBe('function');
+    expect(typeof configurePreviewMethods(
+      {
+        apiKey: 'foo',
+        host: 'bar',
+        spaceId: 'aSpace',
+      },
+      {
+        getTargetDate: async () => 'testTargetDate',
+      })).toBe('function');
   });
 });
