@@ -51,7 +51,7 @@ const cf = ContentChef({
   host: 'https://instance.of.contentchef.com/',
   // Will close a pending call after 5 seconds
   timeout: 5000,
-});
+}, targetDateResolver);
 ```
 
 Configuration implements this interface
@@ -103,6 +103,16 @@ export default interface ISDKConfiguration {
 }
 ```
 
+targetDateResolver can is used to retrieve contents in the preview channel in a specific dare different from the current date
+targetDateResolver if defined must be a string of a ITargetDateResolver type defined as follow:
+a valid targetDateResolver must return a valid date expressed using the ISO format like 2019-08-16T12:22:232Z
+```typescrtipt
+    export interface ITargetDateResolver {
+      getTargetDate(): Promise<string | undefined>;
+    }
+```
+
+
 > Bear in mind that `apiKey` and `host` are required
 
 ## Channels
@@ -127,7 +137,7 @@ const cf = ContentChef({
   apiKey: 'your-content-chef-api-key',
   host: 'https://instance.of.contentchef.com/',
   timeout: 5000,
-});
+}, undefined | '');
 
 // This could be the representation of your data
 interface IArticle {
@@ -162,13 +172,6 @@ const websitePreviewChannel = cf.previewChannel('website', PublishingStatus.Stag
 
 // retrieves a single published content from the channel website with the current date
 websitePreviewChannel.content<IArticle>({ publicId: 'your-content-id' }).then(response => /* handles response */);
-
-// retrieves a single published content from the channel website for a desired date as specified in the targetDate param
-websitePreviewChannel.content<IArticle>({
-  publicId: 'your-content-id',
-  // remember, valid dates are expressed using the ISO format like 2019-08-16T12:22:232Z
-  targetDate: 'a_date_different_from_now',
-}).then(response => /* handles response */);
 
 // retrieves the first 10 contents from the channel website with a specific contentDefinition in another date
 websitePreviewChannel.search<IArticle>({
