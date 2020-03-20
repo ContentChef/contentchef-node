@@ -38,7 +38,7 @@ describe('Tests ConfigurationManager class', () => {
 
     expect( () => new ConfigurationManager(
         { spaceId: 'aSpace', apiKey: 'qwe', host: 'qwe' },
-        { getTargetDate: async () => 'testTargetDate' },
+        { getTargetDate: async () => '2019-08-16T12:22:232Z' },
     )).not.toThrow();
   });
 

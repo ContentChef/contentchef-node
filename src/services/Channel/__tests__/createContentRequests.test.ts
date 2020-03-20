@@ -40,7 +40,7 @@ describe(`Tests createPreviewContentRequest`, () => {
       'foo',
       PublishingStatus.Live,
       config,
-      { getTargetDate: async () => 'testTargetDateResolver' },
+      { getTargetDate: async () => '2019-08-16T12:22:232Z' },
     )).not.toThrow();
 
     expect(typeof createPreviewContentRequest(
@@ -48,7 +48,7 @@ describe(`Tests createPreviewContentRequest`, () => {
       'foo',
       PublishingStatus.Live,
       config,
-      { getTargetDate: async () => 'testTargetDateResolver' },
+      { getTargetDate: async () => '2019-08-16T12:22:232Z' },
     )).toBe('function');
   });
 
@@ -58,7 +58,7 @@ describe(`Tests createPreviewContentRequest`, () => {
       'foo',
       PublishingStatus.Staging,
       config,
-      { getTargetDate: async () => 'testTargetDateResolver' },
+      { getTargetDate: async () => '2019-08-16T12:22:232Z' },
       )({ publicId: 'hello-world' }).then(response => {
       expect(response.data).toEqual(mockedData);
       done();
@@ -71,7 +71,7 @@ describe(`Tests createPreviewContentRequest`, () => {
       'foo',
       PublishingStatus.Live,
       config,
-      { getTargetDate: async () => 'testTargetDateResolver' },
+      { getTargetDate: async () => '2019-08-16T12:22:232Z' },
       )({ publicId: 'hello-world' }).then(response => {
       expect(response.data).toEqual(mockedData);
       done();

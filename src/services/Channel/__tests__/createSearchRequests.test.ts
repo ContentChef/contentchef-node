@@ -50,7 +50,7 @@ describe(`Tests createPreviewSearchRequest`, () => {
       'test',
       PublishingStatus.Live,
       config,
-      { getTargetDate: async () => 'testTargetDateResolver' },
+      { getTargetDate: async () => '2019-08-16T12:22:232Z' },
     )).toBe('function');
   });
 
@@ -60,7 +60,7 @@ describe(`Tests createPreviewSearchRequest`, () => {
       'foo',
       PublishingStatus.Staging,
       config,
-      { getTargetDate: async () => 'testTargetDateResolver' },
+      { getTargetDate: async () => '2019-08-16T12:22:232Z' },
     )({ contentDefinition: 'hello-world', skip: 0, take: 10 }).then(response => {
       expect(response.data).toEqual(mockedData);
       done();
@@ -73,7 +73,7 @@ describe(`Tests createPreviewSearchRequest`, () => {
       'foo',
       PublishingStatus.Live,
       config,
-      { getTargetDate: async () => 'testTargetDateResolver' },
+      { getTargetDate: async () => '2019-08-16T12:22:232Z' },
     )<any>({ contentDefinition: 'hello-world', tags: ['hello', 'world'], skip: 0, take: 10 }).then(response => {
       expect(response.data).toEqual(mockedData);
       expect(response.data.items[0].payload.tags).toEqual(['hello', 'world']);
@@ -95,7 +95,7 @@ describe(`Tests createPreviewSearchRequest`, () => {
       'foo',
       PublishingStatus.Live,
       config,
-      { getTargetDate: async () => 'testTargetDateResolver' },
+      { getTargetDate: async () => '2019-08-16T12:22:232Z' },
     )<any>({ propFilters, skip: 0, take: 10 }).then(response => {
       expect(response.data).toEqual(mockedData);
       expect(response.config.params.propFilters).toEqual(JSON.stringify(propFilters));
