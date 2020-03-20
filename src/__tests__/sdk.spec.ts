@@ -1,5 +1,5 @@
 import sdk from '..';
-import ConfigurationManager from "../services/ConfigurationManager";
+import ConfigurationManager from '../services/ConfigurationManager';
 
 describe('Tests the sdk', () => {
   test('Entering an invalid configuration will throw an error', () => {
