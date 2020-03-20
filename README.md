@@ -103,9 +103,11 @@ export default interface ISDKConfiguration {
 }
 ```
 
-targetDateResolver can is used to retrieve contents in the preview channel in a specific dare different from the current date
-targetDateResolver if defined must be a string of a ITargetDateResolver type defined as follow:
+targetDateResolver is used to retrieve contents in the preview channel in a specific dare different from the current date
 a valid targetDateResolver must return a valid date expressed using the ISO format like 2019-08-16T12:22:232Z
+
+if defined must be a string or a TargetDateResolver interface defined as follow:
+
 ```typescrtipt
     export interface ITargetDateResolver {
       getTargetDate(): Promise<string | undefined>;
@@ -137,7 +139,7 @@ const cf = ContentChef({
   apiKey: 'your-content-chef-api-key',
   host: 'https://instance.of.contentchef.com/',
   timeout: 5000,
-}, undefined | '');
+}, undefined | 'a target date' | ITargetDateResolver);
 
 // This could be the representation of your data
 interface IArticle {
