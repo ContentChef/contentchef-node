@@ -35,20 +35,44 @@ nock(config.host)
 
 describe(`Tests createPreviewContentRequest`, () => {
   test(`Invoking this method will return a new function`, () => {
-    expect(() => createPreviewContentRequest('aSpace', 'foo', PublishingStatus.Live, config)).not.toThrow();
+    expect(() => createPreviewContentRequest(
+      'aSpace',
+      'foo',
+      PublishingStatus.Live,
+      config,
+      { getTargetDate: async () => '2019-08-16T12:22:232Z' },
+    )).not.toThrow();
 
-    expect(typeof createPreviewContentRequest('aSpace', 'foo', PublishingStatus.Live, config)).toBe('function');
+    expect(typeof createPreviewContentRequest(
+      'aSpace',
+      'foo',
+      PublishingStatus.Live,
+      config,
+      { getTargetDate: async () => '2019-08-16T12:22:232Z' },
+    )).toBe('function');
   });
 
   test('Invoking the returning method with staging state will trigger an axios request', done => {
-    createPreviewContentRequest('aSpace', 'foo', PublishingStatus.Staging, config)({ publicId: 'hello-world' }).then(response => {
+    createPreviewContentRequest(
+      'aSpace',
+      'foo',
+      PublishingStatus.Staging,
+      config,
+      { getTargetDate: async () => '2019-08-16T12:22:232Z' },
+      )({ publicId: 'hello-world' }).then(response => {
       expect(response.data).toEqual(mockedData);
       done();
     });
   });
 
   test('Invoking the returning method with live state will trigger an axios request', done => {
-    createPreviewContentRequest('aSpace', 'foo', PublishingStatus.Live, config)({ publicId: 'hello-world' }).then(response => {
+    createPreviewContentRequest(
+      'aSpace',
+      'foo',
+      PublishingStatus.Live,
+      config,
+      { getTargetDate: async () => '2019-08-16T12:22:232Z' },
+      )({ publicId: 'hello-world' }).then(response => {
       expect(response.data).toEqual(mockedData);
       done();
     });

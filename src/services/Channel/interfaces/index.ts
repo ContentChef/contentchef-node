@@ -11,10 +11,9 @@ export type GetOnlineChannelMethods = (channel: string) => IOnlineChannelMethods
 export interface IGetContentConfig {
   legacyMetadata?: boolean;
   publicId: string;
-  targetDate?: string;
 }
 
-export type GetContentOnlineConfig = Pick<IGetContentConfig, Exclude<keyof IGetContentConfig, 'targetDate'>>;
+export type GetContentOnlineConfig = IGetContentConfig;
 export type GetContentPreviewConfig = IGetContentConfig;
 
 export interface IGetContentResponse<T = any> extends IResponse<T> { }
@@ -68,12 +67,11 @@ export interface ISearchConfig {
   repositories?: string[];
   legacyMetadata?: boolean;
   tags?: string[] | string;
-  targetDate?: Date;
   propFilters?: IPropFilter;
   sorting?: ISortingField[] | string;
 }
 
-export type SearchOnlineConfig = Pick<ISearchConfig, Exclude<keyof ISearchConfig, 'targetDate'>>;
+export type SearchOnlineConfig = ISearchConfig;
 export type SearchPreviewConfig = ISearchConfig;
 
 export interface IPropFilter {

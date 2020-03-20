@@ -1,5 +1,9 @@
 import { AxiosProxyConfig } from 'axios';
 
+export interface ITargetDateResolver {
+  getTargetDate(): Promise<string | undefined>;
+}
+
 export default interface ISDKConfiguration {
   /**
    * Your Content Chef API key

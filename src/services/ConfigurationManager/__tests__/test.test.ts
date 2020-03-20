@@ -27,6 +27,19 @@ describe('Tests ConfigurationManager class', () => {
     expect(() => new ConfigurationManager({ spaceId: 'aSpace', apiKey: 'qwe', host: 'qwe', timeout: '1000' })).toThrow();
 
     expect(() => new ConfigurationManager({ spaceId: 'aSpace', apiKey: 'qwe', host: 'qwe', timeout: -1 })).toThrow();
+
+    // @ts-ignore
+    expect( () => new ConfigurationManager({ spaceId: 'aSpace', apiKey: 'qwe', host: 'qwe', timeout: -1 }, 10)).toThrow();
+
+    expect( () => new ConfigurationManager(
+        { spaceId: 'aSpace', apiKey: 'qwe', host: 'qwe' },
+        'testTargetDate',
+    )).not.toThrow();
+
+    expect( () => new ConfigurationManager(
+        { spaceId: 'aSpace', apiKey: 'qwe', host: 'qwe' },
+        { getTargetDate: async () => '2019-08-16T12:22:232Z' },
+    )).not.toThrow();
   });
 
   test('It can configure an object implementing the IConfigurable interface', () => {
