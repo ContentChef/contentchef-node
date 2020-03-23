@@ -55,7 +55,7 @@ export interface IResponseMetadata {
 }
 
 export interface ISortingField {
-  fieldName: 'publicId' | 'id' | 'onlineDate' | 'offlineDate' | string;
+  fieldName: 'publicId' | 'onlineDate' | 'offlineDate' | string;
   ascending: boolean;
 }
 
