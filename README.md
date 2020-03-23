@@ -133,7 +133,7 @@ Otherwise you can use the **search** methods to find content with multiple match
 Example:
 
 ```typescript
-import ContentChef, { PublishingStatus } from '@contentchef/contentchef-node';
+import ContentChef, { PublishingStatus } from '@contentchef/contentchef-node'; 
 
 const cf = ContentChef({
   apiKey: 'your-content-chef-api-key',
@@ -172,8 +172,30 @@ websiteOnlineChannel.search<IArticle>({
 // opens your website channel and queries only the published content with a staging state
 const websitePreviewChannel = cf.previewChannel('website', PublishingStatus.Staging);
 
+// admitted params for content function
+
+interface IGetContentConfig {
+  legacyMetadata?: boolean;
+  publicId: string;
+}
+
+
 // retrieves a single published content from the channel website with the current date
 websitePreviewChannel.content<IArticle>({ publicId: 'your-content-id' }).then(response => /* handles response */);
+
+// admitted params for search function
+
+interface ISearchConfig {
+  skip: number;
+  take: number;
+  publicId?: string[] | string;
+  contentDefinition?: string[] | string;
+  repositories?: string[];
+  legacyMetadata?: boolean;
+  tags?: string[] | string;
+  propFilters?: IPropFilter;
+  sorting?: ISortingField[] | string;
+}
 
 // retrieves the first 10 contents from the channel website with a specific contentDefinition in another date
 websitePreviewChannel.search<IArticle>({
@@ -189,4 +211,18 @@ websitePreviewChannel.search<IArticle>({
   take: 10,
   targetDate: 'a_date_different_from_now',
 }).then(response => /* handles response */);
+
+// retrieve the first 10 contents with ascending ordering for publicId
+websitePreviewChannel.search<IArticle>({
+  skip: 0,
+  take: 10,
+  sorting: '+publicId',
+}).then(response => /* handles response */);
+
+// retrieve the first 10 contents with descending ordering for publicId and ascending ordering for onlineDate, 
+websitePreviewChannel.search<IArticle>({
+  skip: 0,
+  take: 10,
+  sorting: '-publicId, +onlineDate',
+}).then(response => /* handles response */); 
 ```
