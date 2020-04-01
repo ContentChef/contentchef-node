@@ -42,7 +42,6 @@ export {
   IGetContentResponse,
   IResponse,
   ISearchConfig,
-  ISearchResponse,
   PublishingStatus,
 } from './services/Channel';
 

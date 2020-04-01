@@ -1,7 +1,7 @@
 import nock from 'nock';
 import {createOnlineSearchRequest, createPreviewSearchRequest, PublishingStatus} from '..';
 import ISDKConfiguration from '../../ConfigurationManager/interfaces/SDKConfiguration';
-import { IPropFilter, ISearchResponse, LogicalOperators, Operators } from '../interfaces';
+import { IPropFilter, IResponse, LogicalOperators, Operators } from '../interfaces';
 
 const mockedData = {
   items: [
@@ -21,10 +21,10 @@ const mockedData = {
           'world',
         ],
       },
-      requestData: {
+      requestContext: {
         publishingChannel: 'test',
       },
-    } as ISearchResponse<any>,
+    } as IResponse<any>,
   ],
   skip: 0,
   take: 10,
