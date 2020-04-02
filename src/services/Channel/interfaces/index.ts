@@ -13,6 +13,13 @@ export interface IGetContentConfig {
   publicId: string;
 }
 
+export interface IRequestContext {
+  publishingChannel: string;
+  targetDate: Date;
+  cloudName: string;
+  timestamp: string;
+}
+
 export type GetContentOnlineConfig = IGetContentConfig;
 export type GetContentPreviewConfig = IGetContentConfig;
 
@@ -20,12 +27,12 @@ export interface IGetContentResponse<T = any> extends IResponse<T> { }
 
 export interface IOnlineChannelMethods {
   content<T extends object>(params: GetContentOnlineConfig): Promise<AxiosResponse<IGetContentResponse<T>>>;
-  search<T extends object>(params: SearchOnlineConfig): Promise<AxiosResponse<IPaginatedResponse<ISearchResponse<T>>>>;
+  search<T extends object>(params: SearchOnlineConfig): Promise<AxiosResponse<IPaginatedResponse<IResponse<T>>>>;
 }
 
 export interface IPreviewChannelMethods {
   content<T extends object>(params: GetContentPreviewConfig): Promise<AxiosResponse<IGetContentResponse<T>>>;
-  search<T extends object>(params: SearchPreviewConfig): Promise<AxiosResponse<IPaginatedResponse<ISearchResponse<T>>>>;
+  search<T extends object>(params: SearchPreviewConfig): Promise<AxiosResponse<IPaginatedResponse<IResponse<T>>>>;
 }
 
 export interface IResponse<T> {
@@ -36,6 +43,7 @@ export interface IResponse<T> {
   offlineDate: string | null;
   onlineDate: string | null;
   payload: T;
+  requestContext: IRequestContext;
 }
 
 export interface IPaginatedResponse<T = any> {
@@ -43,6 +51,7 @@ export interface IPaginatedResponse<T = any> {
   total: number;
   skip: number;
   take: number;
+  requestContext: IRequestContext;
 }
 
 export interface IResponseMetadata {
@@ -99,12 +108,4 @@ export enum Operators {
   IN_IC = 'IN_IC',
   STARTS_WITH = 'STARTS_WITH',
   STARTS_WITH_IC = 'STARTS_WITH_IC',
-}
-
-export interface ISearchResponse<T = any> extends IResponse<T> {
-  requestData: ISearchResponseRequestData;
-}
-
-export interface ISearchResponseRequestData {
-  publishingChannel: string;
 }

@@ -79,7 +79,7 @@ export function createPreviewContentRequest(spaceId: string, channel: string, st
 export function createOnlineSearchRequest(spaceId: string, channel: string, config: ISDKConfiguration) {
   const url = getOnlineEndpoint(spaceId, 'search/v2', channel);
 
-  return async <T extends object>(params: interfaces.SearchOnlineConfig): Promise<AxiosResponse<interfaces.IPaginatedResponse<interfaces.ISearchResponse<T>>>> => {
+  return async <T extends object>(params: interfaces.SearchOnlineConfig): Promise<AxiosResponse<interfaces.IPaginatedResponse<interfaces.IResponse<T>>>> => {
     return getAxiosInstance(config)(url, { params: {
         ...params,
         propFilters: params.propFilters ? JSON.stringify(params.propFilters) : undefined,
@@ -91,7 +91,7 @@ export function createOnlineSearchRequest(spaceId: string, channel: string, conf
 export function createPreviewSearchRequest(spaceId: string, channel: string, state: PublishingStatus, config: ISDKConfiguration, targetDateResolver: ITargetDateResolver) {
   const url = getPreviewEndpoint(spaceId, 'search/v2', state, channel);
 
-  return async <T extends object>(params: interfaces.SearchPreviewConfig): Promise<AxiosResponse<interfaces.IPaginatedResponse<interfaces.ISearchResponse<T>>>> => {
+  return async <T extends object>(params: interfaces.SearchPreviewConfig): Promise<AxiosResponse<interfaces.IPaginatedResponse<interfaces.IResponse<T>>>> => {
     const targetDate = await targetDateResolver.getTargetDate();
     return getAxiosInstance(config)(url, { params : {
         ...params,
