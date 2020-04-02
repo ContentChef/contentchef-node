@@ -5,7 +5,7 @@
 Content Chef Typescript SDK
 ===========================
 
-[Content Chef](https://contentchefwebsite)'s polymorphic typescript SDK for your web and node.js applications.
+[Content Chef](https://contentchef.io)'s polymorphic typescript SDK for your web and node.js applications.
 
 - [Content Chef Typescript SDK](#content-chef-typescript-sdk)
 - [Requirements](#requirements)
