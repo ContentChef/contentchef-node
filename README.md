@@ -13,6 +13,7 @@ Content Chef Typescript SDK
 - [API](#api)
   - [ContentChef](#contentchef)
   - [Channels](#channels)
+  - [Helpers](#helpers)
 
 # Requirements
 
@@ -225,4 +226,21 @@ websitePreviewChannel.search<IArticle>({
   take: 10,
   sorting: '-publicId, +onlineDate',
 }).then(response => /* handles response */); 
+```
+
+## Helpers
+
+```typescript
+import { createUrl, createImageTag, createVideoTag } from '@contentchef/contentchef-node';
+
+const mediaPublicId = 'publicId';
+const cloudName = 'cloudname'
+
+const mediaUrl = createUrl(mediaPublicId, cloudName);
+
+const imageTag = createImageTag(mediaPublicId, cloudName);
+imageTag.toHtml();
+
+const videoTag = createVideoTag(mediaPublicId, cloudName);
+videoTag.toHtml();
 ```
