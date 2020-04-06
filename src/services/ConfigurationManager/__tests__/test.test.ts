@@ -14,12 +14,11 @@ describe('Tests ConfigurationManager class', () => {
     expect(() => new ConfigurationManager({ apiKey: '' })).toThrow();
 
     // @ts-ignore
-    expect(() => new ConfigurationManager({ apiKey: 'qwe' })).toThrow();
-
-    // @ts-ignore
     expect(() => new ConfigurationManager({ spaceId: 'aSpace', apiKey: 'qwe', host: 100 })).toThrow();
 
     expect(() => new ConfigurationManager({ spaceId: 'aSpace', apiKey: 'qwe', host: '' })).toThrow();
+
+    expect(() => new ConfigurationManager({ spaceId: 'aSpace', apiKey: 'qwe' })).not.toThrow();
 
     expect(() => new ConfigurationManager({ spaceId: 'aSpace', apiKey: 'qwe', host: 'qwe' })).not.toThrow();
 

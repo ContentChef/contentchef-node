@@ -47,8 +47,6 @@ import ContentChef from '@contentchef/contentchef-node';
 const cf = ContentChef({
   // Your Content Chef apiKey
   apiKey: 'your-content-chef-api-key',
-  // Your Content Chef instance domain
-  host: 'https://instance.of.contentchef.com/',
   // Will close a pending call after 5 seconds
   timeout: 5000,
 }, targetDateResolver);
@@ -85,7 +83,7 @@ export default interface ISDKConfiguration {
    * @type {string}
    * @memberof IContentChefConfiguration
    */
-  host: string;
+  host?: string;
   /**
    * Axios proxy configuration. 
    * See the [axios request config documentation](https://github.com/mzabriskie/axios#request-config) 

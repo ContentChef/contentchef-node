@@ -50,12 +50,12 @@ export default class ConfigurationManager {
       throw new TypeError('callTimeout cannot be less than 0');
     }
 
-    if (typeof configuration.host !== 'string') {
-      throw new TypeError('serviceRoot must be a string');
+    if (configuration.host && typeof configuration.host !== 'string') {
+      throw new TypeError('host must be a string');
     }
 
-    if (String(configuration.host).trim().length === 0) {
-      throw new TypeError('serviceRoot seems to be an empty string');
+    if (String(configuration.host).length === 0) {
+      throw new TypeError('host seems to be an empty string');
     }
 
     const createFixedTargetDateResolver = (fixedTargetDate: string | undefined): ITargetDateResolver => ({
