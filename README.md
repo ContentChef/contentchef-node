@@ -64,6 +64,13 @@ export default interface ISDKConfiguration {
    * @memberof IContentChefConfiguration
    */
   apiKey: string;
+
+  /**
+   * Content Chef SpaceId to use
+   * @type {string}
+   * @memberof IContentChefConfiguration
+   */
+  spaceId: string;
   /**
    * Custom agent to perform HTTP requests. 
    * Find further information in the 
@@ -138,7 +145,7 @@ import ContentChef, { PublishingStatus } from '@contentchef/contentchef-node';
 const cf = ContentChef({
   apiKey: 'your-content-chef-api-key',
   host: 'https://instance.of.contentchef.com/',
-  timeout: 5000,
+  spaceId: 'your-space-id'
 }, undefined | 'a target date' | ITargetDateResolver);
 
 // This could be the representation of your data
