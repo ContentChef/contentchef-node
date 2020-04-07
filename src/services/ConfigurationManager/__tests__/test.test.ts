@@ -17,27 +17,27 @@ describe('Tests ConfigurationManager class', () => {
     expect(() => new ConfigurationManager({ apiKey: 'qwe' })).toThrow();
 
     // @ts-ignore
-    expect(() => new ConfigurationManager({ spaceId: 'aSpace', apiKey: 'qwe', host: 100 })).toThrow();
+    expect(() => new ConfigurationManager({ spaceId: 'aSpace', host: 100 })).toThrow();
 
-    expect(() => new ConfigurationManager({ spaceId: 'aSpace', apiKey: 'qwe', host: '' })).toThrow();
+    expect(() => new ConfigurationManager({ spaceId: 'aSpace', host: '' })).toThrow();
 
-    expect(() => new ConfigurationManager({ spaceId: 'aSpace', apiKey: 'qwe', host: 'qwe' })).not.toThrow();
-
-    // @ts-ignore
-    expect(() => new ConfigurationManager({ spaceId: 'aSpace', apiKey: 'qwe', host: 'qwe', timeout: '1000' })).toThrow();
-
-    expect(() => new ConfigurationManager({ spaceId: 'aSpace', apiKey: 'qwe', host: 'qwe', timeout: -1 })).toThrow();
+    expect(() => new ConfigurationManager({ spaceId: 'aSpace', host: 'qwe' })).not.toThrow();
 
     // @ts-ignore
-    expect( () => new ConfigurationManager({ spaceId: 'aSpace', apiKey: 'qwe', host: 'qwe', timeout: -1 }, 10)).toThrow();
+    expect(() => new ConfigurationManager({ spaceId: 'aSpace', host: 'qwe', timeout: '1000' })).toThrow();
+
+    expect(() => new ConfigurationManager({ spaceId: 'aSpace', host: 'qwe', timeout: -1 })).toThrow();
+
+    // @ts-ignore
+    expect( () => new ConfigurationManager({ spaceId: 'aSpace', host: 'qwe', timeout: -1 }, 10)).toThrow();
 
     expect( () => new ConfigurationManager(
-        { spaceId: 'aSpace', apiKey: 'qwe', host: 'qwe' },
+        { spaceId: 'aSpace', host: 'qwe' },
         'testTargetDate',
     )).not.toThrow();
 
     expect( () => new ConfigurationManager(
-        { spaceId: 'aSpace', apiKey: 'qwe', host: 'qwe' },
+        { spaceId: 'aSpace', host: 'qwe' },
         { getTargetDate: async () => '2019-08-16T12:22:232Z' },
     )).not.toThrow();
   });
@@ -46,22 +46,21 @@ describe('Tests ConfigurationManager class', () => {
     const configurable = {
       foo: '',
       configurePreviewMethods(configuration: ISDKConfiguration) {
-        this.foo = configuration.apiKey;
+        this.foo = configuration.spaceId;
         return {} as GetPreviewChannelMethods;
       },
       configureOnlineMethods(configuration: ISDKConfiguration) {
-        this.foo = configuration.apiKey;
+        this.foo = configuration.spaceId;
         return {} as GetOnlineChannelMethods;
       },
     };
     const configurationManager = new ConfigurationManager({
-      apiKey: 'lorem',
       host: 'ipsum',
       spaceId: 'aSpace',
     });
 
     expect(configurationManager.configure(configurable)).toHaveProperty('onlineChannel');
     expect(configurationManager.configure(configurable)).toHaveProperty('previewChannel');
-    expect(configurable.foo).toBe('lorem');
+    expect(configurable.foo).toBe('aSpace');
   });
 });

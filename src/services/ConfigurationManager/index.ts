@@ -34,14 +34,6 @@ export default class ConfigurationManager {
       throw new TypeError('Configuration cannot be undefined');
     }
 
-    if (typeof configuration.apiKey !== 'string') {
-      throw new TypeError('apiKey must be a string');
-    }
-
-    if (String(configuration.apiKey).length === 0) {
-      throw new TypeError('apiKey seems to be an empty string');
-    }
-
     if (configuration.timeout && typeof configuration.timeout !== 'number') {
       throw new TypeError('callTimeout must be a number');
     }
