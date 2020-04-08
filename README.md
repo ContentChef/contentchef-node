@@ -234,13 +234,13 @@ websitePreviewChannel.search<IArticle>({
 import { createUrl, createImageTag, createVideoTag } from '@contentchef/contentchef-node';
 
 const mediaPublicId = 'publicId';
-const cloudName = 'cloudname'
 
-const mediaUrl = createUrl(mediaPublicId, cloudName);
+const mediaUrl = createUrl(mediaPublicId);
 
-const imageTag = createImageTag(mediaPublicId, cloudName);
+const imageTag = createImageTag(mediaPublicId);
 imageTag.toHtml();
 
-const videoTag = createVideoTag(mediaPublicId, cloudName);
+const videoTag = createVideoTag(mediaPublicId);
 videoTag.toHtml();
+
 ```
