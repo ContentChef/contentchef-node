@@ -110,6 +110,9 @@ export function createPreviewSearchRequest(spaceId: string, channel: string, sta
 export function getAxiosInstance(config: ISDKConfiguration): AxiosInstance {
   const instance = axios.create({
     baseURL: config.host,
+    headers: {
+      'X-API-Key': config.apiKey,
+    },
     httpAgent: config.httpAgent,
     httpsAgent: config.httpsAgent,
     paramsSerializer: params => qs.stringify(params, { arrayFormat: 'repeat' }),
