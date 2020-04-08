@@ -243,4 +243,10 @@ imageTag.toHtml();
 const videoTag = createVideoTag(mediaPublicId);
 videoTag.toHtml();
 
+// If you'd like to pass transformations you can do so in the second argument of each method
+const transformations = {
+  height: 100,
+  width: 200
+}
+const mediaUrl = createUrl(mediaPublicId, transformations);
 ```
