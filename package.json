@@ -39,6 +39,7 @@
   "license": "MIT",
   "dependencies": {
     "axios": "^0.18.0",
+    "cloudinary-core": "^2.8.2",
     "qs": "^6.6.0"
   },
   "devDependencies": {
