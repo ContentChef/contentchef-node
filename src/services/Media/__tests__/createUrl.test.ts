@@ -14,5 +14,5 @@ describe('createUrl should', () => {
         const resource = createUrl(publicId, {cloud_name: cloudName});
 
         expect(resource).toContain(cloudName);
-    })
-})
+    });
+});
