@@ -46,10 +46,7 @@ example
 import ContentChef from '@contentchef/contentchef-node';
 
 const cf = ContentChef({
-  // Your Content Chef apiKey
-  apiKey: 'your-content-chef-api-key',
-  // Will close a pending call after 5 seconds
-  timeout: 5000,
+  spaceId: 'your-space-id'
 }, targetDateResolver);
 ```
 
@@ -57,13 +54,6 @@ Configuration implements this interface
 
 ```typescript
 export default interface ISDKConfiguration {
-  /**
-   * Your Content Chef API key
-   * @type {string}
-   * @memberof IContentChefConfiguration
-   */
-  apiKey: string;
-
   /**
    * Content Chef SpaceId to use
    * @type {string}
@@ -142,8 +132,6 @@ Example:
 import ContentChef, { PublishingStatus } from '@contentchef/contentchef-node'; 
 
 const cf = ContentChef({
-  apiKey: 'your-content-chef-api-key',
-  host: 'https://instance.of.contentchef.com/',
   spaceId: 'your-space-id'
 }, undefined | 'a target date' | ITargetDateResolver);
 
@@ -163,7 +151,7 @@ interface IArticle {
 }
 
 // opens for example your website channel, will query only published contents in live state in the current date
-const websiteOnlineChannel = cf.onlineChannel('website');
+const websiteOnlineChannel = cf.onlineChannel('onlineApiKey', 'website');
 
 // will retrieve from the channel website a single content
 websiteOnlineChannel.content<IArticle>({ publicId: 'your-content-id' }).then(response => /* handles response */);
@@ -176,7 +164,7 @@ websiteOnlineChannel.search<IArticle>({
 }).then(response => /* handles response */);
 
 // opens your website channel and queries only the published content with a staging state
-const websitePreviewChannel = cf.previewChannel('website', PublishingStatus.Staging);
+const websitePreviewChannel = cf.previewChannel('previewApiKey', 'website', PublishingStatus.Staging);
 
 // admitted params for content function
 

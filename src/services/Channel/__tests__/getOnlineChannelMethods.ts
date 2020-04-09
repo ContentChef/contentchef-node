@@ -5,7 +5,7 @@ describe(`Tests getOnlineChannelMethods` , () => {
         // @ts-ignore
         expect(() => getOnlineChannelMethods()).toThrow();
 
-        expect(() => (getOnlineChannelMethods as any)('defaultSpaceId', 'abc')).not.toThrow();
+        expect(() => (getOnlineChannelMethods as any)('defaultSpaceId', 'abc', {apiKey: 'qwe'})).not.toThrow();
 
         // @ts-ignore
         expect(() => (getOnlineChannelMethods as any)('defaultSpaceId', 100)).toThrow();
@@ -24,11 +24,11 @@ describe(`Tests getOnlineChannelMethods` , () => {
 
         expect(() => (getOnlineChannelMethods as any)(undefined, undefined)).toThrow();
 
-        expect(() => getOnlineChannelMethods('defaultSpaceId', 'foobar', {} as any)).not.toThrow();
+        expect(() => getOnlineChannelMethods('defaultSpaceId', 'foobar', {} as any)).toThrow();
     });
 
     test(`getOnlineChannelMethods returns methods for contentPreview and searchPreview endpoints`, () => {
-        const result = getOnlineChannelMethods('test', 'testchannel', {} as any);
+        const result = getOnlineChannelMethods('test', 'testchannel', {apiKey: 'qwe'} as any);
 
         expect(typeof result.content).toBe('function');
         expect(typeof result.search).toBe('function');

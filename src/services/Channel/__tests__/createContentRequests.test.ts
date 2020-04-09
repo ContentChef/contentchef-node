@@ -22,7 +22,6 @@ const mockedData = {
   publicId: '',
 } as IGetContentResponse<number>;
 const config = <ISDKConfiguration> {
-  apiKey: 'qwerty',
   host: 'http://localhost:1234/',
   spaceId: 'aSpace',
   timeout: 25000,

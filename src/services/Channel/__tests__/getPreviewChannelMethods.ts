@@ -5,7 +5,7 @@ describe(`Tests getPreviewChannelMethods` , () => {
     // @ts-ignore
     expect(() => getPreviewChannelMethods()).toThrow();
 
-    expect(() => (getPreviewChannelMethods as any)('defaultSpaceId', 'abc', PublishingStatus.Live)).not.toThrow();
+    expect(() => (getPreviewChannelMethods as any)('defaultSpaceId', 'abc', PublishingStatus.Live, { apiKey: 'qwe' })).not.toThrow();
 
     // @ts-ignore
     expect(() => (getPreviewChannelMethods as any)('defaultSpaceId', 100)).toThrow();
@@ -31,7 +31,7 @@ describe(`Tests getPreviewChannelMethods` , () => {
     expect(() => getPreviewChannelMethods(
       'defaultSpaceId',
       'foobar',
-      PublishingStatus.Staging, {} as any,
+      PublishingStatus.Staging, {apiKey: 'qwe'} as any,
       { getTargetDate: async () => 'testTargetDate' },
     )).not.toThrow();
   });
@@ -41,7 +41,7 @@ describe(`Tests getPreviewChannelMethods` , () => {
       'test',
       'testchannel',
       PublishingStatus.Live,
-      {} as any,
+      {apiKey: 'qwe'} as any,
       { getTargetDate: async () => 'testTargetDate' },
     );
 

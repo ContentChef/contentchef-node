@@ -6,12 +6,6 @@ export interface ITargetDateResolver {
 
 export default interface ISDKConfiguration {
   /**
-   * Your Content Chef API key
-   * @type {string}
-   * @memberof IContentChefConfiguration
-   */
-  apiKey: string;
-  /**
    * Content Chef SpaceId to use
    * @type {string}
    * @memberof IContentChefConfiguration
@@ -53,4 +47,13 @@ export default interface ISDKConfiguration {
    * @memberof IContentChefConfiguration
    */
   timeout?: number;
+}
+
+export interface IChannelConfiguration extends ISDKConfiguration {
+  /**
+   * Your Content Chef API key
+   * @type {string}
+   * @memberof IContentChefConfiguration
+   */
+  apiKey: string;
 }

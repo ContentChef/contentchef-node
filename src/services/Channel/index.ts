@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import qs from 'qs';
-import ISDKConfiguration, { ITargetDateResolver } from '../ConfigurationManager/interfaces/SDKConfiguration';
+import ISDKConfiguration, { IChannelConfiguration, ITargetDateResolver } from '../ConfigurationManager/interfaces/SDKConfiguration';
 import * as interfaces from './interfaces';
 import serializeSorting from './serializeSorting';
 
@@ -20,8 +20,8 @@ export enum PublishingStatus {
  * @returns
  */
 export function configurePreviewMethods(config: ISDKConfiguration, targetDateResolver: ITargetDateResolver): interfaces.GetPreviewChannelMethods {
-  return (channel: string, state: PublishingStatus = PublishingStatus.Live) => {
-    return getPreviewChannelMethods(config.spaceId, channel, state, { ... defaultConfig, ... config }, targetDateResolver);
+  return (apiKey: string, channel: string, state: PublishingStatus = PublishingStatus.Live) => {
+    return getPreviewChannelMethods(config.spaceId, channel, state, { ... defaultConfig, ... config, apiKey }, targetDateResolver);
   };
 }
 
@@ -31,8 +31,8 @@ export function configurePreviewMethods(config: ISDKConfiguration, targetDateRes
  * @returns
  */
 export function configureOnlineMethods(config: ISDKConfiguration): interfaces.GetOnlineChannelMethods {
-  return (channel: string) => {
-    return getOnlineChannelMethods(config.spaceId, channel, { ...defaultConfig, ... config });
+  return (apiKey: string, channel: string) => {
+    return getOnlineChannelMethods(config.spaceId, channel, { ...defaultConfig, ... config, apiKey });
   };
 }
 
@@ -135,7 +135,7 @@ export function getPreviewChannelMethods(
     spaceId: string,
     channel: string,
     state: PublishingStatus,
-    config: ISDKConfiguration,
+    config: IChannelConfiguration,
     targetDateResolver: ITargetDateResolver,
 ): interfaces.IPreviewChannelMethods {
   if (typeof spaceId !== 'string' || spaceId.length === 0) {
@@ -148,6 +148,10 @@ export function getPreviewChannelMethods(
 
   if (state !== PublishingStatus.Live && state !== PublishingStatus.Staging) {
     throw new TypeError(`State must be either 'live' or 'staging'`);
+  }
+
+  if (typeof config.apiKey !== 'string' || config.apiKey.length === 0) {
+    throw new TypeError(`apiKey is mandatory`);
   }
 
   const content = createPreviewContentRequest(spaceId, channel, state, config, targetDateResolver);
@@ -165,13 +169,17 @@ export function getPreviewChannelMethods(
  * @param {ISDKConfiguration} config
  * @returns
  */
-export function getOnlineChannelMethods(spaceId: string, channel: string, config: ISDKConfiguration): interfaces.IOnlineChannelMethods {
+export function getOnlineChannelMethods(spaceId: string, channel: string, config: IChannelConfiguration): interfaces.IOnlineChannelMethods {
   if (typeof spaceId !== 'string' || spaceId.length === 0) {
     throw new TypeError('SpaceId is mandatory');
   }
 
   if (typeof channel !== 'string' || channel.length === 0) {
     throw new TypeError('Channel is mandatory');
+  }
+
+  if (typeof config.apiKey !== 'string' || config.apiKey.length === 0) {
+    throw new TypeError(`apiKey is mandatory`);
   }
 
   const content = createOnlineContentRequest(spaceId, channel, config);
