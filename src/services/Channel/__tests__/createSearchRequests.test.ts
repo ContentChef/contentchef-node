@@ -1,6 +1,6 @@
 import nock from 'nock';
 import {createOnlineSearchRequest, createPreviewSearchRequest, PublishingStatus} from '..';
-import ISDKConfiguration from '../../ConfigurationManager/interfaces/SDKConfiguration';
+import ISDKConfiguration, { IChannelConfiguration } from '../../ConfigurationManager/interfaces/SDKConfiguration';
 import { IPropFilter, IResponse, LogicalOperators, Operators } from '../interfaces';
 
 const mockedData = {
@@ -31,7 +31,8 @@ const mockedData = {
   total: 1,
 };
 
-const config = <ISDKConfiguration> {
+const config = <IChannelConfiguration> {
+  apiKey: 'test',
   host: `http://localhost:1234/`,
   spaceId: 'aSpace',
   timeout: 25000,

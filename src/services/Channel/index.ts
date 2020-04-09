@@ -41,7 +41,7 @@ export function configureOnlineMethods(config: ISDKConfiguration): interfaces.Ge
  * @param {string} channel
  * @param {ISDKConfiguration} config
  */
-export function createOnlineContentRequest(spaceId: string, channel: string, config: ISDKConfiguration) {
+export function createOnlineContentRequest(spaceId: string, channel: string, config: IChannelConfiguration) {
   const url = getOnlineEndpoint(spaceId, 'content', channel);
 
   return async <T extends object>(params: interfaces.GetContentOnlineConfig): Promise<AxiosResponse<interfaces.IGetContentResponse<T>>> => {
@@ -57,7 +57,7 @@ export function createOnlineContentRequest(spaceId: string, channel: string, con
  * @param {ITargetDateResolver} targetDateResolver
  * @param {ISDKConfiguration} config
  */
-export function createPreviewContentRequest(spaceId: string, channel: string, state: PublishingStatus, config: ISDKConfiguration, targetDateResolver: ITargetDateResolver) {
+export function createPreviewContentRequest(spaceId: string, channel: string, state: PublishingStatus, config: IChannelConfiguration, targetDateResolver: ITargetDateResolver) {
   const url = getPreviewEndpoint(spaceId, 'content', state, channel);
 
   return async <T extends object>(params: interfaces.GetContentPreviewConfig): Promise<AxiosResponse<interfaces.IGetContentResponse<T>>> => {
@@ -76,7 +76,7 @@ export function createPreviewContentRequest(spaceId: string, channel: string, st
  * @param {string} channel
  * @param {ISDKConfiguration} config
  */
-export function createOnlineSearchRequest(spaceId: string, channel: string, config: ISDKConfiguration) {
+export function createOnlineSearchRequest(spaceId: string, channel: string, config: IChannelConfiguration) {
   const url = getOnlineEndpoint(spaceId, 'search/v2', channel);
 
   return async <T extends object>(params: interfaces.SearchOnlineConfig): Promise<AxiosResponse<interfaces.IPaginatedResponse<interfaces.IResponse<T>>>> => {
@@ -88,7 +88,7 @@ export function createOnlineSearchRequest(spaceId: string, channel: string, conf
   };
 }
 
-export function createPreviewSearchRequest(spaceId: string, channel: string, state: PublishingStatus, config: ISDKConfiguration, targetDateResolver: ITargetDateResolver) {
+export function createPreviewSearchRequest(spaceId: string, channel: string, state: PublishingStatus, config: IChannelConfiguration, targetDateResolver: ITargetDateResolver) {
   const url = getPreviewEndpoint(spaceId, 'search/v2', state, channel);
 
   return async <T extends object>(params: interfaces.SearchPreviewConfig): Promise<AxiosResponse<interfaces.IPaginatedResponse<interfaces.IResponse<T>>>> => {
@@ -107,7 +107,7 @@ export function createPreviewSearchRequest(spaceId: string, channel: string, sta
  * @export
  * @returns {AxiosInstance}
  */
-export function getAxiosInstance(config: ISDKConfiguration): AxiosInstance {
+export function getAxiosInstance(config: IChannelConfiguration): AxiosInstance {
   const instance = axios.create({
     baseURL: config.host,
     headers: {
