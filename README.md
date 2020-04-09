@@ -46,8 +46,7 @@ example
 import ContentChef from '@contentchef/contentchef-node';
 
 const cf = ContentChef({
-  // Will close a pending call after 5 seconds
-  timeout: 5000,
+  spaceId: 'your-space-id'
 }, targetDateResolver);
 ```
 
@@ -61,7 +60,6 @@ export default interface ISDKConfiguration {
    * @memberof IContentChefConfiguration
    */
   spaceId: string;
-  /**
   /**
    * Custom agent to perform HTTP requests. 
    * Find further information in the 
@@ -134,7 +132,6 @@ Example:
 import ContentChef, { PublishingStatus } from '@contentchef/contentchef-node'; 
 
 const cf = ContentChef({
-  host: 'https://instance.of.contentchef.com/',
   spaceId: 'your-space-id'
 }, undefined | 'a target date' | ITargetDateResolver);
 

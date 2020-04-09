@@ -50,6 +50,10 @@ export default class ConfigurationManager {
       throw new TypeError('host seems to be an empty string');
     }
 
+    if (typeof configuration.spaceId !== 'string' || (configuration.spaceId).trim().length === 0) {
+      throw new TypeError('spaceId must be a string');
+    }
+
     const createFixedTargetDateResolver = (fixedTargetDate: string | undefined): ITargetDateResolver => ({
       getTargetDate: async () => fixedTargetDate,
     });
