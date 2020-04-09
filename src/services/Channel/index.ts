@@ -111,7 +111,7 @@ export function getAxiosInstance(config: IChannelConfiguration): AxiosInstance {
   const instance = axios.create({
     baseURL: config.host,
     headers: {
-      'X-API-Key': config.apiKey,
+      'X-SPACE-D-API-Key': config.apiKey,
     },
     httpAgent: config.httpAgent,
     httpsAgent: config.httpsAgent,
