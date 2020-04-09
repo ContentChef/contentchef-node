@@ -5,8 +5,8 @@ export type ContentRequestMethod = 'content' | `search/v2`;
 
 export type ContentState = 'staging' | 'live';
 
-export type GetPreviewChannelMethods = (channel: string, state: PublishingStatus) => IPreviewChannelMethods;
-export type GetOnlineChannelMethods = (channel: string) => IOnlineChannelMethods;
+export type GetPreviewChannelMethods = (apiKey: string, channel: string, state: PublishingStatus) => IPreviewChannelMethods;
+export type GetOnlineChannelMethods = (apiKey: string, channel: string) => IOnlineChannelMethods;
 
 export interface IGetContentConfig {
   legacyMetadata?: boolean;

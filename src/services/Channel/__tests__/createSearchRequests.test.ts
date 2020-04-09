@@ -32,7 +32,6 @@ const mockedData = {
 };
 
 const config = <ISDKConfiguration> {
-  apiKey: 'qwerty',
   host: `http://localhost:1234/`,
   spaceId: 'aSpace',
   timeout: 25000,
