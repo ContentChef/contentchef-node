@@ -5,7 +5,7 @@ export type IVideoTag = cloudinary.VideoTag;
 export type IMediaOptions = cloudinary.Transformation.Options;
 
 const defaultCloudName = 'contentchef';
-const client = cloudinary.Cloudinary.new({cloud_name: defaultCloudName});
+const client = cloudinary.Cloudinary.new({cloud_name: defaultCloudName, secure: true});
 
 export function createUrl(publicId: string, options?: IMediaOptions): string {
     return client.url(publicId, options);
