@@ -8,15 +8,6 @@ describe('Tests ConfigurationManager class', () => {
     expect(() => new ConfigurationManager()).toThrow();
 
     // @ts-ignore
-    expect(() => new ConfigurationManager({ apiKey: 100 })).toThrow();
-
-    // @ts-ignore
-    expect(() => new ConfigurationManager({ apiKey: '' })).toThrow();
-
-    // @ts-ignore
-    expect(() => new ConfigurationManager({ apiKey: 'qwe' })).toThrow();
-
-    // @ts-ignore
     expect(() => new ConfigurationManager({ spaceId: 'aSpace', host: 100 })).toThrow();
 
     expect(() => new ConfigurationManager({ spaceId: 'aSpace', host: '' })).toThrow();

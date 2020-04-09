@@ -13,6 +13,7 @@ Content Chef Typescript SDK
 - [API](#api)
   - [ContentChef](#contentchef)
   - [Channels](#channels)
+  - [Helpers](#helpers)
 
 # Requirements
 
@@ -45,8 +46,6 @@ example
 import ContentChef from '@contentchef/contentchef-node';
 
 const cf = ContentChef({
-  // Your Content Chef instance domain
-  host: 'https://instance.of.contentchef.com/',
   // Will close a pending call after 5 seconds
   timeout: 5000,
 }, targetDateResolver);
@@ -56,6 +55,13 @@ Configuration implements this interface
 
 ```typescript
 export default interface ISDKConfiguration {
+  /**
+   * Content Chef SpaceId to use
+   * @type {string}
+   * @memberof IContentChefConfiguration
+   */
+  spaceId: string;
+  /**
   /**
    * Custom agent to perform HTTP requests. 
    * Find further information in the 
@@ -77,7 +83,7 @@ export default interface ISDKConfiguration {
    * @type {string}
    * @memberof IContentChefConfiguration
    */
-  host: string;
+  host?: string;
   /**
    * Axios proxy configuration. 
    * See the [axios request config documentation](https://github.com/mzabriskie/axios#request-config) 
@@ -129,7 +135,7 @@ import ContentChef, { PublishingStatus } from '@contentchef/contentchef-node';
 
 const cf = ContentChef({
   host: 'https://instance.of.contentchef.com/',
-  timeout: 5000,
+  spaceId: 'your-space-id'
 }, undefined | 'a target date' | ITargetDateResolver);
 
 // This could be the representation of your data
@@ -216,4 +222,27 @@ websitePreviewChannel.search<IArticle>({
   take: 10,
   sorting: '-publicId, +onlineDate',
 }).then(response => /* handles response */); 
+```
+
+## Helpers
+
+```typescript
+import { createUrl, createImageTag, createVideoTag } from '@contentchef/contentchef-node';
+
+const mediaPublicId = 'publicId';
+
+const mediaUrl = createUrl(mediaPublicId);
+
+const imageTag = createImageTag(mediaPublicId);
+imageTag.toHtml();
+
+const videoTag = createVideoTag(mediaPublicId);
+videoTag.toHtml();
+
+// If you'd like to pass transformations you can do so in the second argument of each method
+const transformations = {
+  height: 100,
+  width: 200
+}
+const mediaUrl = createUrl(mediaPublicId, transformations);
 ```

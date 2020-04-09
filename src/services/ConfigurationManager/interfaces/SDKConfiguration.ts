@@ -32,7 +32,7 @@ export default interface ISDKConfiguration {
    * @type {string}
    * @memberof IContentChefConfiguration
    */
-  host: string;
+  host?: string;
   /**
    * Axios proxy configuration.
    * See the [axios request config documentation](https://github.com/mzabriskie/axios#request-config)
