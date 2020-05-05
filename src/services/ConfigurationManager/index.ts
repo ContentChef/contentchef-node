@@ -54,6 +54,10 @@ export default class ConfigurationManager {
       throw new TypeError('spaceId must be a string');
     }
 
+    if (configuration.hasOwnProperty('host') && configuration.host === undefined) {
+      delete configuration.host;
+    }
+
     const createFixedTargetDateResolver = (fixedTargetDate: string | undefined): ITargetDateResolver => ({
       getTargetDate: async () => fixedTargetDate,
     });
@@ -65,7 +69,6 @@ export default class ConfigurationManager {
     } else {
       throw new TypeError('TargetDateResolver is mandatory and must be a string or a ITargetDateResolver type');
     }
-
     this.configuration = configuration;
   }
 
