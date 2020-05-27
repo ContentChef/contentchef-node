@@ -1,5 +1,5 @@
 import nock = require('nock');
-import ISDKConfiguration from '../../ConfigurationManager/interfaces/SDKConfiguration';
+import ISDKConfiguration, { IChannelConfiguration } from '../../ConfigurationManager/interfaces/SDKConfiguration';
 import {
   createOnlineContentRequest,
   createPreviewContentRequest,
@@ -21,7 +21,8 @@ const mockedData = {
   payload: 0,
   publicId: '',
 } as IGetContentResponse<number>;
-const config = <ISDKConfiguration> {
+const config = <IChannelConfiguration> {
+  apiKey: 'test',
   host: 'http://localhost:1234/',
   spaceId: 'aSpace',
   timeout: 25000,
