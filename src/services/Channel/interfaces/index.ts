@@ -5,8 +5,8 @@ export type ContentRequestMethod = 'content' | `search/v2`;
 
 export type ContentState = 'staging' | 'live';
 
-export type GetPreviewChannelMethods = (apiKey: string, channel: string, state: PublishingStatus) => IPreviewChannelMethods;
-export type GetOnlineChannelMethods = (apiKey: string, channel: string) => IOnlineChannelMethods;
+export type GetPreviewChannelMethods = (apiKey: string, channel: string, state: PublishingStatus) => IChannelMethods;
+export type GetOnlineChannelMethods = (apiKey: string, channel: string) => IChannelMethods;
 
 export interface IGetContentConfig {
   legacyMetadata?: boolean;
@@ -23,17 +23,28 @@ export interface IRequestContext {
 export type GetContentOnlineConfig = IGetContentConfig;
 export type GetContentPreviewConfig = IGetContentConfig;
 
+export type SearchOnlineConfig = ISearchConfig;
+export type SearchPreviewConfig = ISearchConfig;
+
 export interface IGetContentResponse<T = any> extends IResponse<T> { }
 
-export interface IOnlineChannelMethods {
-  content<T extends object>(params: GetContentOnlineConfig): Promise<AxiosResponse<IGetContentResponse<T>>>;
-  search<T extends object>(params: SearchOnlineConfig): Promise<AxiosResponse<IPaginatedResponse<IResponse<T>>>>;
+export interface IChannelMethods {
+  content<T extends object>(params: IGetContentConfig): Promise<AxiosResponse<IGetContentResponse<T>>>;
+  search<T extends object>(params: ISearchConfig): Promise<AxiosResponse<IPaginatedResponse<IResponse<T>>>>;
 }
 
-export interface IPreviewChannelMethods {
-  content<T extends object>(params: GetContentPreviewConfig): Promise<AxiosResponse<IGetContentResponse<T>>>;
-  search<T extends object>(params: SearchPreviewConfig): Promise<AxiosResponse<IPaginatedResponse<IResponse<T>>>>;
-}
+/**
+ * @deprecated Since version 2.2.4. This will be removed in version 3.0.0
+ * @export
+ * @interface IOnlineChannelMethods
+ */
+export interface IOnlineChannelMethods extends IChannelMethods {}
+/**
+ * @deprecated Since version 2.2.4. This will be removed in version 3.0.0
+ * @export
+ * @interface IPreviewChannelMethods
+ */
+export interface IPreviewChannelMethods extends IChannelMethods {}
 
 export interface IResponse<T> {
   definition: string;
@@ -79,9 +90,6 @@ export interface ISearchConfig {
   propFilters?: IPropFilter;
   sorting?: ISortingField[] | string;
 }
-
-export type SearchOnlineConfig = ISearchConfig;
-export type SearchPreviewConfig = ISearchConfig;
 
 export interface IPropFilter {
   condition: LogicalOperators;
