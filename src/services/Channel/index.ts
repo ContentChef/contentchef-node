@@ -137,7 +137,7 @@ export function getPreviewChannelMethods(
     state: PublishingStatus,
     config: IChannelConfiguration,
     targetDateResolver: ITargetDateResolver,
-): interfaces.IPreviewChannelMethods {
+): interfaces.IChannelMethods {
   if (typeof spaceId !== 'string' || spaceId.length === 0) {
     throw new TypeError('SpaceId is mandatory');
   }
@@ -169,7 +169,7 @@ export function getPreviewChannelMethods(
  * @param {ISDKConfiguration} config
  * @returns
  */
-export function getOnlineChannelMethods(spaceId: string, channel: string, config: IChannelConfiguration): interfaces.IOnlineChannelMethods {
+export function getOnlineChannelMethods(spaceId: string, channel: string, config: IChannelConfiguration): interfaces.IChannelMethods {
   if (typeof spaceId !== 'string' || spaceId.length === 0) {
     throw new TypeError('SpaceId is mandatory');
   }

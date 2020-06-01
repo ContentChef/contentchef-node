@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.4] - 2020-06-01
+### Added
+- `IChannelMethods` interface to deprecate `IPreviewChannelMethods` and `IOnlineChannelMethods` as since version 2.0.0 they were the same
+
 ## [2.2.3] - 2020-05-27
 ### Added
 - `apiKey` should be passed as a header named `X-Chef-Key`
