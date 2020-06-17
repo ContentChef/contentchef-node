@@ -13,7 +13,6 @@ Content Chef Typescript SDK
 - [API](#api)
   - [ContentChef](#contentchef)
   - [Channels](#channels)
-  - [Helpers](#helpers)
 
 # Requirements
 
@@ -219,27 +218,4 @@ websitePreviewChannel.search<IArticle>({
   take: 10,
   sorting: '-publicId, +onlineDate',
 }).then(response => /* handles response */); 
-```
-
-## Helpers
-
-```typescript
-import { createUrl, createImageTag, createVideoTag } from '@contentchef/contentchef-node';
-
-const mediaPublicId = 'publicId';
-
-const mediaUrl = createUrl(mediaPublicId);
-
-const imageTag = createImageTag(mediaPublicId);
-imageTag.toHtml();
-
-const videoTag = createVideoTag(mediaPublicId);
-videoTag.toHtml();
-
-// If you'd like to pass transformations you can do so in the second argument of each method
-const transformations = {
-  height: 100,
-  width: 200
-}
-const mediaUrl = createUrl(mediaPublicId, transformations);
 ```
