@@ -1,0 +1,14 @@
+{
+  "files.exclude": {
+    "**/coverage": true,
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/dist": true,
+    "**/.DS_Store": true,
+    "**/*.js": {
+      "when": "$(basename).ts"
+    }
+  }
+}

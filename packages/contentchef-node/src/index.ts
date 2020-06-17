@@ -45,12 +45,4 @@ export {
   PublishingStatus,
 } from './services/Channel';
 
-export {
-  createImageTag,
-  createVideoTag,
-  createUrl,
-  IImageTag,
-  IVideoTag,
-} from './services/Media';
-
 export default configure;
