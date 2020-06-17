@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "packages/contentchef-node"
+		},
+		{
+			"path": "packages/contentchef-media"
+		}
+	],
+	"settings": {}
+}

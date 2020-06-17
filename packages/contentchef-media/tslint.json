@@ -1,0 +1,27 @@
+{
+    "defaultSeverity": "error",
+    "extends": [
+        "tslint:recommended"
+    ],
+    "jsRules": {
+
+    },
+    "rules": {
+        "arrow-parens": false,
+        "object-literal-key-quotes": [
+            false
+        ],
+        "jsdoc-format": true,
+        "no-angle-bracket-type-assertion": false,
+        "no-empty-interface": false,
+        "quotemark": [
+            true,
+            "single"
+        ],
+        "max-line-length": false,
+        "no-trailing-whitespace": false
+    },
+    "rulesDirectory": [
+        
+    ]
+}

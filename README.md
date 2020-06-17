@@ -12,9 +12,11 @@ yarn bootstrap
 contentchef-node/
   packages/
     contentchef-node/
+    contentchef-media/
 ```
 
-* `contentchef-node` package contains the client to retrieve contents from ContentChef. [Click here for more details](./packages/contentchef-node/README.md);
+* `contentchef-node` package contains the client to retrieve contents from ContentChef. [Click here for more details](./packages/contentchef-node/README.md)
+* `contentchef-media` package contains methods to help managing and interacting with ContentChef's media. [Click here for more details](./packages/contentchef-media/README.md);
 
 ### Changelog
 
