@@ -48,7 +48,6 @@
     "typescript": "^3.9.5"
   },
   "dependencies": {
-    "cloudinary-core": "^2.8.2",
-    "standard-changelog": "^2.0.24"
+    "cloudinary-core": "^2.8.2"
   }
 }
