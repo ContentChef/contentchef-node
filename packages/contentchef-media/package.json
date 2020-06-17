@@ -21,6 +21,7 @@
   "files": [
     "src"
   ],
+  "private": "false",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ContentChef/contentchef-node.git"
