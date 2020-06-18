@@ -1,6 +1,6 @@
 {
   "name": "@contentchef/contentchef-media",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Package for helping managing media with ContentChef",
   "author": "ContentChef",
   "maintainers": [
@@ -21,7 +21,6 @@
   "files": [
     "src"
   ],
-  "private": "false",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ContentChef/contentchef-node.git"
