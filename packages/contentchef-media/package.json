@@ -1,6 +1,6 @@
 {
   "name": "@contentchef/contentchef-media",
-  "version": "1.0.2",
+  "version": "3.0.0",
   "description": "Package for helping managing media with ContentChef",
   "author": "ContentChef",
   "maintainers": [
