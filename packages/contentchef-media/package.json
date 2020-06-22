@@ -14,13 +14,9 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "source": "src/index.ts",
-  "directories": {
-    "src": "src",
-    "test": "src/__tests__"
+  "publishConfig": {
+    "access": "public"
   },
-  "files": [
-    "src"
-  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ContentChef/contentchef-node.git"
