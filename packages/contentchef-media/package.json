@@ -1,6 +1,6 @@
 {
   "name": "@contentchef/contentchef-media",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Package for helping managing media with ContentChef",
   "author": "ContentChef",
   "maintainers": [
@@ -14,13 +14,9 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "source": "src/index.ts",
-  "directories": {
-    "src": "src",
-    "test": "src/__tests__"
+  "publishConfig": {
+    "access": "public"
   },
-  "files": [
-    "src"
-  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ContentChef/contentchef-node.git"
