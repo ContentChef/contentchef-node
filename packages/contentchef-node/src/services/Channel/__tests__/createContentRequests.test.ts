@@ -77,6 +77,38 @@ describe(`Tests createPreviewContentRequest`, () => {
       done();
     });
   });
+
+  test('Invoking the returning method with staging state after configuring it with locale, will use correct endpoint', done => {
+    createPreviewContentRequest(
+      'aSpace',
+      'foo',
+      PublishingStatus.Staging,
+      config,
+      { getTargetDate: async () => '2019-08-16T12:22:232Z' },
+      'locale-to-get',
+    )({ publicId: 'hello-world' }).then(response => {
+      const expectedURL = `space/aSpace/preview/staging/content/foo/locale-to-get`;
+      expect(response.config.url).toContain(expectedURL);
+      expect(response.data).toEqual(mockedData);
+      done();
+    });
+  });
+
+  test('Invoking the returning method with live state after configuring it with locale, will use correct endpoint', done => {
+    createPreviewContentRequest(
+      'aSpace',
+      'foo',
+      PublishingStatus.Live,
+      config,
+      { getTargetDate: async () => '2019-08-16T12:22:232Z' },
+      'locale-to-get',
+    )({ publicId: 'hello-world' }).then(response => {
+      const expectedURL = `space/aSpace/preview/live/content/foo/locale-to-get`;
+      expect(response.config.url).toContain(expectedURL);
+      expect(response.data).toEqual(mockedData);
+      done();
+    });
+  });
 });
 
 describe(`Tests createOnlineContentRequest`, () => {
@@ -88,6 +120,20 @@ describe(`Tests createOnlineContentRequest`, () => {
 
   test('Invoking the returning method will trigger an axios request', done => {
     createOnlineContentRequest('aSpace', 'foo', config)({ publicId: 'hello-world' }).then(response => {
+      expect(response.data).toEqual(mockedData);
+      done();
+    });
+  });
+
+  test('Invoking the returning method after configuring it with locale, will use correct endpoint', done => {
+    createOnlineContentRequest(
+      'aSpace',
+      'foo',
+      config,
+      'locale-to-get',
+    )({ publicId: 'hello-world' }).then(response => {
+      const expectedURL = `space/aSpace/online/content/foo/locale-to-get`;
+      expect(response.config.url).toContain(expectedURL);
       expect(response.data).toEqual(mockedData);
       done();
     });

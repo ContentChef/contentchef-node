@@ -41,11 +41,13 @@ describe(`Tests getPreviewChannelMethods` , () => {
       'test',
       'testchannel',
       PublishingStatus.Live,
-      {apiKey: 'qwe'} as any,
+      {apiKey: 'qwe', locale: 'test'} as any,
       { getTargetDate: async () => 'testTargetDate' },
     );
 
     expect(typeof result.content).toBe('function');
     expect(typeof result.search).toBe('function');
+    expect(typeof result.localizedContent).toBe('function');
+    expect(typeof result.localizedSearch).toBe('function');
   });
 });
