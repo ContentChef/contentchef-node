@@ -5,8 +5,8 @@ export type ContentRequestMethod = 'content' | `search/v2`;
 
 export type ContentState = 'staging' | 'live';
 
-export type GetPreviewChannelMethods = (apiKey: string, channel: string, state: PublishingStatus) => IChannelMethods;
-export type GetOnlineChannelMethods = (apiKey: string, channel: string) => IChannelMethods;
+export type GetPreviewChannelMethods = (apiKey: string, channel: string, state: PublishingStatus, locale?: string) => IChannelMethods;
+export type GetOnlineChannelMethods = (apiKey: string, channel: string, locale?: string) => IChannelMethods;
 
 export interface IGetContentConfig {
   legacyMetadata?: boolean;
@@ -31,6 +31,8 @@ export interface IGetContentResponse<T = any> extends IResponse<T> { }
 export interface IChannelMethods {
   content<T extends object>(params: IGetContentConfig): Promise<AxiosResponse<IGetContentResponse<T>>>;
   search<T extends object>(params: ISearchConfig): Promise<AxiosResponse<IPaginatedResponse<IResponse<T>>>>;
+  localizedContent<T extends object>(params: IGetContentConfig): Promise<AxiosResponse<IGetContentResponse<T>>>;
+  localizedSearch<T extends object>(params: ISearchConfig): Promise<AxiosResponse<IPaginatedResponse<IResponse<T>>>>;
 }
 
 /**

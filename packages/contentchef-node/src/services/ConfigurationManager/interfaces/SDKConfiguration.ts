@@ -56,4 +56,9 @@ export interface IChannelConfiguration extends ISDKConfiguration {
    * @memberof IContentChefConfiguration
    */
   apiKey: string;
+
+  /**
+   * Locale needed to access localized contents
+   */
+  locale?: string;
 }
