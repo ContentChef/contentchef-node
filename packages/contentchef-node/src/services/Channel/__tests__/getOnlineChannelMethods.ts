@@ -28,9 +28,11 @@ describe(`Tests getOnlineChannelMethods` , () => {
     });
 
     test(`getOnlineChannelMethods returns methods for contentPreview and searchPreview endpoints`, () => {
-        const result = getOnlineChannelMethods('test', 'testchannel', {apiKey: 'qwe'} as any);
+        const result = getOnlineChannelMethods('test', 'testchannel', {apiKey: 'qwe', locale: 'test'} as any);
 
         expect(typeof result.content).toBe('function');
         expect(typeof result.search).toBe('function');
+        expect(typeof result.localizedContent).toBe('function');
+        expect(typeof result.localizedSearch).toBe('function');
     });
 });

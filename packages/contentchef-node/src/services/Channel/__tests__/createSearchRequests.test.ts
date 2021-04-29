@@ -102,6 +102,22 @@ describe(`Tests createPreviewSearchRequest`, () => {
       done();
     });
   });
+
+  test('Invoking the returning method after configuring it with locale, will use correct endpoint', done => {
+    createPreviewSearchRequest(
+      'aSpace',
+      'foo',
+      PublishingStatus.Staging,
+      config,
+      { getTargetDate: async () => '2019-08-16T12:22:232Z' },
+      'locale-to-get',
+    )({ contentDefinition: 'hello-world', skip: 0, take: 10 }).then(response => {
+      const expectedURL = `space/aSpace/preview/staging/search/v2/foo/locale-to-get`;
+      expect(response.config.url).toContain(expectedURL);
+      expect(response.data).toEqual(mockedData);
+      done();
+    });
+  });
 });
 
 describe(`Tests createOnlineSearchRequest`, () => {
@@ -129,6 +145,19 @@ describe(`Tests createOnlineSearchRequest`, () => {
     createOnlineSearchRequest('aSpace', 'foo', config)<any>({ propFilters, skip: 0, take: 10 }).then(response => {
       expect(response.data).toEqual(mockedData);
       expect(response.config.params.propFilters).toEqual(JSON.stringify(propFilters));
+      done();
+    });
+  });
+  test('Invoking the returning method after configuring it with locale, will use correct endpoint', done => {
+    createOnlineSearchRequest(
+      'aSpace',
+      'foo',
+      config,
+      'locale-to-get',
+    )({ contentDefinition: 'hello-world', skip: 0, take: 10 }).then(response => {
+      const expectedURL = `space/aSpace/online/search/v2/foo/locale-to-get`;
+      expect(response.config.url).toContain(expectedURL);
+      expect(response.data).toEqual(mockedData);
       done();
     });
   });

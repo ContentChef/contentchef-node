@@ -20,8 +20,8 @@ export enum PublishingStatus {
  * @returns
  */
 export function configurePreviewMethods(config: ISDKConfiguration, targetDateResolver: ITargetDateResolver): interfaces.GetPreviewChannelMethods {
-  return (apiKey: string, channel: string, state: PublishingStatus = PublishingStatus.Live) => {
-    return getPreviewChannelMethods(config.spaceId, channel, state, { ... defaultConfig, ... config, apiKey }, targetDateResolver);
+  return (apiKey: string, channel: string, state: PublishingStatus = PublishingStatus.Live, locale?: string) => {
+    return getPreviewChannelMethods(config.spaceId, channel, state, { ... defaultConfig, ... config, apiKey, locale }, targetDateResolver);
   };
 }
 
@@ -31,8 +31,8 @@ export function configurePreviewMethods(config: ISDKConfiguration, targetDateRes
  * @returns
  */
 export function configureOnlineMethods(config: ISDKConfiguration): interfaces.GetOnlineChannelMethods {
-  return (apiKey: string, channel: string) => {
-    return getOnlineChannelMethods(config.spaceId, channel, { ...defaultConfig, ... config, apiKey });
+  return (apiKey: string, channel: string, locale?: string) => {
+    return getOnlineChannelMethods(config.spaceId, channel, { ...defaultConfig, ... config, apiKey, locale });
   };
 }
 
@@ -41,8 +41,8 @@ export function configureOnlineMethods(config: ISDKConfiguration): interfaces.Ge
  * @param {string} channel
  * @param {ISDKConfiguration} config
  */
-export function createOnlineContentRequest(spaceId: string, channel: string, config: IChannelConfiguration) {
-  const url = getOnlineEndpoint(spaceId, 'content', channel);
+export function createOnlineContentRequest(spaceId: string, channel: string, config: IChannelConfiguration, locale?: string) {
+  const url = getOnlineEndpoint(spaceId, 'content', channel, locale);
 
   return async <T extends object>(params: interfaces.GetContentOnlineConfig): Promise<AxiosResponse<interfaces.IGetContentResponse<T>>> => {
 
@@ -57,8 +57,8 @@ export function createOnlineContentRequest(spaceId: string, channel: string, con
  * @param {ITargetDateResolver} targetDateResolver
  * @param {ISDKConfiguration} config
  */
-export function createPreviewContentRequest(spaceId: string, channel: string, state: PublishingStatus, config: IChannelConfiguration, targetDateResolver: ITargetDateResolver) {
-  const url = getPreviewEndpoint(spaceId, 'content', state, channel);
+export function createPreviewContentRequest(spaceId: string, channel: string, state: PublishingStatus, config: IChannelConfiguration, targetDateResolver: ITargetDateResolver, locale?: string) {
+  const url = getPreviewEndpoint(spaceId, 'content', state, channel, locale);
 
   return async <T extends object>(params: interfaces.GetContentPreviewConfig): Promise<AxiosResponse<interfaces.IGetContentResponse<T>>> => {
     const targetDate = await targetDateResolver.getTargetDate();
@@ -76,8 +76,8 @@ export function createPreviewContentRequest(spaceId: string, channel: string, st
  * @param {string} channel
  * @param {ISDKConfiguration} config
  */
-export function createOnlineSearchRequest(spaceId: string, channel: string, config: IChannelConfiguration) {
-  const url = getOnlineEndpoint(spaceId, 'search/v2', channel);
+export function createOnlineSearchRequest(spaceId: string, channel: string, config: IChannelConfiguration, locale?: string) {
+  const url = getOnlineEndpoint(spaceId, 'search/v2', channel, locale);
 
   return async <T extends object>(params: interfaces.SearchOnlineConfig): Promise<AxiosResponse<interfaces.IPaginatedResponse<interfaces.IResponse<T>>>> => {
     return getAxiosInstance(config)(url, { params: {
@@ -88,8 +88,8 @@ export function createOnlineSearchRequest(spaceId: string, channel: string, conf
   };
 }
 
-export function createPreviewSearchRequest(spaceId: string, channel: string, state: PublishingStatus, config: IChannelConfiguration, targetDateResolver: ITargetDateResolver) {
-  const url = getPreviewEndpoint(spaceId, 'search/v2', state, channel);
+export function createPreviewSearchRequest(spaceId: string, channel: string, state: PublishingStatus, config: IChannelConfiguration, targetDateResolver: ITargetDateResolver, locale?: string) {
+  const url = getPreviewEndpoint(spaceId, 'search/v2', state, channel, locale);
 
   return async <T extends object>(params: interfaces.SearchPreviewConfig): Promise<AxiosResponse<interfaces.IPaginatedResponse<interfaces.IResponse<T>>>> => {
     const targetDate = await targetDateResolver.getTargetDate();
@@ -154,11 +154,18 @@ export function getPreviewChannelMethods(
     throw new TypeError(`apiKey is mandatory`);
   }
 
+  if (config.locale && typeof config.locale !== 'string') {
+    throw new TypeError('Property locale must be a string');
+  }
+
   const content = createPreviewContentRequest(spaceId, channel, state, config, targetDateResolver);
   const search = createPreviewSearchRequest(spaceId, channel, state, config, targetDateResolver);
-
+  const localizedContent = createPreviewContentRequest(spaceId, channel, state, config, targetDateResolver, config.locale);
+  const localizedSearch = createPreviewSearchRequest(spaceId, channel, state, config, targetDateResolver, config.locale);
   return {
     content,
+    localizedContent,
+    localizedSearch,
     search,
   };
 }
@@ -182,11 +189,19 @@ export function getOnlineChannelMethods(spaceId: string, channel: string, config
     throw new TypeError(`apiKey is mandatory`);
   }
 
+  if (config.locale && typeof config.locale !== 'string') {
+    throw new TypeError('Property locale must be a string');
+  }
+
   const content = createOnlineContentRequest(spaceId, channel, config);
   const search = createOnlineSearchRequest(spaceId, channel, config);
+  const localizedContent = createOnlineContentRequest(spaceId, channel, config, config.locale);
+  const localizedSearch = createOnlineSearchRequest(spaceId, channel, config, config.locale);
 
   return {
     content,
+    localizedContent,
+    localizedSearch,
     search,
   };
 }
@@ -197,8 +212,8 @@ export function getOnlineChannelMethods(spaceId: string, channel: string, config
  * @param {string} channel
  * @returns
  */
-export function getOnlineEndpoint(spaceId: string, method: interfaces.ContentRequestMethod, channel: string) {
-  return `/space/${spaceId}/online/${method}/${channel}`;
+export function getOnlineEndpoint(spaceId: string, method: interfaces.ContentRequestMethod, channel: string, locale?: string) {
+  return `/space/${spaceId}/online/${method}/${channel}${locale ? `/${locale}` : ''}`;
 }
 
 /**
@@ -208,8 +223,8 @@ export function getOnlineEndpoint(spaceId: string, method: interfaces.ContentReq
  * @param {string} channel
  * @returns
  */
-export function getPreviewEndpoint(spaceId: string, method: interfaces.ContentRequestMethod, state: PublishingStatus, channel: string) {
-  return `/space/${spaceId}/preview/${state}/${method}/${channel}`;
+export function getPreviewEndpoint(spaceId: string, method: interfaces.ContentRequestMethod, state: PublishingStatus, channel: string, locale?: string) {
+  return `/space/${spaceId}/preview/${state}/${method}/${channel}${locale ? `/${locale}` : ''}`;
 }
 
 export * from './interfaces';
