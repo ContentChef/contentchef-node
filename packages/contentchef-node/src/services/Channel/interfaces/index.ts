@@ -67,6 +67,13 @@ export interface IPaginatedResponse<T = any> {
   requestContext: IRequestContext;
 }
 
+export interface IAvailableLocale {
+  locale: string;
+  slugs?: {
+    [key: string]: string;
+  };
+}
+
 export interface IResponseMetadata {
   authoringContentId: number;
   contentLastModifiedDate: string;
@@ -74,6 +81,7 @@ export interface IResponseMetadata {
   id: number;
   publishedOn: string;
   tags: string[];
+  availableLocales?: IAvailableLocale[];
 }
 
 export interface ISortingField {
