@@ -82,6 +82,7 @@ export interface IResponseMetadata {
   publishedOn: string;
   tags: string[];
   availableLocales?: IAvailableLocale[];
+  locale: string;
 }
 
 export interface ISortingField {
