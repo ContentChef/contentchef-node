@@ -21,9 +21,9 @@
       "es2016.array.include",
       "dom"
     ],
-    "module": "commonjs",
+    "module": "ESNext",
     "moduleResolution": "node",
-    "outDir": "dist/cjs",
+    "outDir": "dist/esm",
     "target": "es5"
   },
   "exclude": [

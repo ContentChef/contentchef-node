@@ -21,10 +21,10 @@
       "es2016.array.include",
       "dom"
     ],
-    "module": "commonjs",
     "moduleResolution": "node",
-    "outDir": "dist/cjs",
-    "target": "es5"
+    "target": "es5",
+    "module": "esnext",
+    "outDir": "./dist/esm/",
   },
   "exclude": [
     "node_modules",
