@@ -1,8 +1,7 @@
-import * as cloudinary from 'cloudinary-core';
+import { createCloudinaryLegacyURL } from '@cloudinary/url-gen';
+import { LegacyITransforamtionOptions } from '@cloudinary/url-gen/types/types';
 
-export type IImageTag = cloudinary.ImageTag;
-export type IVideoTag = cloudinary.VideoTag;
-export type IMediaOptions = cloudinary.Transformation.Options;
+export type IMediaOptions = LegacyITransforamtionOptions;
 
 export enum ResourceType {
     image = 'image',
@@ -11,18 +10,9 @@ export enum ResourceType {
 };
 
 const defaultCloudName = 'contentchef';
-const client = cloudinary.Cloudinary.new({cloud_name: defaultCloudName, secure: true});
 
 export function createUrl(publicId: string, options?: IMediaOptions, resourceType: ResourceType = ResourceType.image): string {
-    return client.url(publicId, {...options, resource_type: resourceType});
-}
-
-export function createImageTag(publicId: string, options?: IMediaOptions): IImageTag {
-    return client.imageTag(publicId, options);
-}
-
-export function createVideoTag(publicId: string, options?: IMediaOptions): IVideoTag {
-    return client.videoTag(publicId, options);
+    return createCloudinaryLegacyURL(publicId, { ...options, resource_type: resourceType, cloud_name: options && options.cloud_name ? options.cloud_name : defaultCloudName, secure: true });
 }
 
 export function imageUrl(publicId: string, options?: IMediaOptions) {
