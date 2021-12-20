@@ -23,11 +23,12 @@
     ],
     "module": "commonjs",
     "moduleResolution": "node",
-    "outDir": "dist",
+    "outDir": "dist/cjs",
     "target": "es5"
   },
   "exclude": [
     "node_modules",
-    "dist"
+    "dist",
+    "**/*.test.ts", "**/*.test.tsx", "**/*.spec.ts", "**/*.spec.tsx"
   ]
 }

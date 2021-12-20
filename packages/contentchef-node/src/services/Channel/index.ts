@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
-import qs from 'qs';
+import { stringify } from 'qs';
 import ISDKConfiguration, { IChannelConfiguration, ITargetDateResolver } from '../ConfigurationManager/interfaces/SDKConfiguration';
 import * as interfaces from './interfaces';
 import serializeSorting from './serializeSorting';
@@ -21,7 +21,7 @@ export enum PublishingStatus {
  */
 export function configurePreviewMethods(config: ISDKConfiguration, targetDateResolver: ITargetDateResolver): interfaces.GetPreviewChannelMethods {
   return (apiKey: string, channel: string, state: PublishingStatus = PublishingStatus.Live, locale?: string) => {
-    return getPreviewChannelMethods(config.spaceId, channel, state, { ... defaultConfig, ... config, apiKey, locale }, targetDateResolver);
+    return getPreviewChannelMethods(config.spaceId, channel, state, { ...defaultConfig, ...config, apiKey, locale }, targetDateResolver);
   };
 }
 
@@ -32,7 +32,7 @@ export function configurePreviewMethods(config: ISDKConfiguration, targetDateRes
  */
 export function configureOnlineMethods(config: ISDKConfiguration): interfaces.GetOnlineChannelMethods {
   return (apiKey: string, channel: string, locale?: string) => {
-    return getOnlineChannelMethods(config.spaceId, channel, { ...defaultConfig, ... config, apiKey, locale });
+    return getOnlineChannelMethods(config.spaceId, channel, { ...defaultConfig, ...config, apiKey, locale });
   };
 }
 
@@ -80,11 +80,13 @@ export function createOnlineSearchRequest(spaceId: string, channel: string, conf
   const url = getOnlineEndpoint(spaceId, 'search/v2', channel, locale);
 
   return async <T extends object>(params: interfaces.SearchOnlineConfig): Promise<AxiosResponse<interfaces.IPaginatedResponse<interfaces.IResponse<T>>>> => {
-    return getAxiosInstance(config)(url, { params: {
+    return getAxiosInstance(config)(url, {
+      params: {
         ...params,
         propFilters: params.propFilters ? JSON.stringify(params.propFilters) : undefined,
         sorting: serializeSorting(params.sorting),
-      } });
+      },
+    });
   };
 }
 
@@ -93,12 +95,14 @@ export function createPreviewSearchRequest(spaceId: string, channel: string, sta
 
   return async <T extends object>(params: interfaces.SearchPreviewConfig): Promise<AxiosResponse<interfaces.IPaginatedResponse<interfaces.IResponse<T>>>> => {
     const targetDate = await targetDateResolver.getTargetDate();
-    return getAxiosInstance(config)(url, { params : {
+    return getAxiosInstance(config)(url, {
+      params: {
         ...params,
         propFilters: params.propFilters ? JSON.stringify(params.propFilters) : undefined,
         sorting: serializeSorting(params.sorting),
         targetDate,
-      } });
+      },
+    });
   };
 }
 
@@ -115,7 +119,7 @@ export function getAxiosInstance(config: IChannelConfiguration): AxiosInstance {
     },
     httpAgent: config.httpAgent,
     httpsAgent: config.httpsAgent,
-    paramsSerializer: params => qs.stringify(params, { arrayFormat: 'repeat' }),
+    paramsSerializer: params => stringify(params, { arrayFormat: 'repeat' }),
     proxy: config.proxy,
     timeout: config.timeout,
   });
@@ -132,11 +136,11 @@ export function getAxiosInstance(config: IChannelConfiguration): AxiosInstance {
  * @returns
  */
 export function getPreviewChannelMethods(
-    spaceId: string,
-    channel: string,
-    state: PublishingStatus,
-    config: IChannelConfiguration,
-    targetDateResolver: ITargetDateResolver,
+  spaceId: string,
+  channel: string,
+  state: PublishingStatus,
+  config: IChannelConfiguration,
+  targetDateResolver: ITargetDateResolver,
 ): interfaces.IChannelMethods {
   if (typeof spaceId !== 'string' || spaceId.length === 0) {
     throw new TypeError('SpaceId is mandatory');

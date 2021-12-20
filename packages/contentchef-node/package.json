@@ -10,7 +10,8 @@
   ],
   "homepage": "https://github.com/ContentChef/contentchef-node",
   "description": "JavaScript and TypeScript SDK for Content Chef",
-  "main": "dist/index.js",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
   "types": "dist/index.d.ts",
   "source": "src/index.ts",
   "private": false,
@@ -18,7 +19,7 @@
     "access": "public"
   },
   "scripts": {
-    "build": "npm run clean && tsc -p .",
+    "build": "npm run clean && tsc -p ./tsconfig.browser.json && tsc -p ./tsconfig.json",
     "clean": "rimraf dist",
     "lint": "tslint -p .",
     "prepack": "npm run build",
@@ -40,14 +41,14 @@
   },
   "license": "MIT",
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.24.0",
     "qs": "^6.6.0"
   },
   "devDependencies": {
     "@types/express": "^4.16.0",
     "@types/jest": "^23.3.10",
     "@types/nock": "^10.0.3",
-    "@types/node": "^10.12.14",
+    "@types/node": "^12.20.37",
     "@types/qs": "^6.5.1",
     "awesome-typescript-loader": "^5.2.1",
     "axios-mock-adapter": "^1.15.0",
@@ -59,6 +60,6 @@
     "rimraf": "^2.6.2",
     "ts-jest": "^23.10.5",
     "tslint": "^5.11.0",
-    "typescript": "^3.2.2"
+    "typescript": "^4.5.4"
   }
 }

@@ -1,9 +1,9 @@
 import nock = require('nock');
-import ISDKConfiguration, { IChannelConfiguration } from '../../ConfigurationManager/interfaces/SDKConfiguration';
+import { IChannelConfiguration } from '../../ConfigurationManager/interfaces/SDKConfiguration';
 import {
   createOnlineContentRequest,
   createPreviewContentRequest,
-  PublishingStatus,
+  PublishingStatus
 } from '../index';
 import { IGetContentResponse } from '../interfaces';
 
@@ -21,7 +21,7 @@ const mockedData = {
   payload: 0,
   publicId: '',
 } as IGetContentResponse<number>;
-const config = <IChannelConfiguration> {
+const config = <IChannelConfiguration>{
   apiKey: 'test',
   host: 'http://localhost:1234/',
   spaceId: 'aSpace',
@@ -59,7 +59,7 @@ describe(`Tests createPreviewContentRequest`, () => {
       PublishingStatus.Staging,
       config,
       { getTargetDate: async () => '2019-08-16T12:22:232Z' },
-      )({ publicId: 'hello-world' }).then(response => {
+    )({ publicId: 'hello-world' }).then(response => {
       expect(response.data).toEqual(mockedData);
       done();
     });
@@ -72,7 +72,7 @@ describe(`Tests createPreviewContentRequest`, () => {
       PublishingStatus.Live,
       config,
       { getTargetDate: async () => '2019-08-16T12:22:232Z' },
-      )({ publicId: 'hello-world' }).then(response => {
+    )({ publicId: 'hello-world' }).then(response => {
       expect(response.data).toEqual(mockedData);
       done();
     });
