@@ -1,7 +1,7 @@
-import { createCloudinaryLegacyURL } from '@cloudinary/url-gen';
-import { LegacyITransforamtionOptions } from '@cloudinary/url-gen/types/types';
+import { CldOptions } from '@cld-apis/types';
+import buildUrl from 'cloudinary-build-url';
 
-export type IMediaOptions = LegacyITransforamtionOptions;
+export type IMediaOptions = CldOptions['transformations'] & {cloud_name: string};
 
 export enum ResourceType {
     image = 'image',
@@ -11,8 +11,9 @@ export enum ResourceType {
 
 const defaultCloudName = 'contentchef';
 
-export function createUrl(publicId: string, options?: IMediaOptions, resourceType: ResourceType = ResourceType.image): string {
-    return createCloudinaryLegacyURL(publicId, { ...options, resource_type: resourceType, cloud_name: options && options.cloud_name ? options.cloud_name : defaultCloudName, secure: true });
+export function createUrl(publicId: string, options: IMediaOptions = {cloud_name: defaultCloudName}, resourceType: ResourceType = ResourceType.image): string {
+    const {cloud_name, ...transformations} = options;
+    return buildUrl(publicId, {cloud: {cloudName: cloud_name || defaultCloudName, resourceType, secure: true}, transformations});
 }
 
 export function imageUrl(publicId: string, options?: IMediaOptions) {
