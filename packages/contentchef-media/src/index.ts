@@ -1,7 +1,7 @@
 import { CldOptions } from '@cld-apis/types';
 import buildUrl from 'cloudinary-build-url';
 
-export type IMediaOptions = CldOptions['transformations'] & {cloud_name: string};
+export type IMediaOptions = CldOptions['transformations'] & {cloud_name?: string};
 
 export enum ResourceType {
     image = 'image',
