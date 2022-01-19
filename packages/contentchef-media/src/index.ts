@@ -1,8 +1,7 @@
-import * as cloudinary from 'cloudinary-core';
+import { CldOptions } from '@cld-apis/types';
+import buildUrl from 'cloudinary-build-url';
 
-export type IImageTag = cloudinary.ImageTag;
-export type IVideoTag = cloudinary.VideoTag;
-export type IMediaOptions = cloudinary.Transformation.Options;
+export type IMediaOptions = CldOptions['transformations'] & {cloud_name: string};
 
 export enum ResourceType {
     image = 'image',
@@ -11,18 +10,10 @@ export enum ResourceType {
 };
 
 const defaultCloudName = 'contentchef';
-const client = cloudinary.Cloudinary.new({cloud_name: defaultCloudName, secure: true});
 
-export function createUrl(publicId: string, options?: IMediaOptions, resourceType: ResourceType = ResourceType.image): string {
-    return client.url(publicId, {...options, resource_type: resourceType});
-}
-
-export function createImageTag(publicId: string, options?: IMediaOptions): IImageTag {
-    return client.imageTag(publicId, options);
-}
-
-export function createVideoTag(publicId: string, options?: IMediaOptions): IVideoTag {
-    return client.videoTag(publicId, options);
+export function createUrl(publicId: string, options: IMediaOptions = {cloud_name: defaultCloudName}, resourceType: ResourceType = ResourceType.image): string {
+    const {cloud_name, ...transformations} = options;
+    return buildUrl(publicId, {cloud: {cloudName: cloud_name || defaultCloudName, resourceType, secure: true}, transformations});
 }
 
 export function imageUrl(publicId: string, options?: IMediaOptions) {

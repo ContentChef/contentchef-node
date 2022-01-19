@@ -8,5 +8,6 @@ coverage
 jest.config.js
 src
 tsconfig.json
+tsconfig.browser.json
 tslint.json
 typings
