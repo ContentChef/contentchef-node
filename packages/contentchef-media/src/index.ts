@@ -2,6 +2,7 @@ import { TransformerOption, TransformerVideoOption } from '@cld-apis/types';
 import buildUrl from 'cloudinary-build-url';
 
 export type IMediaOptions = (TransformerOption | TransformerVideoOption) & {cloud_name?: string};
+export type IImageOptions = TransformerOption & {cloud_name?: string};
 export type IVideoOptions = TransformerVideoOption & {cloud_name?: string};
 
 export enum ResourceType {
@@ -17,7 +18,7 @@ export function createUrl(publicId: string, options: IMediaOptions = {cloud_name
     return buildUrl(publicId, {cloud: {cloudName: cloud_name || defaultCloudName, resourceType, secure: true}, transformations});
 }
 
-export function imageUrl(publicId: string, options?: IMediaOptions) {
+export function imageUrl(publicId: string, options?: IImageOptions) {
     return createUrl(publicId, options, ResourceType.image);
 }
 
