@@ -11,21 +11,22 @@ yarn @contentchef/contentchef-media
 This package provides methods to help you manage and interact with ContentChef's media
 
 * `createUrl` helps you generate a proper url given a media publicId
-* `createImageTag` helps you create a img tag given a media publicId
-* `createVideoTag` helps you create a video tag given a media publicId
+* `imageUrl` helps you create an url for an image given a media publicId
+* `videoUrl` helps you create an url for a video given a media publicId
+* `rawFileUrl` helps you create an url for a raw file (pdf, zip, ecc.) given a media publicId
 
 ```typescript
-import { createUrl, createImageTag, createVideoTag } from '@contentchef/contentchef-node';
+import { createUrl, imageUrl, videoUrl, rawFileUrl } from '@contentchef/contentchef-node';
 
 const mediaPublicId = 'publicId';
 
 const mediaUrl = createUrl(mediaPublicId);
 
-const imageTag = createImageTag(mediaPublicId);
-imageTag.toHtml();
+const image = imageUrl(mediaPublicId);
 
-const videoTag = createVideoTag(mediaPublicId);
-videoTag.toHtml();
+const video = videoUrl(mediaPublicId);
+
+const rawFile = rawFileUrl(mediaPublicId);
 
 // If you'd like to pass transformations you can do so in the second argument of each method
 const transformations = {
