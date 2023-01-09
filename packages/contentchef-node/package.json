@@ -22,7 +22,7 @@
     "build": "npm run clean && tsc -p ./tsconfig.browser.json && tsc -p ./tsconfig.json",
     "clean": "rimraf dist",
     "lint": "tslint -p .",
-    "prepack": "npm run build",
+    "prepack": "npm run lint && npm run build",
     "postpack": "npm run clean",
     "prepublishOnly": "npm test && npm run lint && npm run build",
     "postpublish": "npm run clean",

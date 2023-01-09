@@ -42,10 +42,10 @@ export function configureOnlineMethods(config: ISDKConfiguration): interfaces.Ge
 export function createOnlineContentRequest(spaceId: string, channel: string, config: IChannelConfiguration, locale?: string) {
   const url = getOnlineEndpoint(spaceId, 'content', channel, locale);
 
-  return async <T extends object>(params: interfaces.GetContentOnlineConfig): Promise<interfaces.MethodResponse<interfaces.IGetContentResponse<T>>> => {
+  return async <T extends object>(params: interfaces.GetContentOnlineConfig): Promise<interfaces.IMethodResponse<interfaces.IGetContentResponse<T>>> => {
   
     const searchParams: URLSearchParams = createGetContentRequestURLSearchParams(params, undefined);
-    return executeFetchRequest(config, url, searchParams)
+    return executeFetchRequest(config, url, searchParams);
   };
 }
 
@@ -59,11 +59,11 @@ export function createOnlineContentRequest(spaceId: string, channel: string, con
 export function createPreviewContentRequest(spaceId: string, channel: string, state: PublishingStatus, config: IChannelConfiguration, targetDateResolver: ITargetDateResolver, locale?: string) {
   const url = getPreviewEndpoint(spaceId, 'content', state, channel, locale);
 
-  return async <T extends object>(params: interfaces.GetContentPreviewConfig):  Promise<interfaces.MethodResponse<interfaces.IGetContentResponse<T>>> => {
+  return async <T extends object>(params: interfaces.GetContentPreviewConfig): Promise<interfaces.IMethodResponse<interfaces.IGetContentResponse<T>>> => {
     const targetDate = await targetDateResolver.getTargetDate();
 
     const searchParams: URLSearchParams = createGetContentRequestURLSearchParams(params, targetDate);
-    return executeFetchRequest(config, url, searchParams)
+    return executeFetchRequest(config, url, searchParams);
   };
 }
 
@@ -75,38 +75,38 @@ export function createPreviewContentRequest(spaceId: string, channel: string, st
 export function createOnlineSearchRequest(spaceId: string, channel: string, config: IChannelConfiguration, locale?: string) {
   const url = getOnlineEndpoint(spaceId, 'search/v2', channel, locale);
 
-  return async <T extends object>(params: interfaces.SearchOnlineConfig): Promise<interfaces.MethodResponse<interfaces.IPaginatedResponse<interfaces.IResponse<T>>>> => {    
+  return async <T extends object>(params: interfaces.SearchOnlineConfig): Promise<interfaces.IMethodResponse<interfaces.IPaginatedResponse<interfaces.IResponse<T>>>> => {    
     const searchParams: URLSearchParams = createSearchRequestURLSearchParams(params, undefined);
 
-    return executeFetchRequest(config, url, searchParams)
+    return executeFetchRequest(config, url, searchParams);
   };
 }
 
 export function createPreviewSearchRequest(spaceId: string, channel: string, state: PublishingStatus, config: IChannelConfiguration, targetDateResolver: ITargetDateResolver, locale?: string) {
   const url = getPreviewEndpoint(spaceId, 'search/v2', state, channel, locale);
 
-  return async <T extends object>(params: interfaces.SearchPreviewConfig): Promise<interfaces.MethodResponse<interfaces.IPaginatedResponse<interfaces.IResponse<T>>>> => {
+  return async <T extends object>(params: interfaces.SearchPreviewConfig): Promise<interfaces.IMethodResponse<interfaces.IPaginatedResponse<interfaces.IResponse<T>>>> => {
     const targetDate = await targetDateResolver.getTargetDate();
 
     const searchParams: URLSearchParams = createSearchRequestURLSearchParams(params, targetDate);
 
-    return executeFetchRequest(config, url, searchParams)
+    return executeFetchRequest(config, url, searchParams);
     
   };
 }
 
-function maybeAddToURLSearchParams (params: URLSearchParams, paramName: string, paramValue: string | string[]) {
-  if(!paramValue) {
+function maybeAddToURLSearchParams(params: URLSearchParams, paramName: string, paramValue: string | string[]) {
+  if (!paramValue) {
     return;
   }
 
   const items = Array.isArray(paramValue) ? paramValue : [paramValue];
   items.forEach((item) => {
     params.append(paramName, item);
-  })     
+  });     
 }
 
-function createSearchRequestURLSearchParams (params: interfaces.SearchPreviewConfig | interfaces.SearchOnlineConfig, targetDate?: string) {
+function createSearchRequestURLSearchParams(params: interfaces.SearchPreviewConfig | interfaces.SearchOnlineConfig, targetDate?: string) {
 
   const { skip, take, contentDefinition, legacyMetadata, propFilters, publicId, repositories, sorting, tags } = params;
 
@@ -135,7 +135,7 @@ function createSearchRequestURLSearchParams (params: interfaces.SearchPreviewCon
   return createdParams;
 }
 
-function createGetContentRequestURLSearchParams (params: interfaces.GetContentPreviewConfig | interfaces.GetContentOnlineConfig , targetDate?: string) {
+function createGetContentRequestURLSearchParams(params: interfaces.GetContentPreviewConfig | interfaces.GetContentOnlineConfig , targetDate?: string) {
 
   const { legacyMetadata, publicId } = params;
 
@@ -149,7 +149,7 @@ function createGetContentRequestURLSearchParams (params: interfaces.GetContentPr
   return createdParams;
 }
 
-export async function executeFetchRequest<T>(config: IChannelConfiguration, url: string, params: URLSearchParams) : Promise<interfaces.MethodResponse<T>> {
+export async function executeFetchRequest<T>(config: IChannelConfiguration, url: string, params: URLSearchParams): Promise<interfaces.IMethodResponse<T>> {
   
   const fullUrl = new URL(url, `${config.host}`);
   fullUrl.search = params.toString();
@@ -158,14 +158,12 @@ export async function executeFetchRequest<T>(config: IChannelConfiguration, url:
     { 
       headers: { 'X-Chef-Key': config.apiKey },      
     });
-
+  const data = await result.json();
   return { 
-    data: xx as T ,
-    config: { url,params }
+    config: { url, params },
+    data,
   };
 }
-
-
 
 /**
  * @param {string} spaceId
