@@ -158,10 +158,10 @@ export async function executeFetchRequest<T>(config: IChannelConfiguration, url:
     { 
       headers: { 'X-Chef-Key': config.apiKey },      
     });
-
+  const data = await result.json();
   return { 
-    data: xx as T ,
-    config: { url,params }
+    config: { url, params },
+    data,
   };
 }
 
