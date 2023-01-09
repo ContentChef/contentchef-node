@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+- Removed `axios`, now the client use a global fetch, this has been made to support edge environments
+- Removed `axios` related configuration from configuration
+- Now all channel methods return `MethodResponse` instead of `AxiosResponse` a simple import is needed as the interface if backward compatible
+- For SSR usage you should provide a global fetch (eg. node-fetch or similar)
 
 ## [2.2.4] - 2020-06-01
 ### Added

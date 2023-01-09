@@ -2,6 +2,7 @@ import nock from 'nock';
 import {createOnlineSearchRequest, createPreviewSearchRequest, PublishingStatus} from '..';
 import ISDKConfiguration, { IChannelConfiguration } from '../../ConfigurationManager/interfaces/SDKConfiguration';
 import { IPropFilter, IResponse, LogicalOperators, Operators } from '../interfaces';
+global.fetch = require('node-fetch');
 
 const mockedData = {
   items: [
@@ -38,7 +39,7 @@ const config = <IChannelConfiguration> {
   timeout: 25000,
 };
 
-nock(config.host)
+nock(config.host!)
   .persist()
   .get(/.*/)
   .reply(200, mockedData);
@@ -54,7 +55,7 @@ describe(`Tests createPreviewSearchRequest`, () => {
     )).toBe('function');
   });
 
-  test('Invoking the returning method with staging state will trigger an axios request', done => {
+  test('Invoking the returning method with staging state will trigger an request', done => {
     createPreviewSearchRequest(
       'aSpace',
       'foo',
@@ -67,7 +68,7 @@ describe(`Tests createPreviewSearchRequest`, () => {
     });
   });
 
-  test('Invoking the returning method with live state will trigger an axios request', done => {
+  test('Invoking the returning method with live state will trigger an request', done => {
     createPreviewSearchRequest(
       'aSpace',
       'foo',
@@ -81,7 +82,7 @@ describe(`Tests createPreviewSearchRequest`, () => {
     });
   });
 
-  test('Invoking the returning method with stage state and propFilters param should trigger an axios request and propFilters should be a stringified json', done => {
+  test('Invoking the returning method with stage state and propFilters param should trigger an request and propFilters should be a stringified json', done => {
     const propFilters: IPropFilter = {
       condition: LogicalOperators.AND,
       items: [{
@@ -98,7 +99,7 @@ describe(`Tests createPreviewSearchRequest`, () => {
       { getTargetDate: async () => '2019-08-16T12:22:232Z' },
     )<any>({ propFilters, skip: 0, take: 10 }).then(response => {
       expect(response.data).toEqual(mockedData);
-      expect(response.config.params.propFilters).toEqual(JSON.stringify(propFilters));
+      expect(response.config.params.get('propFilters')).toEqual(JSON.stringify(propFilters));
       done();
     });
   });
@@ -125,7 +126,7 @@ describe(`Tests createOnlineSearchRequest`, () => {
     expect(typeof createOnlineSearchRequest('aSpace', 'test', config)).toBe('function');
   });
 
-  test('Invoking the returning method will trigger an axios request', done => {
+  test('Invoking the returning method will trigger an request', done => {
     createOnlineSearchRequest('aSpace', 'foo', config)<any>({ contentDefinition: 'hello-world', tags: ['hello', 'world'], skip: 0, take: 10 }).then(response => {
       expect(response.data).toEqual(mockedData);
       expect(response.data.items[0].payload.tags).toEqual(['hello', 'world']);
@@ -133,7 +134,7 @@ describe(`Tests createOnlineSearchRequest`, () => {
     });
   });
 
-  test('Invoking the returning method with propFilters param should trigger an axios request and propFilters should be a stringified json', done => {
+  test('Invoking the returning method with propFilters param should trigger an request and propFilters should be a stringified json', done => {
     const propFilters: IPropFilter = {
       condition: LogicalOperators.AND,
       items: [{
@@ -144,7 +145,7 @@ describe(`Tests createOnlineSearchRequest`, () => {
     };
     createOnlineSearchRequest('aSpace', 'foo', config)<any>({ propFilters, skip: 0, take: 10 }).then(response => {
       expect(response.data).toEqual(mockedData);
-      expect(response.config.params.propFilters).toEqual(JSON.stringify(propFilters));
+      expect(response.config.params.get('propFilters')).toEqual(JSON.stringify(propFilters));
       done();
     });
   });

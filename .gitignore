@@ -5,3 +5,4 @@ coverage
 *.log
 dist
 node_modules
+.history
