@@ -1,4 +1,3 @@
-import { AxiosResponse } from 'axios';
 import { PublishingStatus } from '../index';
 
 export type ContentRequestMethod = 'content' | `search/v2`;
@@ -26,27 +25,22 @@ export type GetContentPreviewConfig = IGetContentConfig;
 export type SearchOnlineConfig = ISearchConfig;
 export type SearchPreviewConfig = ISearchConfig;
 
+export interface MethodResponse<T> {
+  data: T,
+  config: {
+    params: URLSearchParams,
+    url: string
+  }  
+}
+
 export interface IGetContentResponse<T = any> extends IResponse<T> { }
 
 export interface IChannelMethods {
-  content<T extends object>(params: IGetContentConfig): Promise<AxiosResponse<IGetContentResponse<T>>>;
-  search<T extends object>(params: ISearchConfig): Promise<AxiosResponse<IPaginatedResponse<IResponse<T>>>>;
-  localizedContent<T extends object>(params: IGetContentConfig): Promise<AxiosResponse<IGetContentResponse<T>>>;
-  localizedSearch<T extends object>(params: ISearchConfig): Promise<AxiosResponse<IPaginatedResponse<IResponse<T>>>>;
+  content<T extends object>(params: IGetContentConfig): Promise<MethodResponse<IGetContentResponse<T>>>;
+  search<T extends object>(params: ISearchConfig): Promise<MethodResponse<IPaginatedResponse<IResponse<T>>>>;
+  localizedContent<T extends object>(params: IGetContentConfig): Promise<MethodResponse<IGetContentResponse<T>>>;
+  localizedSearch<T extends object>(params: ISearchConfig): Promise<MethodResponse<IPaginatedResponse<IResponse<T>>>>;
 }
-
-/**
- * @deprecated Since version 2.2.4. This will be removed in version 3.0.0
- * @export
- * @interface IOnlineChannelMethods
- */
-export interface IOnlineChannelMethods extends IChannelMethods {}
-/**
- * @deprecated Since version 2.2.4. This will be removed in version 3.0.0
- * @export
- * @interface IPreviewChannelMethods
- */
-export interface IPreviewChannelMethods extends IChannelMethods {}
 
 export interface IResponse<T> {
   definition: string;

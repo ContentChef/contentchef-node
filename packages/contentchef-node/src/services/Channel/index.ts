@@ -1,5 +1,3 @@
-import axios, { AxiosInstance, AxiosResponse } from 'axios';
-import { stringify } from 'qs';
 import ISDKConfiguration, { IChannelConfiguration, ITargetDateResolver } from '../ConfigurationManager/interfaces/SDKConfiguration';
 import * as interfaces from './interfaces';
 import serializeSorting from './serializeSorting';
@@ -44,9 +42,10 @@ export function configureOnlineMethods(config: ISDKConfiguration): interfaces.Ge
 export function createOnlineContentRequest(spaceId: string, channel: string, config: IChannelConfiguration, locale?: string) {
   const url = getOnlineEndpoint(spaceId, 'content', channel, locale);
 
-  return async <T extends object>(params: interfaces.GetContentOnlineConfig): Promise<AxiosResponse<interfaces.IGetContentResponse<T>>> => {
-
-    return getAxiosInstance(config)(url, { params });
+  return async <T extends object>(params: interfaces.GetContentOnlineConfig): Promise<interfaces.MethodResponse<interfaces.IGetContentResponse<T>>> => {
+  
+    const searchParams: URLSearchParams = createGetContentRequestURLSearchParams(params, undefined);
+    return executeFetchRequest(config, url, searchParams)
   };
 }
 
@@ -60,14 +59,11 @@ export function createOnlineContentRequest(spaceId: string, channel: string, con
 export function createPreviewContentRequest(spaceId: string, channel: string, state: PublishingStatus, config: IChannelConfiguration, targetDateResolver: ITargetDateResolver, locale?: string) {
   const url = getPreviewEndpoint(spaceId, 'content', state, channel, locale);
 
-  return async <T extends object>(params: interfaces.GetContentPreviewConfig): Promise<AxiosResponse<interfaces.IGetContentResponse<T>>> => {
+  return async <T extends object>(params: interfaces.GetContentPreviewConfig):  Promise<interfaces.MethodResponse<interfaces.IGetContentResponse<T>>> => {
     const targetDate = await targetDateResolver.getTargetDate();
-    return getAxiosInstance(config)(url, {
-      params: {
-        ...params,
-        targetDate,
-      },
-    });
+
+    const searchParams: URLSearchParams = createGetContentRequestURLSearchParams(params, targetDate);
+    return executeFetchRequest(config, url, searchParams)
   };
 }
 
@@ -79,53 +75,99 @@ export function createPreviewContentRequest(spaceId: string, channel: string, st
 export function createOnlineSearchRequest(spaceId: string, channel: string, config: IChannelConfiguration, locale?: string) {
   const url = getOnlineEndpoint(spaceId, 'search/v2', channel, locale);
 
-  return async <T extends object>(params: interfaces.SearchOnlineConfig): Promise<AxiosResponse<interfaces.IPaginatedResponse<interfaces.IResponse<T>>>> => {
-    return getAxiosInstance(config)(url, {
-      params: {
-        ...params,
-        propFilters: params.propFilters ? JSON.stringify(params.propFilters) : undefined,
-        sorting: serializeSorting(params.sorting),
-      },
-    });
+  return async <T extends object>(params: interfaces.SearchOnlineConfig): Promise<interfaces.MethodResponse<interfaces.IPaginatedResponse<interfaces.IResponse<T>>>> => {    
+    const searchParams: URLSearchParams = createSearchRequestURLSearchParams(params, undefined);
+
+    return executeFetchRequest(config, url, searchParams)
   };
 }
 
 export function createPreviewSearchRequest(spaceId: string, channel: string, state: PublishingStatus, config: IChannelConfiguration, targetDateResolver: ITargetDateResolver, locale?: string) {
   const url = getPreviewEndpoint(spaceId, 'search/v2', state, channel, locale);
 
-  return async <T extends object>(params: interfaces.SearchPreviewConfig): Promise<AxiosResponse<interfaces.IPaginatedResponse<interfaces.IResponse<T>>>> => {
+  return async <T extends object>(params: interfaces.SearchPreviewConfig): Promise<interfaces.MethodResponse<interfaces.IPaginatedResponse<interfaces.IResponse<T>>>> => {
     const targetDate = await targetDateResolver.getTargetDate();
-    return getAxiosInstance(config)(url, {
-      params: {
-        ...params,
-        propFilters: params.propFilters ? JSON.stringify(params.propFilters) : undefined,
-        sorting: serializeSorting(params.sorting),
-        targetDate,
-      },
-    });
+
+    const searchParams: URLSearchParams = createSearchRequestURLSearchParams(params, targetDate);
+
+    return executeFetchRequest(config, url, searchParams)
+    
   };
 }
 
-/**
- * Will get a configured axios instance
- * @export
- * @returns {AxiosInstance}
- */
-export function getAxiosInstance(config: IChannelConfiguration): AxiosInstance {
-  const instance = axios.create({
-    baseURL: config.host,
-    headers: {
-      'X-Chef-Key': config.apiKey,
-    },
-    httpAgent: config.httpAgent,
-    httpsAgent: config.httpsAgent,
-    paramsSerializer: params => stringify(params, { arrayFormat: 'repeat' }),
-    proxy: config.proxy,
-    timeout: config.timeout,
+function maybeAddToURLSearchParams (params: URLSearchParams, paramName: string, paramValue: string | string[]) {
+  if(!paramValue) {
+    return;
+  }
+
+  const items = Array.isArray(paramValue) ? paramValue : [paramValue];
+  items.forEach((item) => {
+    params.append(paramName, item);
+  })     
+}
+
+function createSearchRequestURLSearchParams (params: interfaces.SearchPreviewConfig | interfaces.SearchOnlineConfig, targetDate?: string) {
+
+  const { skip, take, contentDefinition, legacyMetadata, propFilters, publicId, repositories, sorting, tags } = params;
+
+  const createdParams = new URLSearchParams({
+    skip: '' + skip,
+    take: '' + take,
   });
 
-  return instance;
+  maybeAddToURLSearchParams(createdParams, 'legacyMetadata', legacyMetadata ? 'true' : null);
+
+  maybeAddToURLSearchParams(createdParams, 'publicId', publicId);
+
+  maybeAddToURLSearchParams(createdParams, 'contentDefinition', contentDefinition);
+
+  maybeAddToURLSearchParams(createdParams, 'repositories', repositories);
+
+  const serializedPropFilters = params.propFilters ? JSON.stringify(propFilters) : undefined;
+  maybeAddToURLSearchParams(createdParams, 'propFilters', serializedPropFilters);
+
+  maybeAddToURLSearchParams(createdParams, 'sorting', serializeSorting(sorting));
+
+  maybeAddToURLSearchParams(createdParams, 'targetDate', targetDate);
+
+  maybeAddToURLSearchParams(createdParams, 'tags', tags);
+  
+  return createdParams;
 }
+
+function createGetContentRequestURLSearchParams (params: interfaces.GetContentPreviewConfig | interfaces.GetContentOnlineConfig , targetDate?: string) {
+
+  const { legacyMetadata, publicId } = params;
+
+  const createdParams = new URLSearchParams({
+  });
+
+  maybeAddToURLSearchParams(createdParams, 'legacyMetadata', '' + legacyMetadata);
+  maybeAddToURLSearchParams(createdParams, 'publicId', publicId);
+  maybeAddToURLSearchParams(createdParams, 'targetDate', targetDate);
+
+  return createdParams;
+}
+
+export async function executeFetchRequest<T>(config: IChannelConfiguration, url: string, params: URLSearchParams) : Promise<interfaces.MethodResponse<T>> {
+  
+  const fullUrl = new URL(url, `${config.host}`);
+  fullUrl.search = params.toString();
+
+  const result = await fetch(fullUrl.toString(), 
+    { 
+      headers: { 'X-Chef-Key': config.apiKey },      
+    });2
+
+  const xx = await result.json();
+  console.log('xxxx', xx);
+  return { 
+    data: xx as T ,
+    config: { url,params }
+  };
+}
+
+
 
 /**
  * @param {string} spaceId
