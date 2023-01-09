@@ -51,8 +51,6 @@
     "@types/node": "^12.20.37",
     "@types/node-fetch": "^2.6.2",
     "@types/qs": "^6.5.1",
-    "awesome-typescript-loader": "^5.2.1",
-    "axios-mock-adapter": "^1.15.0",
     "covgen": "^3.1.0",
     "express": "^4.16.4",
     "jest": "^28.1.2",
