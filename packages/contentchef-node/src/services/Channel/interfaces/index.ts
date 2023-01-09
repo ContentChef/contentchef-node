@@ -25,21 +25,21 @@ export type GetContentPreviewConfig = IGetContentConfig;
 export type SearchOnlineConfig = ISearchConfig;
 export type SearchPreviewConfig = ISearchConfig;
 
-export interface MethodResponse<T> {
-  data: T,
+export interface IMethodResponse<T> {
+  data: T;
   config: {
     params: URLSearchParams,
-    url: string
-  }  
+    url: string,
+  };  
 }
 
 export interface IGetContentResponse<T = any> extends IResponse<T> { }
 
 export interface IChannelMethods {
-  content<T extends object>(params: IGetContentConfig): Promise<MethodResponse<IGetContentResponse<T>>>;
-  search<T extends object>(params: ISearchConfig): Promise<MethodResponse<IPaginatedResponse<IResponse<T>>>>;
-  localizedContent<T extends object>(params: IGetContentConfig): Promise<MethodResponse<IGetContentResponse<T>>>;
-  localizedSearch<T extends object>(params: ISearchConfig): Promise<MethodResponse<IPaginatedResponse<IResponse<T>>>>;
+  content<T extends object>(params: IGetContentConfig): Promise<IMethodResponse<IGetContentResponse<T>>>;
+  search<T extends object>(params: ISearchConfig): Promise<IMethodResponse<IPaginatedResponse<IResponse<T>>>>;
+  localizedContent<T extends object>(params: IGetContentConfig): Promise<IMethodResponse<IGetContentResponse<T>>>;
+  localizedSearch<T extends object>(params: ISearchConfig): Promise<IMethodResponse<IPaginatedResponse<IResponse<T>>>>;
 }
 
 export interface IResponse<T> {

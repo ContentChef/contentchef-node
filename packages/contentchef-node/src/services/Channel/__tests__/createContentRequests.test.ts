@@ -90,7 +90,7 @@ describe(`Tests createPreviewContentRequest`, () => {
       'locale-to-get',
     )({ publicId: 'hello-world' }).then(response => {
       const expectedURL = `space/aSpace/preview/staging/content/foo/locale-to-get`;
-      // expect(response.config.url).toContain(expectedURL);
+      expect(response.config.url).toContain(expectedURL);
       expect(response.data).toEqual(mockedData);
       done();
     });
@@ -106,7 +106,7 @@ describe(`Tests createPreviewContentRequest`, () => {
       'locale-to-get',
     )({ publicId: 'hello-world' }).then(response => {
       const expectedURL = `space/aSpace/preview/live/content/foo/locale-to-get`;
-      // expect(response.config.url).toContain(expectedURL);
+      expect(response.config.url).toContain(expectedURL);
       expect(response.data).toEqual(mockedData);
       done();
     });
@@ -135,7 +135,7 @@ describe(`Tests createOnlineContentRequest`, () => {
       'locale-to-get',
     )({ publicId: 'hello-world' }).then(response => {
       const expectedURL = `space/aSpace/online/content/foo/locale-to-get`;
-      // expect(response.config.url).toContain(expectedURL);
+      expect(response.config.url).toContain(expectedURL);
       expect(response.data).toEqual(mockedData);
       done();
     });
