@@ -157,10 +157,8 @@ export async function executeFetchRequest<T>(config: IChannelConfiguration, url:
   const result = await fetch(fullUrl.toString(), 
     { 
       headers: { 'X-Chef-Key': config.apiKey },      
-    });2
+    });
 
-  const xx = await result.json();
-  console.log('xxxx', xx);
   return { 
     data: xx as T ,
     config: { url,params }
