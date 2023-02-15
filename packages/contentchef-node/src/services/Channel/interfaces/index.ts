@@ -1,6 +1,6 @@
 import { PublishingStatus } from '../index';
 
-export type ContentRequestMethod = 'content' | `search/v2`;
+export type ContentRequestMethod = 'content' | 'content-by-id' | `search/v2`;
 
 export type ContentState = 'staging' | 'live';
 
@@ -12,6 +12,11 @@ export interface IGetContentConfig {
   publicId: string;
 }
 
+export interface IGetContentByIdConfig {
+  legacyMetadata?: boolean;
+  publishedContentId: number;
+}
+
 export interface IRequestContext {
   publishingChannel: string;
   targetDate: Date;
@@ -21,6 +26,8 @@ export interface IRequestContext {
 
 export type GetContentOnlineConfig = IGetContentConfig;
 export type GetContentPreviewConfig = IGetContentConfig;
+export type GetContentByIdOnlineConfig = IGetContentByIdConfig;
+export type GetContentByIdPreviewConfig = IGetContentByIdConfig;
 
 export type SearchOnlineConfig = ISearchConfig;
 export type SearchPreviewConfig = ISearchConfig;
@@ -34,9 +41,13 @@ export interface IMethodResponse<T> {
 }
 
 export interface IGetContentResponse<T = any> extends IResponse<T> { }
+export type IGetContentByIdResponse<T = any> = Omit<IResponse<T>, 'requestContext'> & {
+  requestContext: Omit<IRequestContext, 'publishingChannel'> & {publishingChannel?: IRequestContext['publishingChannel']},
+};
 
 export interface IChannelMethods {
   content<T extends object>(params: IGetContentConfig): Promise<IMethodResponse<IGetContentResponse<T>>>;
+  contentById<T extends object>(params: IGetContentByIdConfig): Promise<IMethodResponse<IGetContentByIdResponse<T>>>;
   search<T extends object>(params: ISearchConfig): Promise<IMethodResponse<IPaginatedResponse<IResponse<T>>>>;
   localizedContent<T extends object>(params: IGetContentConfig): Promise<IMethodResponse<IGetContentResponse<T>>>;
   localizedSearch<T extends object>(params: ISearchConfig): Promise<IMethodResponse<IPaginatedResponse<IResponse<T>>>>;
