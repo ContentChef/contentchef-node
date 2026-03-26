@@ -1,5 +1,5 @@
 import * as Channel from './services/Channel';
-import { GetOnlineChannelMethods, GetPreviewChannelMethods } from './services/Channel';
+import { GetExperimentalOnlineChannelMethods, GetOnlineChannelMethods, GetPreviewChannelMethods } from './services/Channel';
 import ConfigurationManager from './services/ConfigurationManager';
 import ISDKConfiguration, {ITargetDateResolver} from './services/ConfigurationManager/interfaces/SDKConfiguration';
 export * from './services/Channel/interfaces';
@@ -14,6 +14,7 @@ export interface IContentChefConfiguration extends ISDKConfiguration { }
 export interface IConfiguredSDK {
   onlineChannel: GetOnlineChannelMethods;
   previewChannel: GetPreviewChannelMethods;
+  experimentalOnlineChannel?: GetExperimentalOnlineChannelMethods;
 }
 
 /**
@@ -25,12 +26,7 @@ export interface IConfiguredSDK {
  */
 export function configure(configuration: IContentChefConfiguration, targetDateResolver?: string | ITargetDateResolver): IConfiguredSDK {
   const configurationManager = new ConfigurationManager(configuration, targetDateResolver);
-  const { onlineChannel, previewChannel } = configurationManager.configure(Channel);
-  
-  return {
-    onlineChannel,
-    previewChannel,
-  };
+  return configurationManager.configure(Channel);
 }
 
 export { ITargetDateResolver } from './services/ConfigurationManager/interfaces/SDKConfiguration';
