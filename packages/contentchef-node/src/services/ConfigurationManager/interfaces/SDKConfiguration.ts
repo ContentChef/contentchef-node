@@ -24,6 +24,13 @@ export default interface ISDKConfiguration {
    * @memberof IContentChefConfiguration
    */
   timeout?: number;
+
+  /**
+   * Force enable experimentalOnlineChannel even when a custom host is provided
+   * @type {boolean}
+   * @memberof IContentChefConfiguration
+   */
+  enableExperimentalChannel?: boolean;
 }
 
 export interface IChannelConfiguration extends ISDKConfiguration {

@@ -1,5 +1,5 @@
 import ConfigurationManager from '..';
-import { GetOnlineChannelMethods, GetPreviewChannelMethods } from '../../Channel/interfaces';
+import { GetExperimentalOnlineChannelMethods, GetOnlineChannelMethods, GetPreviewChannelMethods } from '../../Channel/interfaces';
 import ISDKConfiguration from '../interfaces/SDKConfiguration';
 
 describe('Tests ConfigurationManager class', () => {
@@ -55,6 +55,9 @@ describe('Tests ConfigurationManager class', () => {
       configureOnlineMethods(configuration: ISDKConfiguration) {
         this.foo = configuration.spaceId;
         return {} as GetOnlineChannelMethods;
+      },
+      configureExperimentalOnlineMethods(configuration: ISDKConfiguration) {
+        return {} as GetExperimentalOnlineChannelMethods;
       },
     };
     const configurationManager = new ConfigurationManager({

@@ -1,11 +1,12 @@
 import { PublishingStatus } from '../index';
 
-export type ContentRequestMethod = 'content' | `search/v2`;
+export type ContentRequestMethod = 'content' | 'search/v2' | 'content/v3' | 'search/v3';
 
 export type ContentState = 'staging' | 'live';
 
 export type GetPreviewChannelMethods = (apiKey: string, channel: string, state: PublishingStatus, locale?: string) => IChannelMethods;
 export type GetOnlineChannelMethods = (apiKey: string, channel: string, locale?: string) => IChannelMethods;
+export type GetExperimentalOnlineChannelMethods = (apiKey: string, channel: string, locale?: string) => IChannelMethods;
 
 export interface IGetContentConfig {
   legacyMetadata?: boolean;
