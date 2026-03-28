@@ -51,6 +51,19 @@ export function createOnlineContentRequest(spaceId: string, channel: string, con
 
 /**
  * @param {string} spaceId
+ * @param {ISDKConfiguration} config
+ */
+export function createOnlineContentByIdRequest(spaceId: string, config: IChannelConfiguration) {
+  const url = getOnlineEndpoint(spaceId, 'content-by-id');
+
+  return async <T extends object>(params: interfaces.GetContentByIdOnlineConfig): Promise<interfaces.IMethodResponse<interfaces.IGetContentResponse<T>>> => {
+    const searchParams: URLSearchParams = createGetContentByIdRequestURLSearchParams(params, undefined);
+    return executeFetchRequest(config, url, searchParams);
+  };
+}
+
+/**
+ * @param {string} spaceId
  * @param {string} channel
  * @param {PublishingStatus} state
  * @param {ITargetDateResolver} targetDateResolver
@@ -63,6 +76,23 @@ export function createPreviewContentRequest(spaceId: string, channel: string, st
     const targetDate = await targetDateResolver.getTargetDate();
 
     const searchParams: URLSearchParams = createGetContentRequestURLSearchParams(params, targetDate);
+    return executeFetchRequest(config, url, searchParams);
+  };
+}
+
+/**
+ * @param {string} spaceId
+ * @param {PublishingStatus} state
+ * @param {ITargetDateResolver} targetDateResolver
+ * @param {ISDKConfiguration} config
+ */
+export function createPreviewContentByIdRequest(spaceId: string, state: PublishingStatus, config: IChannelConfiguration, targetDateResolver: ITargetDateResolver) {
+  const url = getPreviewEndpoint(spaceId, 'content-by-id', state);
+
+  return async <T extends object>(params: interfaces.GetContentByIdPreviewConfig): Promise<interfaces.IMethodResponse<interfaces.IGetContentByIdResponse<T>>> => {
+    const targetDate = await targetDateResolver.getTargetDate();
+
+    const searchParams: URLSearchParams = createGetContentByIdRequestURLSearchParams(params, targetDate);
     return executeFetchRequest(config, url, searchParams);
   };
 }
@@ -135,6 +165,20 @@ function createSearchRequestURLSearchParams(params: interfaces.SearchPreviewConf
   return createdParams;
 }
 
+function createGetContentByIdRequestURLSearchParams(params: interfaces.GetContentByIdPreviewConfig | interfaces.GetContentByIdOnlineConfig , targetDate?: string) {
+
+  const { legacyMetadata, publishedContentId } = params;
+
+  const createdParams = new URLSearchParams({
+  });
+
+  maybeAddToURLSearchParams(createdParams, 'legacyMetadata', '' + legacyMetadata);
+  maybeAddToURLSearchParams(createdParams, 'publishedContentId', publishedContentId.toString());
+  maybeAddToURLSearchParams(createdParams, 'targetDate', targetDate);
+
+  return createdParams;
+}
+
 function createGetContentRequestURLSearchParams(params: interfaces.GetContentPreviewConfig | interfaces.GetContentOnlineConfig , targetDate?: string) {
 
   const { legacyMetadata, publicId } = params;
@@ -201,11 +245,13 @@ export function getPreviewChannelMethods(
   }
 
   const content = createPreviewContentRequest(spaceId, channel, state, config, targetDateResolver);
+  const contentById = createPreviewContentByIdRequest(spaceId, state, config, targetDateResolver);
   const search = createPreviewSearchRequest(spaceId, channel, state, config, targetDateResolver);
   const localizedContent = createPreviewContentRequest(spaceId, channel, state, config, targetDateResolver, config.locale);
   const localizedSearch = createPreviewSearchRequest(spaceId, channel, state, config, targetDateResolver, config.locale);
   return {
     content,
+    contentById,
     localizedContent,
     localizedSearch,
     search,
@@ -236,12 +282,14 @@ export function getOnlineChannelMethods(spaceId: string, channel: string, config
   }
 
   const content = createOnlineContentRequest(spaceId, channel, config);
+  const contentById = createOnlineContentByIdRequest(spaceId, config);
   const search = createOnlineSearchRequest(spaceId, channel, config);
   const localizedContent = createOnlineContentRequest(spaceId, channel, config, config.locale);
   const localizedSearch = createOnlineSearchRequest(spaceId, channel, config, config.locale);
 
   return {
     content,
+    contentById,
     localizedContent,
     localizedSearch,
     search,
@@ -254,8 +302,8 @@ export function getOnlineChannelMethods(spaceId: string, channel: string, config
  * @param {string} channel
  * @returns
  */
-export function getOnlineEndpoint(spaceId: string, method: interfaces.ContentRequestMethod, channel: string, locale?: string) {
-  return `/space/${spaceId}/online/${method}/${channel}${locale ? `/${locale}` : ''}`;
+export function getOnlineEndpoint(spaceId: string, method: interfaces.ContentRequestMethod, channel?: string, locale?: string) {
+  return `/space/${spaceId}/online/${method}${channel ? `/${channel}` : ''}${locale ? `/${locale}` : ''}`;
 }
 
 /**
@@ -265,8 +313,8 @@ export function getOnlineEndpoint(spaceId: string, method: interfaces.ContentReq
  * @param {string} channel
  * @returns
  */
-export function getPreviewEndpoint(spaceId: string, method: interfaces.ContentRequestMethod, state: PublishingStatus, channel: string, locale?: string) {
-  return `/space/${spaceId}/preview/${state}/${method}/${channel}${locale ? `/${locale}` : ''}`;
+export function getPreviewEndpoint(spaceId: string, method: interfaces.ContentRequestMethod, state: PublishingStatus, channel?: string, locale?: string) {
+  return `/space/${spaceId}/preview/${state}/${method}${channel ? `/${channel}` : ''}${locale ? `/${locale}` : ''}`;
 }
 
 export * from './interfaces';
