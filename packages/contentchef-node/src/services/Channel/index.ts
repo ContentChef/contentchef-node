@@ -345,6 +345,8 @@ export async function executeFetchRequest<T>(
   return {
     config: { url, params },
     data,
+    ok: result.ok,
+    status: result.status,
   };
 }
 
