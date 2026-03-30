@@ -1,11 +1,29 @@
-import { PublishingStatus } from '../index';
+import { PublishingStatus } from "../index";
 
-export type ContentRequestMethod = 'content' | `search/v2`;
+export type ContentRequestMethod =
+  | "content"
+  | "search/v2"
+  | "content/v3"
+  | "search/v3";
 
-export type ContentState = 'staging' | 'live';
+export type ContentState = "staging" | "live";
 
-export type GetPreviewChannelMethods = (apiKey: string, channel: string, state: PublishingStatus, locale?: string) => IChannelMethods;
-export type GetOnlineChannelMethods = (apiKey: string, channel: string, locale?: string) => IChannelMethods;
+export type GetPreviewChannelMethods = (
+  apiKey: string,
+  channel: string,
+  state: PublishingStatus,
+  locale?: string,
+) => IChannelMethods;
+export type GetOnlineChannelMethods = (
+  apiKey: string,
+  channel: string,
+  locale?: string,
+) => IChannelMethods;
+export type GetExperimentalOnlineChannelMethods = (
+  apiKey: string,
+  channel: string,
+  locale?: string,
+) => IChannelMethods;
 
 export interface IGetContentConfig {
   legacyMetadata?: boolean;
@@ -28,18 +46,28 @@ export type SearchPreviewConfig = ISearchConfig;
 export interface IMethodResponse<T> {
   data: T;
   config: {
-    params: URLSearchParams,
-    url: string,
-  };  
+    params: URLSearchParams;
+    url: string;
+  };
+  status: number;
+  ok: boolean;
 }
 
-export interface IGetContentResponse<T = any> extends IResponse<T> { }
+export interface IGetContentResponse<T = any> extends IResponse<T> {}
 
 export interface IChannelMethods {
-  content<T extends object>(params: IGetContentConfig): Promise<IMethodResponse<IGetContentResponse<T>>>;
-  search<T extends object>(params: ISearchConfig): Promise<IMethodResponse<IPaginatedResponse<IResponse<T>>>>;
-  localizedContent<T extends object>(params: IGetContentConfig): Promise<IMethodResponse<IGetContentResponse<T>>>;
-  localizedSearch<T extends object>(params: ISearchConfig): Promise<IMethodResponse<IPaginatedResponse<IResponse<T>>>>;
+  content<T extends object>(
+    params: IGetContentConfig,
+  ): Promise<IMethodResponse<IGetContentResponse<T>>>;
+  search<T extends object>(
+    params: ISearchConfig,
+  ): Promise<IMethodResponse<IPaginatedResponse<IResponse<T>>>>;
+  localizedContent<T extends object>(
+    params: IGetContentConfig,
+  ): Promise<IMethodResponse<IGetContentResponse<T>>>;
+  localizedSearch<T extends object>(
+    params: ISearchConfig,
+  ): Promise<IMethodResponse<IPaginatedResponse<IResponse<T>>>>;
 }
 
 export interface IResponse<T> {
@@ -80,7 +108,7 @@ export interface IResponseMetadata {
 }
 
 export interface ISortingField {
-  fieldName: 'publicId' | 'onlineDate' | 'offlineDate' | string;
+  fieldName: "publicId" | "onlineDate" | "offlineDate" | string;
   ascending: boolean;
 }
 
@@ -108,17 +136,17 @@ export interface IPropFilterItem {
 }
 
 export enum LogicalOperators {
-  AND = 'AND',
-  OR = 'OR',
+  AND = "AND",
+  OR = "OR",
 }
 
 export enum Operators {
-  CONTAINS = 'CONTAINS',
-  CONTAINS_IC = 'CONTAINS_IC',
-  EQUALS = 'EQUALS',
-  EQUALS_IC = 'EQUALS_IC',
-  IN = 'IN',
-  IN_IC = 'IN_IC',
-  STARTS_WITH = 'STARTS_WITH',
-  STARTS_WITH_IC = 'STARTS_WITH_IC',
+  CONTAINS = "CONTAINS",
+  CONTAINS_IC = "CONTAINS_IC",
+  EQUALS = "EQUALS",
+  EQUALS_IC = "EQUALS_IC",
+  IN = "IN",
+  IN_IC = "IN_IC",
+  STARTS_WITH = "STARTS_WITH",
+  STARTS_WITH_IC = "STARTS_WITH_IC",
 }
