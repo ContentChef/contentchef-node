@@ -343,10 +343,11 @@ export async function executeFetchRequest<T>(
   });
   let data = null;
 
+  const text = await result.text();
   try {
-    data = await result.json();
+    data = JSON.parse(text);
   } catch {
-    data = await result.text();
+    data = text;
   }
 
   return {
