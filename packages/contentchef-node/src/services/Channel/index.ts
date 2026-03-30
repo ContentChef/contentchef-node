@@ -334,7 +334,8 @@ export async function executeFetchRequest<T>(
   url: string,
   params: URLSearchParams,
 ): Promise<interfaces.IMethodResponse<T>> {
-  const fullUrl = new URL(url, config.host);
+  const fullUrl = new URL(config.host);
+  fullUrl.pathname = fullUrl.pathname.replace(/\/$/, "") + url;
   fullUrl.search = params.toString();
 
   const result = await fetch(fullUrl.toString(), {
