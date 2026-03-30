@@ -341,7 +341,15 @@ export async function executeFetchRequest<T>(
   const result = await fetch(fullUrl.toString(), {
     headers: { "X-Chef-Key": config.apiKey },
   });
-  const data = await result.json();
+  let data = null;
+
+  const text = await result.text();
+  try {
+    data = JSON.parse(text);
+  } catch {
+    data = text;
+  }
+
   return {
     config: { url, params },
     data,
