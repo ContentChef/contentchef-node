@@ -1,6 +1,6 @@
 {
   "name": "@contentchef/contentchef-node",
-  "version": "7.0.0-alpha.5",
+  "version": "7.0.0-beta.0",
   "author": "Byte-Code",
   "maintainers": [
     {
@@ -41,7 +41,6 @@
   },
   "license": "MIT",
   "dependencies": {
-    "axios": "^0.24.0",
     "qs": "^6.6.0"
   },
   "devDependencies": {
