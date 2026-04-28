@@ -31,6 +31,13 @@ export default interface ISDKConfiguration {
    * @memberof IContentChefConfiguration
    */
   enableExperimentalChannel?: boolean;
+
+  /**
+   * Route onlineChannel to the experimental online channel implementation
+   * @type {boolean}
+   * @memberof IContentChefConfiguration
+   */
+  useExperimentalOnlineChannel?: boolean;
 }
 
 export interface IChannelConfiguration extends ISDKConfiguration {
