@@ -5,7 +5,7 @@ import ISDKConfiguration, {
 import * as interfaces from "./interfaces";
 import serializeSorting from "./serializeSorting";
 
-const defaultConfig: ISDKConfiguration = <ISDKConfiguration>{
+export const defaultConfig: ISDKConfiguration = <ISDKConfiguration>{
   host: "https://api.contentchef.io",
 };
 
