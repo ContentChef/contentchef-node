@@ -4,7 +4,7 @@ describe('createUrl should', () => {
     const publicId = 'test-public-id';
     it('successfully created an url for a resource with https as protocol', () => {
         const resource = createUrl(publicId);
-        const groups = resource.match(/^((http[s]?|ftp):\/)?\/?([^:\/\s]+)((\/\w+)*\/)([\w\-\.]+[^#?\s]+)(.*)?(#[\w\-]+)?$/);
+        const groups = resource.match(/^((http[s]?|ftp):\/)?\/?([^:/\s]+)((\/\w+)*\/)([\w\-.]+[^#?\s]+)(.*)?(#[\w-]+)?$/);
         const protocol = groups[2];
         expect(protocol).toEqual('https');
     });
@@ -21,7 +21,7 @@ describe('imageUrl should', () => {
     const publicId = 'test-public-id';
     it('successfully created an url for a resource with https as protocol', () => {
         const resource = imageUrl(publicId);
-        const groups = resource.match(/^((http[s]?|ftp):\/)?\/?([^:\/\s]+)((\/\w+)*\/)([\w\-\.]+[^#?\s]+)(.*)?(#[\w\-]+)?$/);
+        const groups = resource.match(/^((http[s]?|ftp):\/)?\/?([^:/\s]+)((\/\w+)*\/)([\w\-.]+[^#?\s]+)(.*)?(#[\w-]+)?$/);
         const protocol = groups[2];
         expect(protocol).toEqual('https');
     });
@@ -42,7 +42,7 @@ describe('videoUrl should', () => {
     const publicId = 'test-public-id';
     it('successfully created an url for a resource with https as protocol', () => {
         const resource = videoUrl(publicId);
-        const groups = resource.match(/^((http[s]?|ftp):\/)?\/?([^:\/\s]+)((\/\w+)*\/)([\w\-\.]+[^#?\s]+)(.*)?(#[\w\-]+)?$/);
+        const groups = resource.match(/^((http[s]?|ftp):\/)?\/?([^:/\s]+)((\/\w+)*\/)([\w\-.]+[^#?\s]+)(.*)?(#[\w-]+)?$/);
         const protocol = groups[2];
         expect(protocol).toEqual('https');
     });
@@ -63,7 +63,7 @@ describe('rawFileUrl should', () => {
     const publicId = 'test-public-id';
     it('successfully created an url for a resource with https as protocol', () => {
         const resource = rawFileUrl(publicId);
-        const groups = resource.match(/^((http[s]?|ftp):\/)?\/?([^:\/\s]+)((\/\w+)*\/)([\w\-\.]+[^#?\s]+)(.*)?(#[\w\-]+)?$/);
+        const groups = resource.match(/^((http[s]?|ftp):\/)?\/?([^:/\s]+)((\/\w+)*\/)([\w\-.]+[^#?\s]+)(.*)?(#[\w-]+)?$/);
         const protocol = groups[2];
         expect(protocol).toEqual('https');
     });

@@ -15,13 +15,16 @@ All commands run from within a package directory (e.g., `packages/contentchef-no
 ```bash
 npm test              # clean + jest (with coverage)
 npm run build         # clean + dual build (ESM → dist/esm, CJS → dist/cjs)
-npm run lint          # tslint
+npm run lint          # eslint
 npx jest --testPathPattern=<pattern>  # run a single test file
 ```
 
-Monorepo bootstrap from root:
+Monorepo install from root (npm workspaces, Lerna 8):
 ```bash
-npm run bootstrap     # lerna bootstrap
+npm install           # installs all packages
+npm run lint          # lerna run lint
+npm test              # lerna run test
+npm run build         # lerna run build
 ```
 
 ## Architecture
@@ -62,7 +65,7 @@ Both packages produce dual targets:
 
 ## Linting
 
-Uses `tslint` (not eslint). Single quotes, no trailing whitespace enforcement disabled, JSDoc format enforced.
+Uses ESLint (flat config at `eslint.config.mjs`) with `typescript-eslint`. Single quotes enforced, `no-empty-object-type` disabled, `ban-ts-comment` disabled in tests.
 
 ## PR Labels for Changelog
 

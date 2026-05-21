@@ -1,9 +1,9 @@
-import { IConfiguredSDK } from "../..";
-import { defaultConfig } from "../Channel";
-import { IConfigurable } from "./interfaces/IConfigurable";
+import { IConfiguredSDK } from '../..';
+import { defaultConfig } from '../Channel';
+import { IConfigurable } from './interfaces/IConfigurable';
 import ISDKConfiguration, {
   ITargetDateResolver,
-} from "./interfaces/SDKConfiguration";
+} from './interfaces/SDKConfiguration';
 
 /**
  * @export
@@ -37,34 +37,34 @@ export default class ConfigurationManager {
     targetDateSource?: ITargetDateResolver | string,
   ) {
     if (configuration === undefined) {
-      throw new TypeError("Configuration cannot be undefined");
+      throw new TypeError('Configuration cannot be undefined');
     }
 
-    if (configuration.timeout && typeof configuration.timeout !== "number") {
-      throw new TypeError("callTimeout must be a number");
+    if (configuration.timeout && typeof configuration.timeout !== 'number') {
+      throw new TypeError('callTimeout must be a number');
     }
 
     if (configuration.timeout < 0) {
-      throw new TypeError("callTimeout cannot be less than 0");
+      throw new TypeError('callTimeout cannot be less than 0');
     }
 
-    if (configuration.host && typeof configuration.host !== "string") {
-      throw new TypeError("host must be a string");
+    if (configuration.host && typeof configuration.host !== 'string') {
+      throw new TypeError('host must be a string');
     }
 
     if (String(configuration.host).length === 0) {
-      throw new TypeError("host seems to be an empty string");
+      throw new TypeError('host seems to be an empty string');
     }
 
     if (
-      typeof configuration.spaceId !== "string" ||
+      typeof configuration.spaceId !== 'string' ||
       configuration.spaceId.trim().length === 0
     ) {
-      throw new TypeError("spaceId must be a string");
+      throw new TypeError('spaceId must be a string');
     }
 
     if (
-      configuration.hasOwnProperty("host") &&
+      Object.prototype.hasOwnProperty.call(configuration, 'host') &&
       configuration.host === undefined
     ) {
       delete configuration.host;
@@ -77,18 +77,18 @@ export default class ConfigurationManager {
     });
 
     if (
-      typeof targetDateSource === "string" ||
-      typeof targetDateSource === "undefined"
+      typeof targetDateSource === 'string' ||
+      typeof targetDateSource === 'undefined'
     ) {
       this.targetDateResolver = createFixedTargetDateResolver(targetDateSource);
     } else if (
-      typeof targetDateSource === "object" &&
-      typeof targetDateSource.getTargetDate === "function"
+      typeof targetDateSource === 'object' &&
+      typeof targetDateSource.getTargetDate === 'function'
     ) {
       this.targetDateResolver = targetDateSource;
     } else {
       throw new TypeError(
-        "TargetDateResolver is mandatory and must be a string or a ITargetDateResolver type",
+        'TargetDateResolver is mandatory and must be a string or a ITargetDateResolver type',
       );
     }
     this.configuration = configuration;

@@ -25,7 +25,7 @@
   "scripts": {
     "build": "npm run clean && tsc -p ./tsconfig.browser.json && tsc -p ./tsconfig.json",
     "clean": "rimraf dist",
-    "lint": "tslint -p .",
+    "lint": "eslint src",
     "prepack": "npm run lint && npm run build",
     "postpack": "npm run clean",
     "prepublishOnly": "npm test && npm run lint && npm run build",
@@ -36,13 +36,16 @@
     "url": "https://github.com/ContentChef/contentchef-node/issues"
   },
   "devDependencies": {
-    "@types/jest": "^26.0.0",
-    "@types/node": "^14.0.13",
-    "jest": "^26.0.1",
-    "rimraf": "^3.0.2",
-    "ts-jest": "^26.1.0",
-    "tslint": "^6.1.2",
-    "typescript": "^3.9.5"
+    "@eslint/js": "^9.38.0",
+    "@types/jest": "^29.5.12",
+    "@types/node": "^22.10.2",
+    "eslint": "^9.38.0",
+    "globals": "^15.14.0",
+    "jest": "^29.7.0",
+    "rimraf": "^5.0.10",
+    "ts-jest": "^29.2.5",
+    "typescript": "^5.6.3",
+    "typescript-eslint": "^8.18.0"
   },
   "dependencies": {
     "@cld-apis/types": "^0.1.3",

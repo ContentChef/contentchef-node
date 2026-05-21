@@ -1,17 +1,17 @@
 import ISDKConfiguration, {
   IChannelConfiguration,
   ITargetDateResolver,
-} from "../ConfigurationManager/interfaces/SDKConfiguration";
-import * as interfaces from "./interfaces";
-import serializeSorting from "./serializeSorting";
+} from '../ConfigurationManager/interfaces/SDKConfiguration';
+import * as interfaces from './interfaces';
+import serializeSorting from './serializeSorting';
 
 export const defaultConfig: ISDKConfiguration = <ISDKConfiguration>{
-  host: "https://api.contentchef.io",
+  host: 'https://api.contentchef.io',
 };
 
 export enum PublishingStatus {
-  Live = "live",
-  Staging = "staging",
+  Live = 'live',
+  Staging = 'staging',
 }
 
 /**
@@ -87,7 +87,7 @@ export function createOnlineContentRequest(
   config: IChannelConfiguration,
   locale?: string,
 ) {
-  const url = getOnlineEndpoint(spaceId, "content", channel, locale);
+  const url = getOnlineEndpoint(spaceId, 'content', channel, locale);
 
   return async <T extends object>(
     params: interfaces.GetContentOnlineConfig,
@@ -113,7 +113,7 @@ export function createPreviewContentRequest(
   targetDateResolver: ITargetDateResolver,
   locale?: string,
 ) {
-  const url = getPreviewEndpoint(spaceId, "content", state, channel, locale);
+  const url = getPreviewEndpoint(spaceId, 'content', state, channel, locale);
 
   return async <T extends object>(
     params: interfaces.GetContentPreviewConfig,
@@ -137,7 +137,7 @@ export function createOnlineSearchRequest(
   config: IChannelConfiguration,
   locale?: string,
 ) {
-  const url = getOnlineEndpoint(spaceId, "search/v2", channel, locale);
+  const url = getOnlineEndpoint(spaceId, 'search/v2', channel, locale);
 
   return async <T extends object>(
     params: interfaces.SearchOnlineConfig,
@@ -166,7 +166,7 @@ export function createExperimentalOnlineContentRequest(
   config: IChannelConfiguration,
   locale?: string,
 ) {
-  const url = getOnlineEndpoint(spaceId, "content/v3", channel, locale);
+  const url = getOnlineEndpoint(spaceId, 'content/v3', channel, locale);
 
   return async <T extends object>(
     params: interfaces.GetContentOnlineConfig,
@@ -188,7 +188,7 @@ export function createExperimentalOnlineSearchRequest(
   config: IChannelConfiguration,
   locale?: string,
 ) {
-  const url = getOnlineEndpoint(spaceId, "search/v3", channel, locale);
+  const url = getOnlineEndpoint(spaceId, 'search/v3', channel, locale);
 
   return async <T extends object>(
     params: interfaces.SearchOnlineConfig,
@@ -214,7 +214,7 @@ export function createPreviewSearchRequest(
   targetDateResolver: ITargetDateResolver,
   locale?: string,
 ) {
-  const url = getPreviewEndpoint(spaceId, "search/v2", state, channel, locale);
+  const url = getPreviewEndpoint(spaceId, 'search/v2', state, channel, locale);
 
   return async <T extends object>(
     params: interfaces.SearchPreviewConfig,
@@ -266,44 +266,44 @@ function createSearchRequestURLSearchParams(
   } = params;
 
   const createdParams = new URLSearchParams({
-    skip: "" + skip,
-    take: "" + take,
+    skip: '' + skip,
+    take: '' + take,
   });
 
   maybeAddToURLSearchParams(
     createdParams,
-    "legacyMetadata",
-    legacyMetadata ? "true" : null,
+    'legacyMetadata',
+    legacyMetadata ? 'true' : null,
   );
 
-  maybeAddToURLSearchParams(createdParams, "publicId", publicId);
+  maybeAddToURLSearchParams(createdParams, 'publicId', publicId);
 
   maybeAddToURLSearchParams(
     createdParams,
-    "contentDefinition",
+    'contentDefinition',
     contentDefinition,
   );
 
-  maybeAddToURLSearchParams(createdParams, "repositories", repositories);
+  maybeAddToURLSearchParams(createdParams, 'repositories', repositories);
 
   const serializedPropFilters = params.propFilters
     ? JSON.stringify(propFilters)
     : undefined;
   maybeAddToURLSearchParams(
     createdParams,
-    "propFilters",
+    'propFilters',
     serializedPropFilters,
   );
 
   maybeAddToURLSearchParams(
     createdParams,
-    "sorting",
+    'sorting',
     serializeSorting(sorting),
   );
 
-  maybeAddToURLSearchParams(createdParams, "targetDate", targetDate);
+  maybeAddToURLSearchParams(createdParams, 'targetDate', targetDate);
 
-  maybeAddToURLSearchParams(createdParams, "tags", tags);
+  maybeAddToURLSearchParams(createdParams, 'tags', tags);
 
   return createdParams;
 }
@@ -320,11 +320,11 @@ function createGetContentRequestURLSearchParams(
 
   maybeAddToURLSearchParams(
     createdParams,
-    "legacyMetadata",
-    "" + legacyMetadata,
+    'legacyMetadata',
+    '' + legacyMetadata,
   );
-  maybeAddToURLSearchParams(createdParams, "publicId", publicId);
-  maybeAddToURLSearchParams(createdParams, "targetDate", targetDate);
+  maybeAddToURLSearchParams(createdParams, 'publicId', publicId);
+  maybeAddToURLSearchParams(createdParams, 'targetDate', targetDate);
 
   return createdParams;
 }
@@ -335,11 +335,11 @@ export async function executeFetchRequest<T>(
   params: URLSearchParams,
 ): Promise<interfaces.IMethodResponse<T>> {
   const fullUrl = new URL(config.host);
-  fullUrl.pathname = fullUrl.pathname.replace(/\/$/, "") + url;
+  fullUrl.pathname = fullUrl.pathname.replace(/\/$/, '') + url;
   fullUrl.search = params.toString();
 
   const result = await fetch(fullUrl.toString(), {
-    headers: { "X-Chef-Key": config.apiKey },
+    headers: { 'X-Chef-Key': config.apiKey },
   });
   let data = null;
 
@@ -373,24 +373,24 @@ export function getPreviewChannelMethods(
   config: IChannelConfiguration,
   targetDateResolver: ITargetDateResolver,
 ): interfaces.IChannelMethods {
-  if (typeof spaceId !== "string" || spaceId.length === 0) {
-    throw new TypeError("SpaceId is mandatory");
+  if (typeof spaceId !== 'string' || spaceId.length === 0) {
+    throw new TypeError('SpaceId is mandatory');
   }
 
-  if (typeof channel !== "string" || channel.length === 0) {
-    throw new TypeError("Channel is mandatory");
+  if (typeof channel !== 'string' || channel.length === 0) {
+    throw new TypeError('Channel is mandatory');
   }
 
   if (state !== PublishingStatus.Live && state !== PublishingStatus.Staging) {
     throw new TypeError(`State must be either 'live' or 'staging'`);
   }
 
-  if (typeof config.apiKey !== "string" || config.apiKey.length === 0) {
+  if (typeof config.apiKey !== 'string' || config.apiKey.length === 0) {
     throw new TypeError(`apiKey is mandatory`);
   }
 
-  if (config.locale && typeof config.locale !== "string") {
-    throw new TypeError("Property locale must be a string");
+  if (config.locale && typeof config.locale !== 'string') {
+    throw new TypeError('Property locale must be a string');
   }
 
   const content = createPreviewContentRequest(
@@ -442,20 +442,20 @@ export function getOnlineChannelMethods(
   channel: string,
   config: IChannelConfiguration,
 ): interfaces.IChannelMethods {
-  if (typeof spaceId !== "string" || spaceId.length === 0) {
-    throw new TypeError("SpaceId is mandatory");
+  if (typeof spaceId !== 'string' || spaceId.length === 0) {
+    throw new TypeError('SpaceId is mandatory');
   }
 
-  if (typeof channel !== "string" || channel.length === 0) {
-    throw new TypeError("Channel is mandatory");
+  if (typeof channel !== 'string' || channel.length === 0) {
+    throw new TypeError('Channel is mandatory');
   }
 
-  if (typeof config.apiKey !== "string" || config.apiKey.length === 0) {
+  if (typeof config.apiKey !== 'string' || config.apiKey.length === 0) {
     throw new TypeError(`apiKey is mandatory`);
   }
 
-  if (config.locale && typeof config.locale !== "string") {
-    throw new TypeError("Property locale must be a string");
+  if (config.locale && typeof config.locale !== 'string') {
+    throw new TypeError('Property locale must be a string');
   }
 
   const content = createOnlineContentRequest(spaceId, channel, config);
@@ -492,20 +492,20 @@ export function getExperimentalOnlineChannelMethods(
   channel: string,
   config: IChannelConfiguration,
 ): interfaces.IChannelMethods {
-  if (typeof spaceId !== "string" || spaceId.length === 0) {
-    throw new TypeError("SpaceId is mandatory");
+  if (typeof spaceId !== 'string' || spaceId.length === 0) {
+    throw new TypeError('SpaceId is mandatory');
   }
 
-  if (typeof channel !== "string" || channel.length === 0) {
-    throw new TypeError("Channel is mandatory");
+  if (typeof channel !== 'string' || channel.length === 0) {
+    throw new TypeError('Channel is mandatory');
   }
 
-  if (typeof config.apiKey !== "string" || config.apiKey.length === 0) {
+  if (typeof config.apiKey !== 'string' || config.apiKey.length === 0) {
     throw new TypeError(`apiKey is mandatory`);
   }
 
-  if (config.locale && typeof config.locale !== "string") {
-    throw new TypeError("Property locale must be a string");
+  if (config.locale && typeof config.locale !== 'string') {
+    throw new TypeError('Property locale must be a string');
   }
 
   const content = createExperimentalOnlineContentRequest(
@@ -551,7 +551,7 @@ export function getOnlineEndpoint(
   channel: string,
   locale?: string,
 ) {
-  return `/space/${spaceId}/online/${method}/${channel}${locale ? `/${locale}` : ""}`;
+  return `/space/${spaceId}/online/${method}/${channel}${locale ? `/${locale}` : ''}`;
 }
 
 /**
@@ -568,7 +568,7 @@ export function getPreviewEndpoint(
   channel: string,
   locale?: string,
 ) {
-  return `/space/${spaceId}/preview/${state}/${method}/${channel}${locale ? `/${locale}` : ""}`;
+  return `/space/${spaceId}/preview/${state}/${method}/${channel}${locale ? `/${locale}` : ''}`;
 }
 
-export * from "./interfaces";
+export * from './interfaces';
