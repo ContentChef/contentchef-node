@@ -1,12 +1,12 @@
-import { PublishingStatus } from "../index";
+import { PublishingStatus } from '../index';
 
 export type ContentRequestMethod =
-  | "content"
-  | "search/v2"
-  | "content/v3"
-  | "search/v3";
+  | 'content'
+  | 'search/v2'
+  | 'content/v3'
+  | 'search/v3';
 
-export type ContentState = "staging" | "live";
+export type ContentState = 'staging' | 'live';
 
 export type GetPreviewChannelMethods = (
   apiKey: string,
@@ -108,7 +108,7 @@ export interface IResponseMetadata {
 }
 
 export interface ISortingField {
-  fieldName: "publicId" | "onlineDate" | "offlineDate" | string;
+  fieldName: 'publicId' | 'onlineDate' | 'offlineDate' | string;
   ascending: boolean;
 }
 
@@ -136,17 +136,17 @@ export interface IPropFilterItem {
 }
 
 export enum LogicalOperators {
-  AND = "AND",
-  OR = "OR",
+  AND = 'AND',
+  OR = 'OR',
 }
 
 export enum Operators {
-  CONTAINS = "CONTAINS",
-  CONTAINS_IC = "CONTAINS_IC",
-  EQUALS = "EQUALS",
-  EQUALS_IC = "EQUALS_IC",
-  IN = "IN",
-  IN_IC = "IN_IC",
-  STARTS_WITH = "STARTS_WITH",
-  STARTS_WITH_IC = "STARTS_WITH_IC",
+  CONTAINS = 'CONTAINS',
+  CONTAINS_IC = 'CONTAINS_IC',
+  EQUALS = 'EQUALS',
+  EQUALS_IC = 'EQUALS_IC',
+  IN = 'IN',
+  IN_IC = 'IN_IC',
+  STARTS_WITH = 'STARTS_WITH',
+  STARTS_WITH_IC = 'STARTS_WITH_IC',
 }
