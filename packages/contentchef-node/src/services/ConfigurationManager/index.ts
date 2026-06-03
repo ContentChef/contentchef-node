@@ -1,5 +1,4 @@
 import { IConfiguredSDK } from '../..';
-import { defaultConfig } from '../Channel';
 import { IConfigurable } from './interfaces/IConfigurable';
 import ISDKConfiguration, {
   ITargetDateResolver,
@@ -102,10 +101,7 @@ export default class ConfigurationManager {
   public configure(configurable: IConfigurable) {
     const channels: IConfiguredSDK = {
       onlineChannel: this.configuration.useExperimentalOnlineChannel
-        ? configurable.configureExperimentalOnlineMethods({
-            ...this.configuration,
-            host: defaultConfig.host,
-          })
+        ? configurable.configureExperimentalOnlineMethods(this.configuration)
         : configurable.configureOnlineMethods(this.configuration),
       previewChannel: configurable.configurePreviewMethods(
         this.configuration,
@@ -118,10 +114,7 @@ export default class ConfigurationManager {
       (!this.configuration.host || this.configuration.enableExperimentalChannel)
     ) {
       channels.experimentalOnlineChannel =
-        configurable.configureExperimentalOnlineMethods({
-          ...this.configuration,
-          host: defaultConfig.host,
-        });
+        configurable.configureExperimentalOnlineMethods(this.configuration);
     }
 
     return channels;
