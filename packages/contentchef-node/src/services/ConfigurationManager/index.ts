@@ -47,12 +47,11 @@ export default class ConfigurationManager {
       throw new TypeError('callTimeout cannot be less than 0');
     }
 
-    if (configuration.host && typeof configuration.host !== 'string') {
+    if (
+      configuration.host !== undefined &&
+      typeof configuration.host !== 'string'
+    ) {
       throw new TypeError('host must be a string');
-    }
-
-    if (String(configuration.host).length === 0) {
-      throw new TypeError('host seems to be an empty string');
     }
 
     if (
@@ -62,10 +61,19 @@ export default class ConfigurationManager {
       throw new TypeError('spaceId must be a string');
     }
 
-    if (
-      Object.prototype.hasOwnProperty.call(configuration, 'host') &&
-      configuration.host === undefined
-    ) {
+    const isBlankHost =
+      typeof configuration.host === 'string' &&
+      configuration.host.trim().length === 0;
+
+    if (isBlankHost) {
+      console.warn(
+        '[contentchef-node] "host" was provided as an empty string; ' +
+          'falling back to the default host. Pass `undefined` or omit it ' +
+          'to silence this warning.',
+      );
+    }
+
+    if (configuration.host === undefined || isBlankHost) {
       delete configuration.host;
     }
 
