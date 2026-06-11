@@ -19,11 +19,6 @@ export type GetOnlineChannelMethods = (
   channel: string,
   locale?: string,
 ) => IChannelMethods;
-export type GetExperimentalOnlineChannelMethods = (
-  apiKey: string,
-  channel: string,
-  locale?: string,
-) => IChannelMethods;
 
 export interface IGetContentConfig {
   legacyMetadata?: boolean;

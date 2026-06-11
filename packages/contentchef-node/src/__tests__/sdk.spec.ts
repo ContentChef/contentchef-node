@@ -59,22 +59,4 @@ describe('Tests the sdk', () => {
     expect(typeof cf.onlineChannel).toBe('function');
     expect(typeof cf.previewChannel).toBe('function');
   });
-
-  test('experimentalOnlineChannel is available when no custom host is provided', () => {
-    const cf = sdk({ spaceId: 'aSpace' });
-
-    expect(typeof cf.experimentalOnlineChannel).toBe('function');
-  });
-
-  test('experimentalOnlineChannel is not available when a custom host is provided', () => {
-    const cf = sdk({ spaceId: 'aSpace', host: 'https://custom.api.com' });
-
-    expect(cf.experimentalOnlineChannel).toBeUndefined();
-  });
-
-  test('experimentalOnlineChannel is available with custom host when enableExperimentalChannel is true', () => {
-    const cf = sdk({ spaceId: 'aSpace', host: 'https://custom.api.com', enableExperimentalChannel: true });
-
-    expect(typeof cf.experimentalOnlineChannel).toBe('function');
-  });
 });

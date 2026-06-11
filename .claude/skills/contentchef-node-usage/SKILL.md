@@ -1,6 +1,6 @@
 ---
 name: contentchef-node-usage
-description: How to configure and consume the @contentchef/contentchef-node SDK — channels (online, preview, experimental), content/search methods, localized variants, sorting, prop filters, target dates. Use when the user is integrating the SDK in an app, debugging SDK responses, or asking about endpoints/params the SDK exposes.
+description: How to configure and consume the @contentchef/contentchef-node SDK — channels (online, preview), content/search methods, localized variants, sorting, prop filters, target dates. Use when the user is integrating the SDK in an app, debugging SDK responses, or asking about endpoints/params the SDK exposes.
 ---
 
 # Using `@contentchef/contentchef-node`
@@ -19,7 +19,6 @@ const cf = ContentChef({
   spaceId: 'my-space',           // required
   host: 'https://api.contentchef.io', // optional, default shown
   timeout: 5000,                 // optional, ms
-  enableExperimentalChannel: false, // optional, see §4
 }, targetDateResolver);          // string ISO date | ITargetDateResolver | undefined
 ```
 
@@ -43,7 +42,6 @@ provided. Invalid input throws `TypeError` synchronously.
 interface IConfiguredSDK {
   onlineChannel:  (apiKey, channel, locale?) => IChannelMethods;
   previewChannel: (apiKey, channel, state, locale?) => IChannelMethods;
-  experimentalOnlineChannel?: (apiKey, channel, locale?) => IChannelMethods;
 }
 ```
 
@@ -54,9 +52,6 @@ interface IConfiguredSDK {
   `targetDate` ≠ now. Takes `PublishingStatus.Live | PublishingStatus.Staging`.
   Backend: `/preview/{state}/content|search/v2/{channel}[/{locale}]`.
   Not cached.
-- **`experimentalOnlineChannel`** → only attached when `host` is the default
-  OR `enableExperimentalChannel: true`. Points at `content/v3` and `search/v3`
-  (not in `serverless.yml` — these live on a separate deployment).
 
 `state` for preview: use the `PublishingStatus` enum, not a raw string.
 
@@ -176,8 +171,6 @@ await itChannel.localizedSearch<Article>({ skip: 0, take: 5 });
 ## 7. Gotchas
 
 - `host` must be a **non-empty** string if provided — `''` throws.
-- Providing a custom `host` silently drops `experimentalOnlineChannel`
-  unless `enableExperimentalChannel: true`.
 - `search`'s `skip`/`take` are **required**, not defaulted.
 - `legacyMetadata` in `content()` is stringified unconditionally
   (`'true'`/`'false'`/`'undefined'`) — pass it explicitly or the query string

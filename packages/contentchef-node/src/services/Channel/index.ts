@@ -59,24 +59,6 @@ export function configureOnlineMethods(
 }
 
 /**
- * @export
- * @param {ISDKConfiguration} config
- * @returns
- */
-export function configureExperimentalOnlineMethods(
-  config: ISDKConfiguration,
-): interfaces.GetExperimentalOnlineChannelMethods {
-  return (apiKey: string, channel: string, locale?: string) => {
-    return getExperimentalOnlineChannelMethods(config.spaceId, channel, {
-      ...defaultConfig,
-      ...config,
-      apiKey,
-      locale,
-    });
-  };
-}
-
-/**
  * @param {string} spaceId
  * @param {string} channel
  * @param {ISDKConfiguration} config
@@ -138,57 +120,6 @@ export function createOnlineSearchRequest(
   locale?: string,
 ) {
   const url = getOnlineEndpoint(spaceId, 'search/v2', channel, locale);
-
-  return async <T extends object>(
-    params: interfaces.SearchOnlineConfig,
-  ): Promise<
-    interfaces.IMethodResponse<
-      interfaces.IPaginatedResponse<interfaces.IResponse<T>>
-    >
-  > => {
-    const searchParams: URLSearchParams = createSearchRequestURLSearchParams(
-      params,
-      undefined,
-    );
-
-    return executeFetchRequest(config, url, searchParams);
-  };
-}
-
-/**
- * @param {string} spaceId
- * @param {string} channel
- * @param {ISDKConfiguration} config
- */
-export function createExperimentalOnlineContentRequest(
-  spaceId: string,
-  channel: string,
-  config: IChannelConfiguration,
-  locale?: string,
-) {
-  const url = getOnlineEndpoint(spaceId, 'content/v3', channel, locale);
-
-  return async <T extends object>(
-    params: interfaces.GetContentOnlineConfig,
-  ): Promise<interfaces.IMethodResponse<interfaces.IGetContentResponse<T>>> => {
-    const searchParams: URLSearchParams =
-      createGetContentRequestURLSearchParams(params, undefined);
-    return executeFetchRequest(config, url, searchParams);
-  };
-}
-
-/**
- * @param {string} spaceId
- * @param {string} channel
- * @param {ISDKConfiguration} config
- */
-export function createExperimentalOnlineSearchRequest(
-  spaceId: string,
-  channel: string,
-  config: IChannelConfiguration,
-  locale?: string,
-) {
-  const url = getOnlineEndpoint(spaceId, 'search/v3', channel, locale);
 
   return async <T extends object>(
     params: interfaces.SearchOnlineConfig,
@@ -467,64 +398,6 @@ export function getOnlineChannelMethods(
     config.locale,
   );
   const localizedSearch = createOnlineSearchRequest(
-    spaceId,
-    channel,
-    config,
-    config.locale,
-  );
-
-  return {
-    content,
-    localizedContent,
-    localizedSearch,
-    search,
-  };
-}
-
-/**
- * @param {string} spaceId
- * @param {string} channel
- * @param {ISDKConfiguration} config
- * @returns
- */
-export function getExperimentalOnlineChannelMethods(
-  spaceId: string,
-  channel: string,
-  config: IChannelConfiguration,
-): interfaces.IChannelMethods {
-  if (typeof spaceId !== 'string' || spaceId.length === 0) {
-    throw new TypeError('SpaceId is mandatory');
-  }
-
-  if (typeof channel !== 'string' || channel.length === 0) {
-    throw new TypeError('Channel is mandatory');
-  }
-
-  if (typeof config.apiKey !== 'string' || config.apiKey.length === 0) {
-    throw new TypeError(`apiKey is mandatory`);
-  }
-
-  if (config.locale && typeof config.locale !== 'string') {
-    throw new TypeError('Property locale must be a string');
-  }
-
-  const content = createExperimentalOnlineContentRequest(
-    spaceId,
-    channel,
-    config,
-  );
-  const search = createExperimentalOnlineSearchRequest(
-    spaceId,
-    channel,
-    config,
-  );
-  const localizedContent = createExperimentalOnlineContentRequest(
-    spaceId,
-    channel,
-    config,
-    config.locale,
-  );
-  const localizedSearch = createExperimentalOnlineSearchRequest(
     spaceId,
     channel,
     config,

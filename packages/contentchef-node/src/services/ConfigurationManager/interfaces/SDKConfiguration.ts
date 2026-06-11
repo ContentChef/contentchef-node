@@ -1,4 +1,3 @@
-
 export interface ITargetDateResolver {
   getTargetDate(): Promise<string | undefined>;
 }
@@ -10,7 +9,7 @@ export default interface ISDKConfiguration {
    * @memberof IContentChefConfiguration
    */
   spaceId: string;
-  
+
   /**
    * Content Chef API Endpoint
    * @type {string}
@@ -24,20 +23,6 @@ export default interface ISDKConfiguration {
    * @memberof IContentChefConfiguration
    */
   timeout?: number;
-
-  /**
-   * Force enable experimentalOnlineChannel even when a custom host is provided
-   * @type {boolean}
-   * @memberof IContentChefConfiguration
-   */
-  enableExperimentalChannel?: boolean;
-
-  /**
-   * Route onlineChannel to the experimental online channel implementation
-   * @type {boolean}
-   * @memberof IContentChefConfiguration
-   */
-  useExperimentalOnlineChannel?: boolean;
 }
 
 export interface IChannelConfiguration extends ISDKConfiguration {

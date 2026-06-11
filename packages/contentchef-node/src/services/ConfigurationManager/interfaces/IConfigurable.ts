@@ -1,5 +1,8 @@
-import { GetExperimentalOnlineChannelMethods, GetOnlineChannelMethods, GetPreviewChannelMethods } from '../../Channel/interfaces';
-import ISDKConfiguration, {ITargetDateResolver} from './SDKConfiguration';
+import {
+  GetOnlineChannelMethods,
+  GetPreviewChannelMethods,
+} from '../../Channel/interfaces';
+import ISDKConfiguration, { ITargetDateResolver } from './SDKConfiguration';
 
 /**
  * @export
@@ -12,19 +15,17 @@ export interface IConfigurable {
    * @returns {*}
    * @memberof IConfigurable
    */
-  configurePreviewMethods(configuration: ISDKConfiguration, targetDateResolver: ITargetDateResolver): GetPreviewChannelMethods;
+  configurePreviewMethods(
+    configuration: ISDKConfiguration,
+    targetDateResolver: ITargetDateResolver,
+  ): GetPreviewChannelMethods;
 
   /**
    * @param {ISDKConfiguration} configuration
    * @returns {*}
    * @memberof IConfigurable
    */
-  configureOnlineMethods(configuration: ISDKConfiguration): GetOnlineChannelMethods;
-
-  /**
-   * @param {ISDKConfiguration} configuration
-   * @returns {*}
-   * @memberof IConfigurable
-   */
-  configureExperimentalOnlineMethods(configuration: ISDKConfiguration): GetExperimentalOnlineChannelMethods;
+  configureOnlineMethods(
+    configuration: ISDKConfiguration,
+  ): GetOnlineChannelMethods;
 }
