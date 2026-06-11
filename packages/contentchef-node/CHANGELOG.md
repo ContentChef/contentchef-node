@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [8.0.0]
+### Removed
+- **BREAKING:** `experimentalOnlineChannel` from the configured SDK and its `content/v3`/`search/v3` endpoints
+- **BREAKING:** `enableExperimentalChannel` and `useExperimentalOnlineChannel` options from `IContentChefConfiguration`
+- `GetExperimentalOnlineChannelMethods` type and `configureExperimentalOnlineMethods` from the `IConfigurable` interface
+
 ## [7.0.0-beta.0]
 ### Fixed
 - Removed `axios` from package dependencies
