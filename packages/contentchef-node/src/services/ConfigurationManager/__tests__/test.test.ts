@@ -22,7 +22,9 @@ describe('Tests ConfigurationManager class', () => {
     // @ts-ignore
     expect(() => new ConfigurationManager({ spaceId: 'aSpace', host: 100 })).toThrow();
 
-    expect(() => new ConfigurationManager({ spaceId: 'aSpace', host: '' })).toThrow();
+    expect(() => new ConfigurationManager({ spaceId: 'aSpace', host: '' })).not.toThrow();
+
+    expect(() => new ConfigurationManager({ spaceId: 'aSpace', host: '   ' })).not.toThrow();
 
     expect(() => new ConfigurationManager({ spaceId: 'aSpace', host: 'qwe' })).not.toThrow();
 
@@ -68,5 +70,78 @@ describe('Tests ConfigurationManager class', () => {
     expect(configurationManager.configure(configurable)).toHaveProperty('onlineChannel');
     expect(configurationManager.configure(configurable)).toHaveProperty('previewChannel');
     expect(configurable.foo).toBe('aSpace');
+  });
+
+  describe('host normalization', () => {
+    let warnSpy: jest.SpyInstance;
+
+    beforeEach(() => {
+      warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => undefined);
+    });
+
+    afterEach(() => {
+      warnSpy.mockRestore();
+    });
+
+    // Captures the configuration the ConfigurationManager hands to the SDK so
+    // we can assert whether `host` survived (kept) or was dropped (default applies).
+    const captureConfiguration = (configuration: ISDKConfiguration) => {
+      let captured: ISDKConfiguration | undefined;
+      const configurable = {
+        configurePreviewMethods() {
+          return {} as GetPreviewChannelMethods;
+        },
+        configureOnlineMethods(config: ISDKConfiguration) {
+          captured = config;
+          return {} as GetOnlineChannelMethods;
+        },
+        configureExperimentalOnlineMethods() {
+          return {} as GetExperimentalOnlineChannelMethods;
+        },
+      };
+      new ConfigurationManager(configuration).configure(configurable);
+      return captured as ISDKConfiguration;
+    };
+
+    test('drops an empty-string host and warns', () => {
+      const captured = captureConfiguration({ spaceId: 'aSpace', host: '' });
+
+      expect(captured).not.toHaveProperty('host');
+      expect(warnSpy).toHaveBeenCalledTimes(1);
+    });
+
+    test('drops a whitespace-only host and warns', () => {
+      const captured = captureConfiguration({ spaceId: 'aSpace', host: '   ' });
+
+      expect(captured).not.toHaveProperty('host');
+      expect(warnSpy).toHaveBeenCalledTimes(1);
+    });
+
+    test('drops an undefined host without warning', () => {
+      const captured = captureConfiguration({
+        spaceId: 'aSpace',
+        host: undefined,
+      });
+
+      expect(captured).not.toHaveProperty('host');
+      expect(warnSpy).not.toHaveBeenCalled();
+    });
+
+    test('keeps a valid host without warning', () => {
+      const captured = captureConfiguration({
+        spaceId: 'aSpace',
+        host: 'https://example.test',
+      });
+
+      expect(captured.host).toBe('https://example.test');
+      expect(warnSpy).not.toHaveBeenCalled();
+    });
+
+    test('does not warn when host is omitted entirely', () => {
+      const captured = captureConfiguration({ spaceId: 'aSpace' });
+
+      expect(captured).not.toHaveProperty('host');
+      expect(warnSpy).not.toHaveBeenCalled();
+    });
   });
 });
