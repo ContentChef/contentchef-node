@@ -108,22 +108,12 @@ export default class ConfigurationManager {
    */
   public configure(configurable: IConfigurable) {
     const channels: IConfiguredSDK = {
-      onlineChannel: this.configuration.useExperimentalOnlineChannel
-        ? configurable.configureExperimentalOnlineMethods(this.configuration)
-        : configurable.configureOnlineMethods(this.configuration),
+      onlineChannel: configurable.configureOnlineMethods(this.configuration),
       previewChannel: configurable.configurePreviewMethods(
         this.configuration,
         this.targetDateResolver,
       ),
     };
-
-    if (
-      !this.configuration.useExperimentalOnlineChannel &&
-      (!this.configuration.host || this.configuration.enableExperimentalChannel)
-    ) {
-      channels.experimentalOnlineChannel =
-        configurable.configureExperimentalOnlineMethods(this.configuration);
-    }
 
     return channels;
   }

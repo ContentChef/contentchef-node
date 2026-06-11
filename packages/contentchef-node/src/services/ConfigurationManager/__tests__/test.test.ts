@@ -1,5 +1,5 @@
 import ConfigurationManager from '..';
-import { GetExperimentalOnlineChannelMethods, GetOnlineChannelMethods, GetPreviewChannelMethods } from '../../Channel/interfaces';
+import { GetOnlineChannelMethods, GetPreviewChannelMethods } from '../../Channel/interfaces';
 import ISDKConfiguration from '../interfaces/SDKConfiguration';
 
 describe('Tests ConfigurationManager class', () => {
@@ -58,9 +58,6 @@ describe('Tests ConfigurationManager class', () => {
         this.foo = configuration.spaceId;
         return {} as GetOnlineChannelMethods;
       },
-      configureExperimentalOnlineMethods(configuration: ISDKConfiguration) {
-        return {} as GetExperimentalOnlineChannelMethods;
-      },
     };
     const configurationManager = new ConfigurationManager({
       host: 'ipsum',
@@ -94,9 +91,6 @@ describe('Tests ConfigurationManager class', () => {
         configureOnlineMethods(config: ISDKConfiguration) {
           captured = config;
           return {} as GetOnlineChannelMethods;
-        },
-        configureExperimentalOnlineMethods() {
-          return {} as GetExperimentalOnlineChannelMethods;
         },
       };
       new ConfigurationManager(configuration).configure(configurable);
