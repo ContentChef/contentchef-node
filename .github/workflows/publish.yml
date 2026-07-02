@@ -1,9 +1,13 @@
 name: Publish to npm
 
+# Independent publishing: Lerna runs in `independent` mode, so `lerna version`
+# creates one tag per bumped package, e.g. `@contentchef/contentchef-node@8.1.0`.
+# Each pushed tag triggers its own run of this workflow, which publishes ONLY the
+# package named in that tag — never the whole monorepo.
 on:
   push:
     tags:
-      - 'v*'
+      - '@contentchef/*'
 
 jobs:
   publish:
@@ -23,20 +27,28 @@ jobs:
 
       - run: npm ci
 
-      - name: Derive dist-tag from git tag
-        id: disttag
+      - name: Parse package name + version from tag
+        id: parse
         run: |
-          VERSION="${GITHUB_REF_NAME#v}"
+          TAG="${GITHUB_REF_NAME}"
+          # Tag format is "<package-name>@<version>". The name is scoped and itself
+          # contains an '@', so split on the LAST '@'.
+          PKG="${TAG%@*}"        # -> @contentchef/contentchef-node
+          VERSION="${TAG##*@}"   # -> 8.1.0
+          echo "package=$PKG" >> "$GITHUB_OUTPUT"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+          # dist-tag: prerelease preid (e.g. 8.1.0-beta.2 -> beta) else "latest".
           if [[ "$VERSION" == *-* ]]; then
             PREID="${VERSION#*-}"
             PREID="${PREID%%.*}"
-            echo "value=$PREID" >> "$GITHUB_OUTPUT"
+            echo "disttag=$PREID" >> "$GITHUB_OUTPUT"
           else
-            echo "value=latest" >> "$GITHUB_OUTPUT"
+            echo "disttag=latest" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Publish
-        run: npx lerna publish from-git --yes --dist-tag ${{ steps.disttag.outputs.value }}
+      - name: Publish ${{ steps.parse.outputs.package }}@${{ steps.parse.outputs.version }} (${{ steps.parse.outputs.disttag }})
+        run: npm publish --workspace "${{ steps.parse.outputs.package }}" --tag "${{ steps.parse.outputs.disttag }}"
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
           NPM_CONFIG_PROVENANCE: 'true'
