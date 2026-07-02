@@ -1,9 +1,16 @@
 import { TransformerOption, TransformerVideoOption } from '@cld-apis/types';
 import buildUrl from 'cloudinary-build-url';
+import { buildCloudflareDeliveryUrl, buildCloudflareImageUrl } from './cloudflare';
+import { IMedia, MediaProvider, resolveProvider } from './types';
 
 export type IMediaOptions = (TransformerOption | TransformerVideoOption) & {cloud_name?: string};
 export type IImageOptions = TransformerOption & {cloud_name?: string};
 export type IVideoOptions = TransformerVideoOption & {cloud_name?: string};
+
+export type ICloudflareAware = {baseUrl?: string};
+export type IMediaImageOptions = IImageOptions & ICloudflareAware;
+export type IMediaVideoOptions = IVideoOptions & ICloudflareAware;
+export type IMediaFileOptions = IMediaOptions & ICloudflareAware;
 
 export enum ResourceType {
     image = 'image',
@@ -30,6 +37,32 @@ export function rawFileUrl(publicId: string, options?: IMediaOptions) {
     return createUrl(publicId, options, ResourceType.raw);
 }
 
+export function mediaImageUrl(media: IMedia, options: IMediaImageOptions = {}): string {
+    const {baseUrl, ...transformations} = options;
+    if (resolveProvider(media) === MediaProvider.cloudflare) {
+        return buildCloudflareImageUrl(media.publicId, transformations, baseUrl);
+    }
+    return createUrl(media.publicId, transformations, ResourceType.image);
+}
+
+export function mediaVideoUrl(media: IMedia, options: IMediaVideoOptions = {}): string {
+    const {baseUrl, ...transformations} = options;
+    if (resolveProvider(media) === MediaProvider.cloudflare) {
+        return buildCloudflareDeliveryUrl(media.publicId, baseUrl);
+    }
+    return createUrl(media.publicId, transformations, ResourceType.video);
+}
+
+export function mediaRawFileUrl(media: IMedia, options: IMediaFileOptions = {}): string {
+    const {baseUrl, ...transformations} = options;
+    if (resolveProvider(media) === MediaProvider.cloudflare) {
+        return buildCloudflareDeliveryUrl(media.publicId, baseUrl);
+    }
+    return createUrl(media.publicId, transformations, ResourceType.raw);
+}
+
+export { IMedia, IMediaMetadata, MediaProvider, resolveProvider } from './types';
+
 export {
     AudioCodec, Border, ColorSpace, CompassGravity, Condition,
     ConditionExpression, CustomFunction, Effect, Expression,
@@ -43,4 +76,3 @@ export {
     TransformerOption,
     TransformerVideoOption, Variable, VColorSpace, VEffect, VFlag
 } from '@cld-apis/types';
-
