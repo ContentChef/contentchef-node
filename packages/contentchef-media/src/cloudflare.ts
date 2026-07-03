@@ -164,7 +164,7 @@ function normalizeSource(publicId: string): string {
     return String(publicId).replace(/^\/+/, '');
 }
 
-export function buildCloudflareImageUrl(publicId: string, options: TransformerOption = {}, baseUrl?: string): string {
+export function buildCloudflareUrl(publicId: string, options: TransformerOption = {}, baseUrl?: string): string {
     const base = normalizeBase(baseUrl);
     const source = normalizeSource(publicId);
     const params = toCloudflareOptions(options);
@@ -172,8 +172,4 @@ export function buildCloudflareImageUrl(publicId: string, options: TransformerOp
         return `${base}/${source}`;
     }
     return `${base}/cdn-cgi/image/${params.join(',')}/${source}`;
-}
-
-export function buildCloudflareDeliveryUrl(publicId: string, baseUrl?: string): string {
-    return `${normalizeBase(baseUrl)}/${normalizeSource(publicId)}`;
 }
