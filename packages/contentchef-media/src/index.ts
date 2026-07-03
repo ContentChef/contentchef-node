@@ -1,78 +1,126 @@
 import { TransformerOption, TransformerVideoOption } from '@cld-apis/types';
 import buildUrl from 'cloudinary-build-url';
-import { buildCloudflareDeliveryUrl, buildCloudflareImageUrl } from './cloudflare';
+import {
+  buildCloudflareDeliveryUrl,
+  buildCloudflareImageUrl,
+} from './cloudflare';
 import { IMedia, MediaProvider, resolveProvider } from './types';
 
-export type IMediaOptions = (TransformerOption | TransformerVideoOption) & {cloud_name?: string};
-export type IImageOptions = TransformerOption & {cloud_name?: string};
-export type IVideoOptions = TransformerVideoOption & {cloud_name?: string};
+export type IMediaOptions = (TransformerOption | TransformerVideoOption) & {
+  cloud_name?: string;
+};
+export type IImageOptions = TransformerOption & { cloud_name?: string };
+export type IVideoOptions = TransformerVideoOption & { cloud_name?: string };
 
-export type ICloudflareAware = {baseUrl?: string};
-export type IMediaImageOptions = IImageOptions & ICloudflareAware;
-export type IMediaVideoOptions = IVideoOptions & ICloudflareAware;
-export type IMediaFileOptions = IMediaOptions & ICloudflareAware;
+export type BaseUrlAware = { baseUrl?: string };
+export type IMediaImageOptions = IImageOptions & BaseUrlAware;
+export type IMediaVideoOptions = IVideoOptions & BaseUrlAware;
+export type IMediaFileOptions = IMediaOptions & BaseUrlAware;
 
 export enum ResourceType {
-    image = 'image',
-    video = 'video',
-    raw = 'raw'
-};
+  image = 'image',
+  video = 'video',
+  raw = 'raw',
+}
 
 const defaultCloudName = 'contentchef';
 
-export function createUrl(publicId: string, options: IMediaOptions = {cloud_name: defaultCloudName}, resourceType: ResourceType = ResourceType.image): string {
-    const {cloud_name, ...transformations} = options;
-    return buildUrl(publicId, {cloud: {cloudName: cloud_name || defaultCloudName, resourceType, secure: true}, transformations});
+export function createUrl(
+  publicId: string,
+  options: IMediaOptions = { cloud_name: defaultCloudName },
+  resourceType: ResourceType = ResourceType.image,
+): string {
+  const { cloud_name, ...transformations } = options;
+  return buildUrl(publicId, {
+    cloud: {
+      cloudName: cloud_name || defaultCloudName,
+      resourceType,
+      secure: true,
+    },
+    transformations,
+  });
 }
 
 export function imageUrl(publicId: string, options?: IImageOptions) {
-    return createUrl(publicId, options, ResourceType.image);
+  return createUrl(publicId, options, ResourceType.image);
 }
 
 export function videoUrl(publicId: string, options?: IVideoOptions) {
-    return createUrl(publicId, options, ResourceType.video);
+  return createUrl(publicId, options, ResourceType.video);
 }
 
 export function rawFileUrl(publicId: string, options?: IMediaOptions) {
-    return createUrl(publicId, options, ResourceType.raw);
+  return createUrl(publicId, options, ResourceType.raw);
 }
 
-export function mediaImageUrl(media: IMedia, options: IMediaImageOptions = {}): string {
-    const {baseUrl, ...transformations} = options;
-    if (resolveProvider(media) === MediaProvider.cloudflare) {
-        return buildCloudflareImageUrl(media.publicId, transformations, baseUrl);
-    }
-    return createUrl(media.publicId, transformations, ResourceType.image);
+export function mediaImageUrl(
+  media: IMedia,
+  options: IMediaImageOptions = {},
+): string {
+  const { baseUrl, ...transformations } = options;
+  if (resolveProvider(media) === MediaProvider.cloudflare) {
+    return buildCloudflareImageUrl(media.publicId, transformations, baseUrl);
+  }
+  return createUrl(media.publicId, transformations, ResourceType.image);
 }
 
-export function mediaVideoUrl(media: IMedia, options: IMediaVideoOptions = {}): string {
-    const {baseUrl, ...transformations} = options;
-    if (resolveProvider(media) === MediaProvider.cloudflare) {
-        return buildCloudflareDeliveryUrl(media.publicId, baseUrl);
-    }
-    return createUrl(media.publicId, transformations, ResourceType.video);
+export function mediaVideoUrl(
+  media: IMedia,
+  options: IMediaVideoOptions = {},
+): string {
+  const { baseUrl, ...transformations } = options;
+  if (resolveProvider(media) === MediaProvider.cloudflare) {
+    return buildCloudflareDeliveryUrl(media.publicId, baseUrl);
+  }
+  return createUrl(media.publicId, transformations, ResourceType.video);
 }
 
-export function mediaRawFileUrl(media: IMedia, options: IMediaFileOptions = {}): string {
-    const {baseUrl, ...transformations} = options;
-    if (resolveProvider(media) === MediaProvider.cloudflare) {
-        return buildCloudflareDeliveryUrl(media.publicId, baseUrl);
-    }
-    return createUrl(media.publicId, transformations, ResourceType.raw);
+export function mediaRawFileUrl(
+  media: IMedia,
+  options: IMediaFileOptions = {},
+): string {
+  const { baseUrl, ...transformations } = options;
+  if (resolveProvider(media) === MediaProvider.cloudflare) {
+    return buildCloudflareDeliveryUrl(media.publicId, baseUrl);
+  }
+  return createUrl(media.publicId, transformations, ResourceType.raw);
 }
-
-export { IMedia, IMediaMetadata, MediaProvider, resolveProvider } from './types';
 
 export {
-    AudioCodec, Border, ColorSpace, CompassGravity, Condition,
-    ConditionExpression, CustomFunction, Effect, Expression,
-    Flag, FPS, FPSType, Gravity,
-    Offset,
-    Position,
-    Radius,
-    Resize,
-    ResizeType,
-    Rotation, StringValue, TextStyle, Transformation, TransformerBaseOptions,
-    TransformerOption,
-    TransformerVideoOption, Variable, VColorSpace, VEffect, VFlag
+  IMedia,
+  IMediaMetadata,
+  MediaProvider,
+  resolveProvider,
+} from './types';
+
+export {
+  AudioCodec,
+  Border,
+  ColorSpace,
+  CompassGravity,
+  Condition,
+  ConditionExpression,
+  CustomFunction,
+  Effect,
+  Expression,
+  Flag,
+  FPS,
+  FPSType,
+  Gravity,
+  Offset,
+  Position,
+  Radius,
+  Resize,
+  ResizeType,
+  Rotation,
+  StringValue,
+  TextStyle,
+  Transformation,
+  TransformerBaseOptions,
+  TransformerOption,
+  TransformerVideoOption,
+  Variable,
+  VColorSpace,
+  VEffect,
+  VFlag,
 } from '@cld-apis/types';
