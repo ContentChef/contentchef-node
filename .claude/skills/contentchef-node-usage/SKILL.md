@@ -1,6 +1,6 @@
 ---
 name: contentchef-node-usage
-description: How to configure and consume the @contentchef/contentchef-node SDK — channels (online, preview), content/search methods, localized variants, sorting, prop filters, target dates. Use when the user is integrating the SDK in an app, debugging SDK responses, or asking about endpoints/params the SDK exposes.
+description: How to configure and consume the @contentchef/contentchef-node SDK — channels (online, preview), content/search methods, localized variants, sorting, prop filters, dimensions, target dates. Use when the user is integrating the SDK in an app, debugging SDK responses, or asking about endpoints/params the SDK exposes.
 ---
 
 # Using `@contentchef/contentchef-node`
@@ -80,7 +80,7 @@ non-localized variants.
 
 ### `content(params)` — single item by publicId
 ```ts
-interface IGetContentConfig { publicId: string; legacyMetadata?: boolean; }
+interface IGetContentConfig { publicId: string; legacyMetadata?: boolean; dimensions?: IDimensions; }
 ```
 Returns `IGetContentResponse<T>` (one `IResponse<T>`).
 
@@ -96,6 +96,7 @@ interface ISearchConfig {
   legacyMetadata?:   boolean;
   propFilters?:      IPropFilter;
   sorting?:          ISortingField[] | string; // '+publicId, -onlineDate' or array
+  dimensions?:       IDimensions;
 }
 ```
 
@@ -106,6 +107,17 @@ Returns `IPaginatedResponse<IResponse<T>>` with `items`, `total`, `skip`,
 Accepts either a string (`'+publicId, -onlineDate'`) or an array of
 `{ fieldName, ascending }`. `+` = ascending, `-` = descending.
 Serializer in `serializeSorting.ts`.
+
+### Dimensions (personalization)
+```ts
+interface IDimensions { [dimensionMnemonicId: string]: string; }
+```
+The visitor's assignment for the request, e.g. `{ auth: 'authenticated', loyalty: 'gold' }`.
+Serialized as one repeated `dimensions=<dimension>:<key>` query param per entry.
+The backend matches those values against the space's published audience rules and
+picks the field variants; audience names never travel in the query string.
+One key per dimension - the backend's fact map is single-valued, so it cannot
+express "loyalty is gold or platinum".
 
 ### Prop filters
 ```ts
@@ -177,6 +189,8 @@ await itChannel.localizedSearch<Article>({ skip: 0, take: 5 });
   will contain `legacyMetadata=undefined`.
 - `propFilters` is JSON-serialized client-side; the backend parses JSON —
   don't pre-stringify.
+- `dimensions` pairs must match `/^[a-z0-9_-]+:[a-z0-9_-]+$/` after the backend
+  lowercases them, max 20 per request; a malformed pair fails the whole request.
 
 ## 8. Where things live
 
