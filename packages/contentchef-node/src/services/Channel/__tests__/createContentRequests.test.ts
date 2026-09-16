@@ -141,3 +141,19 @@ describe(`Tests createOnlineContentRequest`, () => {
     });
   });
 });
+
+describe('dimensions serialization', () => {
+  test('Sends one dimensions param per dimension, and none when omitted', done => {
+    const content = createOnlineContentRequest('aSpace', 'foo', config);
+
+    content<any>({ publicId: 'a-content', dimensions: { auth: 'authenticated', loyalty: 'gold' } })
+      .then(response => {
+        expect(response.config.params.getAll('dimensions')).toEqual(['auth:authenticated', 'loyalty:gold']);
+        return content<any>({ publicId: 'a-content' });
+      })
+      .then(response => {
+        expect(response.config.params.getAll('dimensions')).toEqual([]);
+        done();
+      });
+  });
+});
