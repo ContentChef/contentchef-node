@@ -146,6 +146,7 @@ const websitePreviewChannel = cf.previewChannel('previewApiKey', 'website', Publ
 interface IGetContentConfig {
   legacyMetadata?: boolean;
   publicId: string;
+  dimensions?: IDimensions;
 }
 
 
@@ -164,6 +165,7 @@ interface ISearchConfig {
   tags?: string[] | string;
   propFilters?: IPropFilter;
   sorting?: ISortingField[] | string;
+  dimensions?: IDimensions;
 }
 
 // retrieves the first 10 contents from the channel website with a specific contentDefinition in another date
@@ -194,4 +196,15 @@ websitePreviewChannel.search<IArticle>({
   take: 10,
   sorting: '-publicId, +onlineDate',
 }).then(response => /* handles response */); 
+
+// the visitor's dimension assignment, one key per dimension
+interface IDimensions {
+  [dimensionMnemonicId: string]: string;
+}
+
+// personalized content: the assignment decides which audiences match, and so which field variants are served
+websiteOnlineChannel.content<IArticle>({
+  publicId: 'your-content-id',
+  dimensions: { auth: 'authenticated', loyalty: 'gold' },
+}).then(response => /* handles response */);
 ```
