@@ -149,6 +149,17 @@ describe(`Tests createOnlineSearchRequest`, () => {
       done();
     });
   });
+  test('Invoking the returning method with dimensions should send one dimensions param per dimension', done => {
+    createOnlineSearchRequest('aSpace', 'foo', config)<any>({
+      dimensions: { auth: 'authenticated', loyalty: 'gold' },
+      skip: 0,
+      take: 10,
+    }).then(response => {
+      expect(response.config.params.getAll('dimensions')).toEqual(['auth:authenticated', 'loyalty:gold']);
+      done();
+    });
+  });
+
   test('Invoking the returning method after configuring it with locale, will use correct endpoint', done => {
     createOnlineSearchRequest(
       'aSpace',

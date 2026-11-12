@@ -23,6 +23,16 @@ export type GetOnlineChannelMethods = (
 export interface IGetContentConfig {
   legacyMetadata?: boolean;
   publicId: string;
+  dimensions?: IDimensions;
+}
+
+/**
+ * The visitor's dimension assignment for one request, one key per dimension:
+ * `{ loyalty: 'gold', auth: 'authenticated' }`. Serialized as repeated
+ * `dimensions=<dimension>:<key>` query params.
+ */
+export interface IDimensions {
+  [dimensionMnemonicId: string]: string;
 }
 
 export interface IRequestContext {
@@ -117,6 +127,7 @@ export interface ISearchConfig {
   tags?: string[] | string;
   propFilters?: IPropFilter;
   sorting?: ISortingField[] | string;
+  dimensions?: IDimensions;
 }
 
 export interface IPropFilter {

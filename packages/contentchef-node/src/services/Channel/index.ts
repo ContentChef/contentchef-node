@@ -180,6 +180,13 @@ function maybeAddToURLSearchParams(
   });
 }
 
+function serializeDimensions(dimensions?: interfaces.IDimensions) {
+  return (
+    dimensions &&
+    Object.entries(dimensions).map(([dimension, key]) => `${dimension}:${key}`)
+  );
+}
+
 function createSearchRequestURLSearchParams(
   params: interfaces.SearchPreviewConfig | interfaces.SearchOnlineConfig,
   targetDate?: string,
@@ -188,6 +195,7 @@ function createSearchRequestURLSearchParams(
     skip,
     take,
     contentDefinition,
+    dimensions,
     legacyMetadata,
     propFilters,
     publicId,
@@ -236,6 +244,12 @@ function createSearchRequestURLSearchParams(
 
   maybeAddToURLSearchParams(createdParams, 'tags', tags);
 
+  maybeAddToURLSearchParams(
+    createdParams,
+    'dimensions',
+    serializeDimensions(dimensions),
+  );
+
   return createdParams;
 }
 
@@ -245,7 +259,7 @@ function createGetContentRequestURLSearchParams(
     | interfaces.GetContentOnlineConfig,
   targetDate?: string,
 ) {
-  const { legacyMetadata, publicId } = params;
+  const { dimensions, legacyMetadata, publicId } = params;
 
   const createdParams = new URLSearchParams({});
 
@@ -256,6 +270,11 @@ function createGetContentRequestURLSearchParams(
   );
   maybeAddToURLSearchParams(createdParams, 'publicId', publicId);
   maybeAddToURLSearchParams(createdParams, 'targetDate', targetDate);
+  maybeAddToURLSearchParams(
+    createdParams,
+    'dimensions',
+    serializeDimensions(dimensions),
+  );
 
   return createdParams;
 }

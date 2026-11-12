@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [9.0.0]
+### Added
+- `dimensions` param on `content()`, `search()`, `localizedContent()` and `localizedSearch()` (online and preview), taking the visitor's assignment as `{ [dimensionMnemonicId]: key }` and sending one `dimensions=<dimension>:<key>` query param per entry
+- `IDimensions` type export
+
 ## [8.0.0]
 ### Removed
 - **BREAKING:** `experimentalOnlineChannel` from the configured SDK and its `content/v3`/`search/v3` endpoints
