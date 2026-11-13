@@ -83,12 +83,21 @@ describe('createUrl (cloudflare)', () => {
         const url = createUrl(cloudflareMedia('space/img/logo.png'), {
             resize: { width: 100, height: 200, type: 'fill' },
         });
-        expect(url).toBe(`${DEFAULT_CLOUDFLARE_BASE_URL}/cdn-cgi/image/width=100,height=200,fit=cover/space/img/logo.png`);
+        expect(url).toBe(
+            `${DEFAULT_CLOUDFLARE_BASE_URL}/cdn-cgi/image/width=100,height=200,fit=cover,format=auto/space/img/logo.png`,
+        );
     });
 
-    it('returns a plain delivery url for images when nothing maps', () => {
+    it('serves images in an automatic format even without options', () => {
         expect(createUrl(cloudflareMedia('space/img/logo.png'))).toBe(
-            `${DEFAULT_CLOUDFLARE_BASE_URL}/space/img/logo.png`,
+            `${DEFAULT_CLOUDFLARE_BASE_URL}/cdn-cgi/image/format=auto/space/img/logo.png`,
+        );
+    });
+
+    it('builds the same url whether format auto is explicit or defaulted', () => {
+        const media = cloudflareMedia('a/b.png');
+        expect(createUrl(media, { resize: { width: 750 }, quality: 80 })).toBe(
+            createUrl(media, { resize: { width: 750 }, quality: 80, format: 'auto' }),
         );
     });
 
@@ -109,7 +118,7 @@ describe('createUrl (cloudflare)', () => {
             baseUrl: 'https://cdn.example.com/',
             resize: { width: 50 },
         });
-        expect(url).toBe('https://cdn.example.com/cdn-cgi/image/width=50/space/img/logo.png');
+        expect(url).toBe('https://cdn.example.com/cdn-cgi/image/width=50,format=auto/space/img/logo.png');
     });
 
     it('does not leak baseUrl or cloud_name into cloudflare params', () => {
@@ -118,7 +127,7 @@ describe('createUrl (cloudflare)', () => {
             cloud_name: 'x',
             resize: { width: 50 },
         });
-        expect(url).toBe('https://cdn.example.com/cdn-cgi/image/width=50/a/b.png');
+        expect(url).toBe('https://cdn.example.com/cdn-cgi/image/width=50,format=auto/a/b.png');
     });
 });
 
@@ -131,7 +140,7 @@ describe('per-type helpers force the resource type', () => {
 
     it('imageUrl maps a cloudflare image', () => {
         expect(imageUrl(cloudflareMedia('a/b.png'), { resize: { width: 10 } })).toBe(
-            `${DEFAULT_CLOUDFLARE_BASE_URL}/cdn-cgi/image/width=10/a/b.png`,
+            `${DEFAULT_CLOUDFLARE_BASE_URL}/cdn-cgi/image/width=10,format=auto/a/b.png`,
         );
     });
 
@@ -147,38 +156,63 @@ describe('per-type helpers force the resource type', () => {
 describe('toCloudflareOptions mapping', () => {
     it('maps resize dimensions and fit', () => {
         expect(toCloudflareOptions({ resize: { width: 10, height: 20, type: 'fit' } }))
-            .toEqual(['width=10', 'height=20', 'fit=contain']);
+            .toEqual(['width=10', 'height=20', 'fit=contain', 'format=auto']);
+    });
+
+    it('derives the missing side from aspectRatio, as Cloudinary does', () => {
+        expect(toCloudflareOptions({ resize: { width: 300, aspectRatio: '1:2', type: 'fill' } }))
+            .toEqual(['width=300', 'height=600', 'fit=cover', 'format=auto']);
+        expect(toCloudflareOptions({ resize: { height: 300, aspectRatio: '1:2' } }))
+            .toEqual(['width=150', 'height=300', 'format=auto']);
+        expect(toCloudflareOptions({ resize: { width: 300, aspectRatio: '16:9' } }))
+            .toEqual(['width=300', 'height=169', 'format=auto']);
+        expect(toCloudflareOptions({ resize: { width: 300, aspectRatio: '1.5' } }))
+            .toEqual(['width=300', 'height=200', 'format=auto']);
+    });
+
+    it('ignores aspectRatio when both sides are set, no side is set, or it is invalid', () => {
+        expect(toCloudflareOptions({ resize: { width: 300, height: 300, aspectRatio: '1:2' } }))
+            .toEqual(['width=300', 'height=300', 'format=auto']);
+        expect(toCloudflareOptions({ resize: { aspectRatio: '1:2' } })).toEqual(['format=auto']);
+        expect(toCloudflareOptions({ resize: { width: 300, aspectRatio: 'wide' } })).toEqual(['width=300', 'format=auto']);
+        expect(toCloudflareOptions({ resize: { width: 300, aspectRatio: '1:0' } })).toEqual(['width=300', 'format=auto']);
     });
 
     it('maps compass gravity to sides and corners', () => {
-        expect(toCloudflareOptions({ gravity: 'north' as any })).toEqual(['gravity=top']);
-        expect(toCloudflareOptions({ gravity: 'south_east' as any })).toEqual(['gravity=1x1']);
-        expect(toCloudflareOptions({ gravity: 'auto' as any })).toEqual(['gravity=auto']);
+        expect(toCloudflareOptions({ gravity: 'north' as any })).toEqual(['gravity=top', 'format=auto']);
+        expect(toCloudflareOptions({ gravity: 'south_east' as any })).toEqual(['gravity=1x1', 'format=auto']);
+        expect(toCloudflareOptions({ gravity: 'auto' as any })).toEqual(['gravity=auto', 'format=auto']);
     });
 
     it('maps format, falling back to fetchFormat, and normalises jpg', () => {
-        expect(toCloudflareOptions({ format: 'auto' })).toEqual(['format=auto']);
+        expect(toCloudflareOptions({ format: 'png' })).toEqual(['format=png']);
         expect(toCloudflareOptions({ fetchFormat: 'jpg' })).toEqual(['format=jpeg']);
     });
 
+    it('defaults to format auto when no format, or an unmappable one, is given', () => {
+        expect(toCloudflareOptions()).toEqual(['format=auto']);
+        expect(toCloudflareOptions({ format: 'bmp' })).toEqual(['format=auto']);
+    });
+
     it('passes numeric quality through and drops auto quality', () => {
-        expect(toCloudflareOptions({ quality: 75 })).toEqual(['quality=75']);
-        expect(toCloudflareOptions({ quality: 'auto' })).toEqual([]);
+        expect(toCloudflareOptions({ quality: 75 })).toEqual(['format=auto', 'quality=75']);
+        expect(toCloudflareOptions({ quality: 'auto' })).toEqual(['format=auto']);
     });
 
     it('only allows cloudflare-supported rotations', () => {
-        expect(toCloudflareOptions({ rotate: 90 })).toEqual(['rotate=90']);
-        expect(toCloudflareOptions({ rotate: 45 })).toEqual([]);
+        expect(toCloudflareOptions({ rotate: 90 })).toEqual(['format=auto', 'rotate=90']);
+        expect(toCloudflareOptions({ rotate: 45 })).toEqual(['format=auto']);
     });
 
     it('escapes the hash in a hex background', () => {
-        expect(toCloudflareOptions({ background: '#ff0000' })).toEqual(['background=%23ff0000']);
+        expect(toCloudflareOptions({ background: '#ff0000' })).toEqual(['format=auto', 'background=%23ff0000']);
     });
 
     it('maps common effects with approximate scaling', () => {
-        expect(toCloudflareOptions({ effect: { name: 'brightness', value: 50 } })).toEqual(['brightness=1.5']);
-        expect(toCloudflareOptions({ effect: { name: 'grayscale' } })).toEqual(['saturation=0']);
-        expect(toCloudflareOptions({ effect: { name: 'sepia', value: 80 } })).toEqual([]);
+        expect(toCloudflareOptions({ effect: { name: 'brightness', value: 50 } }))
+            .toEqual(['format=auto', 'brightness=1.5']);
+        expect(toCloudflareOptions({ effect: { name: 'grayscale' } })).toEqual(['format=auto', 'saturation=0']);
+        expect(toCloudflareOptions({ effect: { name: 'sepia', value: 80 } })).toEqual(['format=auto']);
     });
 });
 
@@ -188,7 +222,7 @@ describe('buildCloudflareUrl', () => {
         expect(url).toBe(`${DEFAULT_CLOUDFLARE_BASE_URL}/cdn-cgi/image/width=100,format=auto,quality=80/a/b.png`);
     });
 
-    it('returns a plain delivery url when no options map to params', () => {
+    it('returns a plain delivery url when no options are given', () => {
         expect(buildCloudflareUrl('space/raw/doc.pdf')).toBe(`${DEFAULT_CLOUDFLARE_BASE_URL}/space/raw/doc.pdf`);
     });
 });
