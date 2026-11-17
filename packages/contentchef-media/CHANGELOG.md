@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [9.0.1]
+### Fixed
+- Cloudflare images are served with `format=auto` unless a `format` is passed, matching Cloudinary's default `f_auto`, so browsers get AVIF or WebP instead of the original format
+- `resize.aspectRatio` is no longer dropped for Cloudflare media: the missing `width` or `height` is derived from it, as Cloudinary does
+
+### Changed
+- `createUrl` on a Cloudflare image without options now returns a `/cdn-cgi/image/format=auto/` url instead of the plain delivery url; video and raw files are still served plain
+
 ## [9.0.0]
 ### Added
 - Cloudflare Images support: media whose provider resolves to `cloudflare` builds URLs against `https://media.contentchef.io`, overridable per call with the `baseUrl` option

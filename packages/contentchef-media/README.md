@@ -52,11 +52,15 @@ parameters and rendered as `https://media.contentchef.io/cdn-cgi/image/<options>
 For example the resized call above yields:
 
 ```
-https://media.contentchef.io/cdn-cgi/image/width=200,height=100,fit=cover/<publicId>
+https://media.contentchef.io/cdn-cgi/image/width=200,height=100,fit=cover,format=auto/<publicId>
 ```
 
 Notes for Cloudflare media:
 
+* Images get `format=auto` unless you pass a `format`, matching Cloudinary's default `f_auto`.
+  The browser then receives AVIF or WebP when it supports them.
+* `resize.aspectRatio` (`'16:9'` or `'1.5'`) fills in the missing `width` or `height`, as Cloudinary does.
+  It is ignored when both sides are set.
 * The base host defaults to `https://media.contentchef.io`; override it per call with
   `{ baseUrl: 'https://your-zone.example.com' }`.
 * Image resizing is image-only. Video and raw files are served as plain delivery urls

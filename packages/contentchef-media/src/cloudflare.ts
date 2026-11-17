@@ -64,6 +64,16 @@ function toNumber(value: unknown): number | undefined {
     return isNaN(n) ? undefined : n;
 }
 
+/** Cloudinary accepts `16:9` or a decimal like `1.5`. */
+function parseAspectRatio(aspectRatio?: string): number | undefined {
+    if (!aspectRatio) {
+        return undefined;
+    }
+    const [a, b] = String(aspectRatio).split(':').map(Number);
+    const ratio = b === undefined ? a : a / b;
+    return ratio > 0 && isFinite(ratio) ? ratio : undefined;
+}
+
 function mapEffect(effect: { name: string; value?: number | string | string[] | number[] }): string | undefined {
     const raw = Array.isArray(effect.value) ? effect.value[0] : effect.value;
     const value = toNumber(raw);
@@ -95,11 +105,17 @@ export function toCloudflareOptions(options: TransformerOption = {}): string[] {
     const { resize, gravity, quality, format, fetchFormat, dpr, rotate, background, effect } = options;
 
     if (resize) {
-        if (resize.width !== undefined && resize.width !== null) {
-            params.push(`width=${resize.width}`);
+        // Cloudflare has no aspect ratio: derive the missing side like Cloudinary, which ignores it when both are set
+        const ratio = parseAspectRatio(resize.aspectRatio);
+        const w = toNumber(resize.width);
+        const h = toNumber(resize.height);
+        const width = ratio && resize.width == null && h !== undefined ? Math.round(h * ratio) : resize.width;
+        const height = ratio && resize.height == null && w !== undefined ? Math.round(w / ratio) : resize.height;
+        if (width !== undefined && width !== null) {
+            params.push(`width=${width}`);
         }
-        if (resize.height !== undefined && resize.height !== null) {
-            params.push(`height=${resize.height}`);
+        if (height !== undefined && height !== null) {
+            params.push(`height=${height}`);
         }
         if (resize.type !== undefined && resize.type !== null) {
             const fit = FIT_MAP[String(resize.type)];
@@ -116,13 +132,9 @@ export function toCloudflareOptions(options: TransformerOption = {}): string[] {
         }
     }
 
+    // Cloudinary urls get f_auto by default; without format=auto Cloudflare never serves AVIF/WebP
     const fmt = format || fetchFormat;
-    if (fmt) {
-        const mapped = FORMAT_MAP[String(fmt).toLowerCase()];
-        if (mapped) {
-            params.push(`format=${mapped}`);
-        }
-    }
+    params.push(`format=${(fmt && FORMAT_MAP[String(fmt).toLowerCase()]) || 'auto'}`);
 
     if (quality !== undefined && quality !== null) {
         const numericQuality = toNumber(quality);
@@ -164,12 +176,12 @@ function normalizeSource(publicId: string): string {
     return String(publicId).replace(/^\/+/, '');
 }
 
-export function buildCloudflareUrl(publicId: string, options: TransformerOption = {}, baseUrl?: string): string {
+/** Without `options` (video, raw files) the media is served as-is, since Cloudflare only transforms images. */
+export function buildCloudflareUrl(publicId: string, options?: TransformerOption, baseUrl?: string): string {
     const base = normalizeBase(baseUrl);
     const source = normalizeSource(publicId);
-    const params = toCloudflareOptions(options);
-    if (params.length === 0) {
+    if (!options) {
         return `${base}/${source}`;
     }
-    return `${base}/cdn-cgi/image/${params.join(',')}/${source}`;
+    return `${base}/cdn-cgi/image/${toCloudflareOptions(options).join(',')}/${source}`;
 }
